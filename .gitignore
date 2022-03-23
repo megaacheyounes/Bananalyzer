@@ -1,0 +1,7 @@
+node_modules/
+build/
+downloads/
+appdataxsj/
+*.xlsx
+dev.js
+.local-chromium/

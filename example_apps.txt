@@ -1,0 +1,4 @@
+com.twitter.android.lite
+com.instagram.android
+//com.package.name(this package name will be ignored)
+com.netflix.mediaclient
