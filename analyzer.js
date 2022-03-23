@@ -16,41 +16,57 @@ const jarPath = path.join(process.cwd(), APP_CHECK_JAR)
 const GMS_OUTPUT = path.join(process.cwd(), APP_DATA_XSJ, "output_gms.txt")
 const HMS_OUTPUT = path.join(process.cwd(), APP_DATA_XSJ, "output_hms.txt")
 const appDataFolder = path.join(process.cwd(), APP_DATA_XSJ)
-var debug  =require("debug")("analyzer")
+var debug = require("debug")("analyzer")
 
+//includes hms sdk names
+const headers = ["AppName", "account", "push",
+    "iap", "location", "map",
+    "analytics", "ads", "game",
+    "drive", "scan", "safetydetect",
+    "nearbyservice", "ml", "awareness",
+    "fido", "health", "identity",
+    "panorama", "site", "dtm",
+    "wallet", "toolkit(G+H)"]
 
-const headers = ['AppName', 'account', 'push',
-    'iap', 'location', 'map',
-    'analytics', 'ads', 'game',
-    'drive', 'scan', 'safetydetect',
-    'nearbyservice', 'ml', 'awareness',
-    'fido', 'health', 'identity',
-    'panorama', 'site', 'dtm',
-    'wallet', 'toolkit(G+H)']
+//todo: use GMS sdk names
+const gmsHeadersMap = {
+    "account": "Sign in",
+    "push": "FCM",
+    // "location": "location",
+    "map": "maps",
+    // "analytics": "analytics",
+    // "ads": "ads",
+    "game": "games",
+    // "drive": "drive",
+    "scan": "Firebase vision",
+    "safetydetect": "safetynet",
+    "nearbyservice": "nearby",
+    // "ml": "ml",
+    // "awareness": "awarness",
+    // "fido": "fido",
+    "health": "fitness",
+    // "identity": "identity",
+    "panorama": "Street View",
+    "site": "places",
+    "dtm": "GTM",
+    "wallet": "pay",
+}
 
-//TODO: use real GMS SDKs names
-// const gmsHeadersMap = { 
-//     "account": "Signin (account)",
-//     "push": "FCM (push)",  
-//     "game": "", 
-
-//     "scan": "Firebase vision(scan)",
-//     "safetydetect": "",
-
-//     "nearbyservice": "",
-//     "ml": "",
-//     "awareness": "",
-
-//     "fido": "",
-//     "health": "",
-//     "identity": "",
-
-//     "panorama": "",
-//     "site": "places",
-//     "dtm": "GTM (dtm)", 
-//     "wallet": "",
-// }
-
+/**
+ * map HMS sdk names to GMS
+ *  @param arr: array of hms kits, example:  ['push' , 'map','wallet','location']
+ * @pram array of hms ktis with gms names, example: ['push (FCM)', 'map (maps)','wallet (pay)','location']
+ */
+const mapSdkNames = arr => {
+    var res = []
+    if (!arr) return res
+    var keys = Object.keys(gmsHeadersMap)
+    arr.forEach(sdk => {
+        res.push(
+            keys.includes(sdk) ? `sdk (${gmsHeadersMap[sdk]})` : sdk
+        )
+    })
+}
 /**
  * delete all apks in data folder, to avoid re-analyzing them or just to save space
  * @returns 
@@ -142,6 +158,7 @@ const analyzeAPKs = (apps) => new Promise(async (resolve, reject) => {
 
     var hmsEntries = getEntries(hmsOutput)
     var gmsEntries = getEntries(gmsOutput)
+
     // console.log("hms entries",hmsEntries)
     const getKits = async (apps, headers) => new Promise((ress, rej) => {
         try {
@@ -197,7 +214,7 @@ const analyzeAPKs = (apps) => new Promise(async (resolve, reject) => {
 
         result[packageName] = {
             version: versionName,
-            GMS: allGms[packageName] || [],
+            GMS: mapSdkNames(allGms[packageName] || []),
             HMS: allHms[packageName] || [],
             "huawei App Id": appId,
             "androidMarket metadata": androidMarket

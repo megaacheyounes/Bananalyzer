@@ -20,7 +20,7 @@ Bananalyzer accepts 4 arguments:
 1.  `--enable-logs`: print debug logs on the console, as well as into log files that can be found in folder names ".log", if you want to submit an issue please include the log files  (caution: the logs may hurt your eyes)
 2.  `--keep-apks`: by default, Bananalyzer will delete the apks that are downloaded to save space. if this flag is specified, Bananalyzer will keep the apks which can be found in a folder named `downloads` (useful if you have a personal data center )      
 3.  `--use-existing`: by default Bananalyzer will always download latest apk from playstore. if you happend to analyze an apk, then decide that you have to re-analyze it without re-downloading it, then use this flag. (by using this flag, Bananalyzer will **NOT** check if a newer version is available, also analyzing will fail if the apk was partially downloaded)
-4.  `--batch-<num>`: to improve efficiancy, this tool handles apks in batches, the default batch size is 3. means it downloads 3 APKs in parallel, analyze them, write the results into the excel sheet, then moves to the next 3 APKs. usage example: `--batch-1`, `--batch-5` (using a large batch size may break Bananalyzer, your PC or the whole universe)
+4.  `--batch-<num>`: to improve efficiancy, this tool handles apks in batches, the default batch size is 3. means it downloads 3 APKs in parallel, analyze them, write the results into cthe excel sheet, then moves to the next 3 APKs. usage example: `--batch-1`, `--batch-5` (using a large batch size may break Bananalyzer, your PC or the whole universe)
 
 command with all arguments: `bananalyzer.exe --keep-apks --use-existing --batch-6 --enable-logs`
 

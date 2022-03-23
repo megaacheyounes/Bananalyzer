@@ -33,7 +33,7 @@ const fs = require('fs')
 const path = require("path")
 const request = require('request');
 const { delay } = require('./utils');
-var debug  =require("debug")("downloader")
+var debug = require("debug")("downloader")
 
 //folder where the APKs will be stored
 const DOWNLOAD_FOLDER = "downloads"
@@ -64,11 +64,23 @@ const getDownloadLink1 = (page, packageName) => new Promise(async (resolve, reje
 
         await page.click('#apksubmit');
         debug("clicked submit")
-        //can take up to 60 seconds 
-        await page.waitForSelector(".dvContents", { timeout: 60000 })
+
+        //wait for download link or error, can take up to 60 seconds 
+        await page.waitForSelector("#downloader_area b , #downloader_area .dvContents", { timeout: 60 * 1000 })
+
+        // await page.waitForSelector(".dvContents", { timeout: 60 * 1000 })
         debug("page finished fetching apk info")
 
+        //first check if thereis an error
+        const text = await page.$eval("#downloader_area", el => el ? el.innerText : "el is null")
+        
+        if (text.toLowerCase().indexOf("not found or invalid") != -1) {
+            debug("got error: " + text)
+            //we have an error
+            return reject("the requested app is not found or invalid")
+        }
 
+        //we got apk info and download link
         let apkSizeEl = await page.$('.dvContents a span')
         const apkSize = await page.evaluate(el => el ? el.textContent : "", apkSizeEl)
 
@@ -290,7 +302,7 @@ const downloadAPK = (packageName) => new Promise(async (resolve, reject) => {
         if (downloadData == null || downloadData.downloadLink == null || downloadData.downloadLink.length == 0) {
             return reject("failed to get download link")
         }
-
+        debug("download link: " + downloadData.downloadLink)
         const { downloadLink, versionName, apkSize, source } = downloadData
         console.log(`→ Downloading ${packageName} → version= ${versionName}, download size = ${apkSize ? apkSize : '? Mb'}, source=${source}`)
 
@@ -308,7 +320,7 @@ const downloadAPK = (packageName) => new Promise(async (resolve, reject) => {
             await page.close()
             resolve({ packageName, filePath })
         })
-         debug("Downlading APK file started ==>> " + packageName)
+        debug("Downlading APK file started ==>> " + packageName)
 
     } catch (e) {
         debug(e)
