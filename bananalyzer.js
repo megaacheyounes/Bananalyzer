@@ -89,7 +89,7 @@ const commitSuicide = (msg) => {
     console.log("")//empty line
     console.log(" ☹  Banana analyzer has commit suicide  ☹ ")
     console.log("[last words]", msg)
-    console.log('(if you think this is an issue with the program, please submit an issue at:', info.homepage, ", and include the logs")
+    console.log('(if you think this is an issue with the tool, re-run it with the flag `--enable-logs`, then submit an issue at:', info.homepage, " and include the logs")
     utils.pause()
 }
 

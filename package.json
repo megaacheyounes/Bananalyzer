@@ -8,9 +8,9 @@
   "scripts": {
     "start": "node bananalyzer.js",
     "start-debug": "node bananalyzer.js --logs",
-    "build": "npm run copy-libs && npm run build-impl",
+    "build": "npm run copy-files && npm run build-impl",
     "build-impl": "pkg bananalyzer.js -t node14-win-x64 --out-path build -C GZip --public",
-    "copy-libs": "copyfiles \"AppCheck.jar\" build"
+    "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"AppCheck.jar\" build"
   },
   "keywords": [
     "hms",
