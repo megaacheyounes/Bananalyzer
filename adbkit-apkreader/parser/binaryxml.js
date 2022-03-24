@@ -7,9 +7,9 @@
 /* eslint no-console: "off"*/
 
 // const assert = require('assert');
-import assert  from "assert";
-import debugModule from "debug"
-const debug = debugModule("adb:apkreader:parser:binaryxml")
+import assert from 'assert';
+import debugModule from 'debug';
+const debug = debugModule('adb:apkreader:parser:binaryxml');
 
 const NodeType = {
   ELEMENT_NODE: 1,
