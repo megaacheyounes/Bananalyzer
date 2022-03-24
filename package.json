@@ -6,12 +6,13 @@
   "homepage": "https://github.com/megaacheyounes/bananalyzer",
   "main": "bananalyzer.js",
   "scripts": {
-    "start": "node bananalyzer.js",
-    "start-debug": "node bananalyzer.js --logs",
+    "start": "node  bananalyzer.js",
+    "debug": "npm run start -- --enable-logs",
     "build": "npm run copy-files && npm run build-impl",
-    "build-impl": "pkg bananalyzer.js -t node14-win-x64 --out-path build -C GZip --public",
+    "build-impl": "pkg bananalyzer.js -t node14-win-x64 --out-path build -C GZip --public --options experimental-modules experimental-json-modules",
     "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"AppCheck.jar\" build"
   },
+  "type": "module",
   "keywords": [
     "hms",
     "gms",
@@ -27,9 +28,11 @@
     "debug": "^4.3.4",
     "decompress-zip": "^0.3.3",
     "download-chromium": "^2.2.1",
+    "fetch": "^1.1.0",
     "fs": "0.0.1-security",
     "java-caller": "^2.4.0",
     "ncp": "^2.0.0",
+    "node-fetch": "^3.2.3",
     "path": "^0.12.7",
     "puppeteer": "^13.5.1",
     "puppeteer-extra": "^3.2.3",
@@ -44,6 +47,16 @@
     "scripts": [
       "node_modules/puppeteer/lib/*.js",
       "node_modules/puppeteer-extra-plugin-stealth/**/*.js"
+    ],
+    "options": [
+      "experimental-modules",
+      "experimental-json-modules"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0"
   }
 }

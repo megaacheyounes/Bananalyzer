@@ -23,217 +23,226 @@
 
  */
 
-"use strict";
-//hide all nodejs warnings
-process.removeAllListeners('warning')
+'use strict';
+// hide all nodejs warnings
+// process.removeAllListeners('warning');
 
-var fs = require('fs');
-const path = require('path');
-const analyzer = require('./analyzer');
-const downloader = require("./downloader")
-const excelHelper = require('./ExcelHelper');
-const info = require('./package.json')
-const utils = require("./utils")
-const picker = require("./psHelper");
-var debug = require("debug")("index")
+import * as fs from 'fs';
+import * as path from 'path';
+import * as analyzer from './analyzer.js';
+import { writeExcel } from './ExcelHelper.js';
 
-const MAX_PACKAGE_NAME = 200
-const DEFAULT_BATCH_SIZE = 3
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+// good ol' require
 
-console.log(`${info.name} V${info.version} (${info.homepage})`)
+// import info from './package.json' assert { type: 'json' }; //eslint fucking hates this line
+// ugly workaround to import package.json
+import { readFileSync } from 'fs';
+const info = JSON.parse(readFileSync('package.json'));
+import { downoadChromiumIfMissing, downloadAPK, closeBrowser } from './downloader.js';
+import { delay, pause, printLogs, currentPlatform } from './utils.js';
+import { pickFile } from './psHelper.js';
 
-//for debugging
-// args[0] = '--enable-logs'
-// args[1] = '--use-existing'
-// args[2] = '--keep-apks'
-//args[3] = '--batch-5'
-var args = process.argv.slice(2);
-debug("args: " + args)
+import debugModule from 'debug';
+const debug = debugModule('');
 
+const MAX_PACKAGE_NAME = 200;
+const DEFAULT_BATCH_SIZE = 3;
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-global.useExisting = args.includes("--use-existing")//if true, will use existing apk in ./download, if false, will force download apks
-global.keepApks = args.includes("--keep-apks") //if set, the program will not delete the downloaded apks, apks can be found ./downloads folder
+const args = process.argv.slice(2);
 
-global.logs = args.includes('--enable-logs')//debug logs
+global.useExisting = args.includes('--use-existing'); // if true, will use existing apk in ./download, if false, will force download apks
+global.keepApks = args.includes('--keep-apks'); // if set, the program will not delete the downloaded apks, apks can be found ./downloads folder
+global.logs = args.includes('--enable-logs'); // debug logs
 
 if (global.logs) {
-    require("debug").enable("*")
+  debugModule.enable('*');
 } else {
-    require("debug").disable("")
+  debugModule.disable('');
 }
 
+console.log(`${info.name} V${info.version} (${info.homepage})`);
 
-//set batch size
-const batchArg = args.find(arg => arg.indexOf("batch") != -1)
+debug('args: ' + args);
+
+printLogs();
+
+// set batch size
+const batchArg = args.find((arg) => arg.indexOf('batch') != -1);
 if (!!batchArg) {
-    //download and anlyze X apps at the same time, default value is 3
-    const sizeTemp = batchArg.replace("--batch-", "")
-    if (isNaN(sizeTemp) || +sizeTemp < 1) {
-        console.log(`the batch size you provided is not valid ("${sizeTemp}"), will fallback to deafult size ()`)
-        global.batchSize = DEFAULT_BATCH_SIZE
-    } else {
-        global.batchSize = +sizeTemp
-    }
+  // download and anlyze X apps at the same time, default value is 3
+  const sizeTemp = batchArg.replace('--batch-', '');
+  if (isNaN(sizeTemp) || +sizeTemp < 1) {
+    console.log(`the batch size you provided is not valid ("${sizeTemp}"), will fallback to deafult size ()`);
+    global.batchSize = DEFAULT_BATCH_SIZE;
+  } else {
+    global.batchSize = +sizeTemp;
+  }
 } else {
-    global.batchSize = DEFAULT_BATCH_SIZE
+  global.batchSize = DEFAULT_BATCH_SIZE;
 }
 
-console.log("Args [enable debug logs =", global.logs,
-    ", use existing apks =", global.useExisting,
-    ", Batch size = ", global.batchSize,
-    ", keep Apks = ", global.keepApks,
-    "]")
+console.log(
+  'DebugLogs =' + global.logs,
+  ' UseExisting =' + global.useExisting,
+  ', BatchSize = ' + global.batchSize,
+  ', KeepAPKs = ' + global.keepApks
+);
 
 const commitSuicide = (msg) => {
-    console.log("")//empty line
-    console.log(" ☹  Banana analyzer has commit suicide  ☹ ")
-    console.log("[last words]", msg)
-    console.log('(if you think this is an issue with the tool, re-run it with the flag `--enable-logs`, then submit an issue at:', info.homepage, " and include the logs")
-    utils.pause()
+  console.log(''); // empty line
+  console.log(' ☹  Banana analyzer has commit suicide  ☹ ');
+  console.log('[last words]', msg);
+  console.log(
+    '(if you think this is an issue with the tool, re-run it with the flag `--enable-logs`, then submit an issue at:',
+    info.homepage,
+    ' and include the logs'
+  );
+  pause();
+};
+
+if (currentPlatform() == 'win32') {
+  commitSuicide('(ಠ_ಠ) Seriously? 32bit windows machine!? sorry this program is designed for 64 bit machines!');
 }
 
-async function run() {
-    if (utils.currentPlatform() == "win32") {
-        return commitSuicide("(ಠ_ಠ) Seriously? 32bit windows machine!? sorry this program is designed for 64 bit machines!")
-    }
-
-    if (!fs.existsSync(analyzer.APP_CHECK_JAR)) {
-        return commitSuicide("(ಠ_ಠ) some parts of me are missing! I coudn't find AppCheck.jar")
-    }
-
-    debug("platform: " + utils.currentPlatform())
-
-    try {
-        await downloader.downoadChromiumIfMissing()
-    } catch (e) {
-        debug(e)
-        return commitSuicide("failed to download chromium")
-    }
-
-    //1 - get package names
-    console.log("choose a txt file that contains the list of package names")
-    //give user some time to read the message above
-    await utils.delay(500)
-    try {
-        var packageNamesFile = await picker.pickFile()
-        debug("package names file", packageNamesFile)
-    } catch (e) {
-        debug(e)
-        return commitSuicide('I couldn\'t read your txt file ¯\\_(ツ)_/¯')
-    }
-
-    debug("continue after file selections")
-    var packageNames = "";
-    try {
-        var data = fs.readFileSync(packageNamesFile, 'utf8').toString();
-
-        //convert data into array
-        packageNames = data.split("\n")
-        //remove empty lines and any spaces after or before package names
-        packageNames = packageNames
-            .map(pn => pn.trim())
-            .filter(pn => pn.length > 0)
-            //ignore commented package names (that starts with // )  :)
-            .filter(pn => pn.indexOf("//") == -1)
-
-        debug(packageNames)
-    } catch (e) {
-        debug(e)
-        return commitSuicide('(⊙_◎) make sure the txt file exists and its format is UTF8, then throw some package names in it!')
-    }
-
-    if (packageNames.length > MAX_PACKAGE_NAME) {
-        return commitSuicide("●_● Downloading and Analyzing more than 200 apps at a time can have serious consquences on you, your gf, your crypto wallet and the future of humanity!")
-    }
-
-
-    const downloadOneAPK = async (packageName) => {
-
-        try {
-            var dlRes = await downloader.downloadAPK(packageName)
-
-            console.log("✓ APK file is ready → " + packageName)
-            return dlRes
-        } catch (e) {
-            debug(e)
-            console.log("⤫ failed to download apk → ", packageName)
-            return null
-        }
-    }
-
-    //3- download, analyze and write result of 2 apps , to avoid loosing results 
-
-    var batchNum = 0
-    var batchSize = global.batchSize
-    var batchCount = Math.ceil(packageNames.length / batchSize)
-    const resultFileName = path.basename(packageNamesFile).split(".")[0]
-    const failedApks = []
-    for (var i = 0; i < packageNames.length; i += batchSize) {
-        let promises = []
-        batchNum++
-        let nextBatch = packageNames.slice(i, i + batchSize)
-        console.log("Batch #" + batchNum + " =", nextBatch)
-
-        //1- download a batch
-        nextBatch.forEach(packageName => promises.push(downloadOneAPK(packageName)))
-
-        let prs = await Promise.allSettled(promises)
-        //done downloading X apks, lets analyze them
-
-        let downloadedApks = prs.map(pr => pr.value).filter(pr => pr != null)
-        const downloadedApksCount = downloadedApks.length
-        debug("downloaded apks: " + downloadedApksCount)
-
-        const batchFailed = nextBatch.filter(pn => !downloadedApks.map(c => c.packageName).includes(pn))
-        debug("batch #" + batchNum + " failed ==>> " + batchFailed)
-        failedApks.push(...batchFailed)
-
-        if (downloadedApksCount == 0) {
-            continue; //all dowlnoads failed, proces to next batch
-        }
-        //2- analyze the batch
-        //delete previous batch (not original (downloaded) APKs) if exists
-        await analyzer.cleanDataFolder()
-        let analyzerRes = await analyzer.analyzeAPKs(downloadedApks)
-
-        //3- write to excel file
-        let finalHeaders = ['package name', 'version', 'GMS kits', 'HMS kits', "huawei App Id", "androidMarket metadata"];
-
-        let data = []
-        Object.keys(analyzerRes).forEach(pn => {
-            const appAnalyzerRes = analyzerRes[pn]
-            data.push({
-                'package name': pn,
-                version: appAnalyzerRes.version,
-                'GMS kits': appAnalyzerRes['GMS'].join(' , '),
-                'HMS kits': appAnalyzerRes['HMS'].join(' , '),
-                "huawei App Id": appAnalyzerRes["huawei App Id"],
-                "androidMarket metadata": appAnalyzerRes["androidMarket metadata"]
-            })
-        })
-
-        try {
-            excelHelper.writeExcel(finalHeaders, data, resultFileName)
-        } catch (e) {
-            debug(e)
-            return commitSuicide(`(╯°□°)╯︵ ┻━┻ I couldn't write to excel file (close the file '${resultFileName}.xlsx' if its open)`)
-        }
-        console.log(`✓ Batch #${batchNum} of ${batchCount} finished`)
-
-    }
-    await analyzer.cleanDataFolder()
-    await downloader.closeBrowser()
-    console.log(`Analyzed ${packageNames.length - failedApks.length} of ${packageNames.length} apps (${failedApks.length} failed)`)
-    if (failedApks.length > 0)
-        console.log("APKs not analyzed ==> ", failedApks)
-    c
-    console.log()
-    onsole.log(`✔✔ DONE → → → ${path.join(process.cwd(), resultFileName + ".xlsx")}  ( ͡~ ͜ʖ ͡°) `)
-
-    await utils.delay(1_000)
-    utils.pause()
+if (!fs.existsSync(analyzer.APP_CHECK_JAR)) {
+  commitSuicide("(ಠ_ಠ) some parts of me are missing! I coudn't find AppCheck.jar");
 }
-run()
 
+debug('platform: ' + currentPlatform());
 
+try {
+  await downoadChromiumIfMissing();
+} catch (e) {
+  debug(e);
+  commitSuicide('failed to download chromium');
+}
+
+// 1 - get package names
+console.log('choose a txt file that contains the list of package names');
+// give user some time to read the message above
+await delay(500);
+let packageNamesFile = null;
+try {
+  packageNamesFile = await pickFile();
+  debug('package names file', packageNamesFile);
+} catch (e) {
+  debug(e);
+  commitSuicide("I couldn't read your txt file ¯\\_(ツ)_/¯");
+}
+
+debug('continue after file selections');
+let packageNames = '';
+try {
+  const data = fs.readFileSync(packageNamesFile, 'utf8').toString();
+
+  // convert data into array
+  packageNames = data.split('\n');
+  // remove empty lines and any spaces after or before package names
+  packageNames = packageNames
+    .map((pn) => pn.trim())
+    .filter((pn) => pn.length > 0)
+    // ignore commented package names (that starts with // )  :)
+    .filter((pn) => pn.indexOf('//') == -1);
+
+  debug(packageNames);
+} catch (e) {
+  debug(e);
+  commitSuicide('(⊙_◎) make sure the txt file exists and its format is UTF8, then throw some package names in it!');
+}
+
+if (packageNames.length > MAX_PACKAGE_NAME) {
+  commitSuicide(
+    '●_● Downloading and Analyzing more than 200 apps at a time can have serious consquences on you, your gf, your crypto wallet and the future of humanity!'
+  );
+}
+
+const downloadOneAPK = async (packageName) => {
+  try {
+    const dlRes = await downloadAPK(packageName);
+
+    console.log('✓ APK file is ready → ' + packageName);
+    return dlRes;
+  } catch (e) {
+    debug(e);
+    console.log('⤫ failed to download apk → ', packageName, ': The requested app is not found or invalid');
+    return null;
+  }
+};
+
+// 3- download, analyze and write result of 2 apps , to avoid loosing results
+
+let batchNum = 0;
+const batchSize = global.batchSize;
+const batchCount = Math.ceil(packageNames.length / batchSize);
+const resultFileName = path.basename(packageNamesFile).split('.')[0];
+const failedApks = [];
+for (let i = 0; i < packageNames.length; i += batchSize) {
+  const promises = [];
+  batchNum++;
+  const nextBatch = packageNames.slice(i, i + batchSize);
+  console.log('Batch #' + batchNum + ' =', nextBatch);
+
+  // 1- download a batch
+  nextBatch.forEach((packageName) => promises.push(downloadOneAPK(packageName)));
+
+  const prs = await Promise.allSettled(promises);
+  // done downloading X apks, lets analyze them
+
+  const downloadedApks = prs.map((pr) => pr.value).filter((pr) => pr != null);
+  const downloadedApksCount = downloadedApks.length;
+  debug('downloaded apks: ' + downloadedApksCount);
+
+  const batchFailed = nextBatch.filter((pn) => !downloadedApks.map((c) => c.packageName).includes(pn));
+  debug('batch #' + batchNum + ' failed ==>> ' + batchFailed);
+  failedApks.push(...batchFailed);
+
+  if (downloadedApksCount == 0) {
+    continue; // all dowlnoads failed, proces to next batch
+  }
+  // 2- analyze the batch
+  // delete previous batch (not original (downloaded) APKs) if exists
+  await analyzer.cleanDataFolder();
+  const analyzerRes = await analyzer.analyzeAPKs(downloadedApks);
+
+  // 3- write to excel file
+  const finalHeaders = ['package name', 'version', 'GMS kits', 'HMS kits', 'huawei App Id', 'androidMarket metadata'];
+
+  const data = [];
+  Object.keys(analyzerRes).forEach((pn) => {
+    const appAnalyzerRes = analyzerRes[pn];
+    console.dir(appAnalyzerRes);
+    data.push({
+      'package name': pn,
+      version: appAnalyzerRes.version,
+      'GMS kits': appAnalyzerRes['GMS'].join(' , '),
+      'HMS kits': appAnalyzerRes['HMS'].join(' , '),
+      'huawei App Id': appAnalyzerRes['huawei App Id'],
+      'androidMarket metadata': appAnalyzerRes['androidMarket metadata'],
+    });
+  });
+
+  try {
+    await writeExcel(finalHeaders, data, resultFileName);
+  } catch (e) {
+    debug(e);
+    commitSuicide(`(╯°□°)╯︵ ┻━┻ I couldn't write to excel file (close the file '${resultFileName}.xlsx' if its open)`);
+  }
+  console.log(`✓ Batch #${batchNum} of ${batchCount} finished`);
+}
+await analyzer.cleanDataFolder();
+await closeBrowser();
+const successCount = packageNames.length - failedApks.length;
+
+console.log(
+  `Analyzed ${successCount} of ${packageNames.length} apps (${failedApks.length} failed${
+    successCount == 0 && failedApks.length > 2 ? ' (ALL) ' : ''
+  })`
+);
+if (failedApks.length > 0) console.log('APKs not analyzed ==> ', failedApks);
+
+console.log();
+if (successCount > 0) console.log(`✔✔ DONE → ${path.join(process.cwd(), resultFileName + '.xlsx')}  ( ͡~ ͜ʖ ͡°) `);
+
+await delay(1_000);
+pause();
