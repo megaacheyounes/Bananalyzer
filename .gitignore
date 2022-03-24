@@ -1,6 +1,7 @@
 node_modules/
 build/
 downloads/
+downloads_backup/
 appdataxsj/
 *.xlsx
 dev.js
