@@ -85,7 +85,7 @@ const mapSdkNames = (arr) => {
   if (!arr) return res;
   const keys = Object.keys(gmsHeadersMap);
   arr.forEach((sdk) => {
-    res.push(keys.includes(sdk) ? `sdk (${gmsHeadersMap[sdk]})` : sdk);
+    res.push(keys.includes(sdk) ? `${sdk} (${gmsHeadersMap[sdk]})` : sdk);
   });
   return res;
 };
@@ -115,7 +115,9 @@ export const cleanDataFolder = async () => {
 
 /**
  *
- * @param {array} apps: list of downloaded apps/apk to analyze, example = [{packageName:"package.name":filePath:"path/to/file.apk"}]
+ * @param {array} apps: list of downloaded apps/apk to analyze, example = [
+ * {packageName:"package.name":filePath:"path/to/file.apk", uploadDate:"may 27, 2021"}
+ * ]
  * @return {promise} resolved when all apks in packageNamesObj are analyzed
  * result example = {
  *    'com.landmarkgroup.splashfashions': {
@@ -139,7 +141,7 @@ export const analyzeAPKs = (apps) =>
       } catch (e) {
         debug('analyzer:failed to move apk ' + app.packageName + '.apk' + ' from /downloads to /appdataxsj');
         debug('analyzer:apk path= ' + app.filePath + ' ,dest = ' + dest);
-        console.debug('⤫ failed to analyze apk of ' + app.packageName);
+        // console.log(`⤫ failed to analyze apk → ${app.packageName} : ${e.message}`);
         debug(e);
       }
     });
@@ -216,7 +218,7 @@ export const analyzeAPKs = (apps) =>
       let androidMarket = '⚠';
       let appId = '⚠';
       let versionName = '⚠';
-
+      let permissions = '⚠';
       try {
         manifestData = await getApkInfo(app.filePath);
 
@@ -227,22 +229,31 @@ export const analyzeAPKs = (apps) =>
         const metaData = manifestData['application']['metaDatas'];
 
         const appIdObj = metaData.find((v) => v.name == 'com.huawei.hms.client.appid');
-        appId = appIdObj ? appIdObj.value : 'NOT FOUND';
+        appId = appIdObj ? appIdObj.value : '';
 
         const androidMarketObj = metaData.find((v) => v.name == 'com.huawei.hms.client.channel.androidMarket');
-        androidMarket = androidMarketObj ? JSON.stringify(androidMarketObj) : 'NOT FOUND';
+        androidMarket = androidMarketObj ? JSON.stringify(androidMarketObj) : '';
+
+        permissions = manifestData.usesPermissions.map((obj) => obj['']).join(', \n ');
       } catch (e) {
         debug('analyzer:failed to parse apk ', packageName);
         // hmmms is an XAPK? a split APK?
+        console.log(`⤫ failed to analyze APK → ${app.packageName} : ${e.message}`);
         debug(e);
       }
 
+      // get apk last modificationm time
+      const stat = fs.statSync(app.filePath);
+
       result[packageName] = {
         version: versionName,
+        'upload date': app.uploadDate,
+        'APK creation date': stat.mtime,
         GMS: mapSdkNames(allGms[packageName]),
         HMS: allHms[packageName] || [],
         'huawei App Id': appId,
-        'androidMarket metadata': androidMarket,
+        'AndroidMarket metadata': androidMarket,
+        permissions,
       };
     }
     resolve(result);

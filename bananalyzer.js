@@ -30,7 +30,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as analyzer from './analyzer.js';
-import { writeExcel } from './ExcelHelper.js';
+import { saveResult } from './ExcelHelper.js';
 
 // good ol' require
 
@@ -96,153 +96,145 @@ const commitSuicide = (msg) => {
   console.log(
     '(if you think this is an issue with the tool, re-run it with the flag `--enable-logs`, then submit an issue at:',
     info.homepage,
-    ' and include the logs'
+    ' and include the logs)'
   );
   pause();
 };
+const main = async () => {
+  if (currentPlatform() == 'win32') {
+    return commitSuicide(
+      '(ಠ_ಠ) Seriously? 32bit windows machine!? sorry this program is designed for 64 bit machines!'
+    );
+  }
 
-if (currentPlatform() == 'win32') {
-  commitSuicide('(ಠ_ಠ) Seriously? 32bit windows machine!? sorry this program is designed for 64 bit machines!');
-}
+  if (!fs.existsSync(analyzer.APP_CHECK_JAR)) {
+    return commitSuicide("(ಠ_ಠ) some parts of me are missing! I coudn't find AppCheck.jar");
+  }
 
-if (!fs.existsSync(analyzer.APP_CHECK_JAR)) {
-  commitSuicide("(ಠ_ಠ) some parts of me are missing! I coudn't find AppCheck.jar");
-}
+  debug('platform: ' + currentPlatform());
 
-debug('platform: ' + currentPlatform());
+  try {
+    await downoadChromiumIfMissing();
+  } catch (e) {
+    debug(e);
+    return commitSuicide('failed to download chromium');
+  }
 
-try {
-  await downoadChromiumIfMissing();
-} catch (e) {
-  debug(e);
-  commitSuicide('failed to download chromium');
-}
+  // 1 - get package names
+  console.log('choose a txt file that contains the list of package names');
+  // give user some time to read the message above
+  await delay(500);
+  let packageNamesFile = null;
+  try {
+    packageNamesFile = await pickFile();
+    debug('package names file', packageNamesFile);
+  } catch (e) {
+    debug(e);
+    return commitSuicide("I couldn't read your txt file ¯\\_(ツ)_/¯");
+  }
 
-// 1 - get package names
-console.log('choose a txt file that contains the list of package names');
-// give user some time to read the message above
-await delay(500);
-let packageNamesFile = null;
-try {
-  packageNamesFile = await pickFile();
-  debug('package names file', packageNamesFile);
-} catch (e) {
-  debug(e);
-  commitSuicide("I couldn't read your txt file ¯\\_(ツ)_/¯");
-}
+  debug('continue after file selections');
+  let packageNames = '';
+  try {
+    const data = fs.readFileSync(packageNamesFile, 'utf8').toString();
 
-debug('continue after file selections');
-let packageNames = '';
-try {
-  const data = fs.readFileSync(packageNamesFile, 'utf8').toString();
+    // convert data into array
+    packageNames = data.split('\n');
+    // remove empty lines and any spaces after or before package names
+    packageNames = packageNames
+      .map((pn) => pn.trim())
+      .filter((pn) => pn.length > 0)
+      // ignore commented package names (that starts with // )  :)
+      .filter((pn) => pn.indexOf('//') == -1);
 
-  // convert data into array
-  packageNames = data.split('\n');
-  // remove empty lines and any spaces after or before package names
-  packageNames = packageNames
-    .map((pn) => pn.trim())
-    .filter((pn) => pn.length > 0)
-    // ignore commented package names (that starts with // )  :)
-    .filter((pn) => pn.indexOf('//') == -1);
+    debug(packageNames);
+  } catch (e) {
+    debug(e);
+    return commitSuicide(
+      '(●_●) make sure the txt file exists and its format is UTF8, then throw some package names in it!'
+    );
+  }
 
-  debug(packageNames);
-} catch (e) {
-  debug(e);
-  commitSuicide('(⊙_◎) make sure the txt file exists and its format is UTF8, then throw some package names in it!');
-}
+  if (packageNames.length > MAX_PACKAGE_NAME) {
+    return commitSuicide(
+      '(●_●) Downloading and Analyzing more than 200 apps at a time can have serious consquences on you, your gf, your crypto wallet and the future of humanity!'
+    );
+  }
 
-if (packageNames.length > MAX_PACKAGE_NAME) {
-  commitSuicide(
-    '●_● Downloading and Analyzing more than 200 apps at a time can have serious consquences on you, your gf, your crypto wallet and the future of humanity!'
+  const downloadOneAPK = async (packageName) => {
+    try {
+      const dlRes = await downloadAPK(packageName);
+
+      console.log('✓ APK file is ready → ' + packageName);
+      return dlRes;
+    } catch (e) {
+      debug(e);
+      console.log('⤫ failed to download apk → ', packageName, ': The requested app is not found or invalid');
+      return null;
+    }
+  };
+
+  // 3- download, analyze and write result of 2 apps , to avoid loosing results
+
+  let batchNum = 0;
+  const batchSize = global.batchSize;
+  const batchCount = Math.ceil(packageNames.length / batchSize);
+  const resultFileName = path.basename(packageNamesFile).split('.')[0];
+  const failedApks = [];
+  for (let i = 0; i < packageNames.length; i += batchSize) {
+    const promises = [];
+    batchNum++;
+    const nextBatch = packageNames.slice(i, i + batchSize);
+    console.log('Batch #' + batchNum + ' =', nextBatch);
+
+    // 1- download a batch
+    nextBatch.forEach((packageName) => promises.push(downloadOneAPK(packageName)));
+
+    const prs = await Promise.allSettled(promises);
+    // done downloading X apks, lets analyze them
+
+    const downloadedApks = prs.map((pr) => pr.value).filter((pr) => pr != null);
+    const downloadedApksCount = downloadedApks.length;
+    debug('downloaded apks: ' + downloadedApksCount);
+
+    const batchFailed = nextBatch.filter((pn) => !downloadedApks.map((c) => c.packageName).includes(pn));
+    debug('batch #' + batchNum + ' failed ==>> ' + batchFailed);
+    failedApks.push(...batchFailed);
+
+    if (downloadedApksCount == 0) {
+      continue; // all dowlnoads failed, proces to next batch
+    }
+    // 2- analyze the batch
+    // delete previous batch (not original (downloaded) APKs) if exists
+    await analyzer.cleanDataFolder();
+    const analyzerRes = await analyzer.analyzeAPKs(downloadedApks);
+
+    try {
+      await saveResult(analyzerRes, resultFileName);
+    } catch (e) {
+      return commitSuicide(
+        `(╯°□°)╯︵ ┻━┻ I couldn't write to excel file (close the file '${resultFileName}.xlsx' if its open)`
+      );
+    }
+    console.log(`✓ Batch #${batchNum} of ${batchCount} finished`);
+  }
+
+  const successCount = packageNames.length - failedApks.length;
+
+  console.log(
+    `Analyzed ${successCount} of ${packageNames.length} apps (${failedApks.length} failed${
+      successCount == 0 && failedApks.length > 2 ? ' (ALL) ' : ''
+    })`
   );
-}
+  if (failedApks.length > 0) console.log('APKs not analyzed ==> ', failedApks);
 
-const downloadOneAPK = async (packageName) => {
-  try {
-    const dlRes = await downloadAPK(packageName);
+  console.log();
+  if (successCount > 0) console.log(`✔✔ DONE → ${path.join(process.cwd(), resultFileName + '.xlsx')}  ( ͡~ ͜ʖ ͡°) `);
 
-    console.log('✓ APK file is ready → ' + packageName);
-    return dlRes;
-  } catch (e) {
-    debug(e);
-    console.log('⤫ failed to download apk → ', packageName, ': The requested app is not found or invalid');
-    return null;
-  }
-};
-
-// 3- download, analyze and write result of 2 apps , to avoid loosing results
-
-let batchNum = 0;
-const batchSize = global.batchSize;
-const batchCount = Math.ceil(packageNames.length / batchSize);
-const resultFileName = path.basename(packageNamesFile).split('.')[0];
-const failedApks = [];
-for (let i = 0; i < packageNames.length; i += batchSize) {
-  const promises = [];
-  batchNum++;
-  const nextBatch = packageNames.slice(i, i + batchSize);
-  console.log('Batch #' + batchNum + ' =', nextBatch);
-
-  // 1- download a batch
-  nextBatch.forEach((packageName) => promises.push(downloadOneAPK(packageName)));
-
-  const prs = await Promise.allSettled(promises);
-  // done downloading X apks, lets analyze them
-
-  const downloadedApks = prs.map((pr) => pr.value).filter((pr) => pr != null);
-  const downloadedApksCount = downloadedApks.length;
-  debug('downloaded apks: ' + downloadedApksCount);
-
-  const batchFailed = nextBatch.filter((pn) => !downloadedApks.map((c) => c.packageName).includes(pn));
-  debug('batch #' + batchNum + ' failed ==>> ' + batchFailed);
-  failedApks.push(...batchFailed);
-
-  if (downloadedApksCount == 0) {
-    continue; // all dowlnoads failed, proces to next batch
-  }
-  // 2- analyze the batch
-  // delete previous batch (not original (downloaded) APKs) if exists
+  console.log('Releasing resources...');
   await analyzer.cleanDataFolder();
-  const analyzerRes = await analyzer.analyzeAPKs(downloadedApks);
+  await closeBrowser();
 
-  // 3- write to excel file
-  const finalHeaders = ['package name', 'version', 'GMS kits', 'HMS kits', 'huawei App Id', 'androidMarket metadata'];
-
-  const data = [];
-  Object.keys(analyzerRes).forEach((pn) => {
-    const appAnalyzerRes = analyzerRes[pn];
-    console.dir(appAnalyzerRes);
-    data.push({
-      'package name': pn,
-      version: appAnalyzerRes.version,
-      'GMS kits': appAnalyzerRes['GMS'].join(' , '),
-      'HMS kits': appAnalyzerRes['HMS'].join(' , '),
-      'huawei App Id': appAnalyzerRes['huawei App Id'],
-      'androidMarket metadata': appAnalyzerRes['androidMarket metadata'],
-    });
-  });
-
-  try {
-    await writeExcel(finalHeaders, data, resultFileName);
-  } catch (e) {
-    debug(e);
-    commitSuicide(`(╯°□°)╯︵ ┻━┻ I couldn't write to excel file (close the file '${resultFileName}.xlsx' if its open)`);
-  }
-  console.log(`✓ Batch #${batchNum} of ${batchCount} finished`);
-}
-await analyzer.cleanDataFolder();
-await closeBrowser();
-const successCount = packageNames.length - failedApks.length;
-
-console.log(
-  `Analyzed ${successCount} of ${packageNames.length} apps (${failedApks.length} failed${
-    successCount == 0 && failedApks.length > 2 ? ' (ALL) ' : ''
-  })`
-);
-if (failedApks.length > 0) console.log('APKs not analyzed ==> ', failedApks);
-
-console.log();
-if (successCount > 0) console.log(`✔✔ DONE → ${path.join(process.cwd(), resultFileName + '.xlsx')}  ( ͡~ ͜ʖ ͡°) `);
-
-await delay(1_000);
-pause();
+  pause();
+};
+main();

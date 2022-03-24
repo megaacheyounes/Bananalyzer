@@ -5,13 +5,12 @@ import { moveFile } from './mv.js';
 import * as os from 'os';
 
 import debugModule from 'debug';
-import fetch from 'node-fetch';
 
 import { promisify } from 'node:util';
 import stream from 'node:stream';
 import fs from 'node:fs';
 import got from 'got';
-import ApkReader from './adbkit-apkreader/apkreader.js';
+import { readManifest } from './adbkit-apkreader/apkreader.js';
 
 const debug = debugModule('');
 
@@ -24,9 +23,9 @@ const OUT_LOG_FILE = 'out.log';
 const getLogFolder = () => path.join(process.cwd(), LOG_FOLDER);
 const getOutLogFile = () => path.join(getLogFolder(), OUT_LOG_FILE);
 const getErrLogFile = () => path.join(getLogFolder(), ERR_LOG_FILE);
-// remove styling
-// const clean = (buffer) => `${buffer}`.replace(/\[(.*?)m/g, '').replace(/\[(.*?)m/g, '');
 
+// remove styling
+const cleanLogs = (buffer) => `${buffer}`.replace(/\[(.*?)m/g, '').replace(/\[(.*?)m/g, '');
 /**
  * print console output and nodejs errors into files
  * console outut goes to out.log
@@ -46,15 +45,15 @@ export const printLogs = () => {
   }
   process.stdout.write_orig = process.stdout.write;
 
-  // process.stdout.write = (buffer) => {
-  //   fs.appendFileSync(outFile, clean(buffer), 'utf-8');
-  //   process.stdout.write_orig(buffer);
-  // };
-  // process.stderr.write_orig = process.stderr.write;
-  // process.stderr.write = (buffer) => {
-  //   fs.appendFileSync(errFile, clean(buffer), 'utf-8');
-  //   process.stderr.write_orig(buffer);
-  // };
+  process.stdout.write = (buffer) => {
+    fs.appendFileSync(outFile, cleanLogs(buffer), 'utf-8');
+    process.stdout.write_orig(buffer);
+  };
+  process.stderr.write_orig = process.stderr.write;
+  process.stderr.write = (buffer) => {
+    fs.appendFileSync(errFile, cleanLogs(buffer), 'utf-8');
+    process.stderr.write_orig(buffer);
+  };
 };
 
 /**
@@ -85,22 +84,22 @@ export const getApkInfo = (apkPath, lookForRootApkIfFailed = true) =>
       return reject(Error(apkPath + ' does not exists!'));
     }
 
-    ApkReader.open(apkPath)
-      .then((reader) => reader.readManifest())
-      .then((manifest) => resolve(manifest))
-      .catch(async (e) => {
-        debug(e.message);
-        // apk does not contain androidManifest.xml, it has to be an xapk
-        if (e.message.indexOf('does not contain') != -1) {
-          const apkpath2 = await getInnerApk(apkPath);
-          debug('got inner apk path ' + apkpath2);
-          if (lookForRootApkIfFailed) {
-            resolve(await getApkInfo(apkpath2, false));
-          } else {
-            reject(Error('APK does not contain AndroidManifest.xml'));
-          }
+    try {
+      const manifest = await readManifest(apkPath);
+      resolve(manifest);
+    } catch (e) {
+      if (e.message.indexOf('does not contain') != -1) {
+        const apkpath2 = await getInnerApk(apkPath);
+        debug('got inner apk path ' + apkpath2);
+        if (lookForRootApkIfFailed) {
+          resolve(await getApkInfo(apkpath2, false));
+        } else {
+          reject(Error('APK does not contain AndroidManifest.xml'));
         }
-      });
+      } else if (e.message.indexOf('end of central directory record signature not found') != -1) {
+        reject(Error('APK is corrupt or partially downloaded!'));
+      } else reject(e);
+    }
   });
 
 // get the apk inside another apk (xapk, apks)
@@ -112,7 +111,7 @@ const getInnerApk = (apkPath) =>
 
     unzipper.on('error', function (err) {
       debug('getInnerApk:Caught an error');
-      debug(err);
+      debug('on erro: ' + err);
     });
 
     const fileName = path.basename(apkPath);
@@ -150,20 +149,6 @@ export const currentPlatform = () => {
   if (p === 'win32') return os.arch() === 'x64' ? 'win64' : 'win32';
   return '';
 };
-
-export const downloadFile = (downloadLink, downloadPath) =>
-  new Promise(async (resolve, reject) => {
-    const streamPipeline = promisify(pipeline);
-
-    const response = await fetch(downloadLink);
-    if (!response.ok) {
-      debug('downloadfile::response not OK!');
-      reject(Error(response.statusText));
-    }
-
-    await streamPipeline(response.body, fs.createWriteStream(downloadPath));
-    resolve(true);
-  });
 
 export const downloadFileGot = (downloadLink, downloadPath) =>
   new Promise(async (resolve, reject) => {

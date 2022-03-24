@@ -8,3 +8,5 @@ dev.js
 .local-chromium/
 .log
 m.*.json
+manifest1.json
+manifest.json

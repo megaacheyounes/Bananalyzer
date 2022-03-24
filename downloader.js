@@ -93,9 +93,14 @@ const getDownloadLink1 = (page, packageName) =>
       const apkInfoJson = await page.$eval('#downloader_area ul', (el) => el.innerText);
 
       let versionName = '';
-      const matchRes = apkInfoJson.match(versionRegex);
+      const versionNameMatchRes = apkInfoJson.match(versionRegex);
 
-      if (!!matchRes && matchRes.length > 1) versionName = matchRes[1];
+      if (!!versionNameMatchRes && versionNameMatchRes.length > 1) versionName = versionNameMatchRes[1];
+
+      const uploadDateRegex = /UploadDate\"\: \"(.*)\"/;
+      let uploadDate = '';
+      const uploadDateMatchRes = apkInfoJson.match(uploadDateRegex);
+      if (!!uploadDateMatchRes && uploadDateMatchRes.length > 1) uploadDate = uploadDateMatchRes[1];
 
       debug('version from website is ', versionName);
 
@@ -108,6 +113,7 @@ const getDownloadLink1 = (page, packageName) =>
         downloadLink,
         versionName,
         apkSize,
+        uploadDate,
         source: 'apk.support',
       });
     } catch (e) {
@@ -217,6 +223,7 @@ const getDownloadLink2 = (page, packageName, attempt = 0) =>
       downloadLink,
       versionName,
       apkSize,
+      uploadDate: '',
       source: 'apps.evozi',
     });
   });
@@ -303,18 +310,17 @@ export const downloadAPK = (packageName) =>
       if (downloadData == null || downloadData.downloadLink == null || downloadData.downloadLink.length == 0) {
         return reject(Error('failed to get download link'));
       }
-      const { downloadLink, versionName, apkSize, source } = downloadData;
+      const { downloadLink, versionName, apkSize, uploadDate, source } = downloadData;
 
       console.log(
-        `→ Downloading ${packageName} → version= ${versionName}, download size = ${
-          apkSize ? apkSize : '? Mb'
-        }, source=${source}`
+        `→ Downloading ${packageName} → version= ${versionName}, download size = ${apkSize ? apkSize : '? Mb'} `
       );
+      debug(` uplaodDate = ${uploadDate} , source=${source} `);
       debug('file path: ' + filePath);
       debug('download link: ' + downloadLink);
 
       await downloadFileGot(downloadLink, filePath);
-      resolve({ packageName, filePath });
+      resolve({ packageName, filePath, uploadDate });
       debug('Downlading APK file started ==>> ' + packageName);
     } catch (e) {
       debug(e);
