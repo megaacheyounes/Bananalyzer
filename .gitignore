@@ -6,3 +6,4 @@ appdataxsj/
 *.xlsx
 dev.js
 .local-chromium/
+.log
