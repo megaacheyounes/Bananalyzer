@@ -11,6 +11,7 @@ import stream from 'node:stream';
 import fs from 'node:fs';
 import got from 'got';
 import { readManifest } from './adbkit-apkreader/apkreader.js';
+import DecompressZip from 'decompress-zip';
 
 const debug = debugModule('');
 
@@ -103,10 +104,9 @@ export const getApkInfo = (apkPath, lookForRootApkIfFailed = true) =>
   });
 
 // get the apk inside another apk (xapk, apks)
-const getInnerApk = (apkPath) =>
+export const getInnerApk = (apkPath) =>
   new Promise(async (resolve, reject) => {
     debug('looking for root APK inside ' + apkPath);
-    const DecompressZip = require('decompress-zip');
     const unzipper = new DecompressZip(apkPath);
 
     unzipper.on('error', function (err) {
@@ -126,6 +126,7 @@ const getInnerApk = (apkPath) =>
         debug('moved root apk to ' + APP_DATA_XSJ);
         await moveFile(rootApkPath, destPath);
         // delete all extracted files
+        // todo: use rm instead
         fs.rmdirSync(TEMP_FOLDER, { recursive: true });
         resolve(destPath);
       } else {

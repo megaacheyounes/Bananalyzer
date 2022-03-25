@@ -223,7 +223,7 @@ const getDownloadLink2 = (page, packageName, attempt = 0) =>
       downloadLink,
       versionName,
       apkSize,
-      uploadDate: '',
+      uploadDate: 'NOT FOUND',
       source: 'apps.evozi',
     });
   });
@@ -315,6 +315,9 @@ export const downloadAPK = (packageName) =>
       console.log(
         `→ Downloading ${packageName} → version= ${versionName}, download size = ${apkSize ? apkSize : '? Mb'} `
       );
+
+      console.log(packageName, ' upload date: ', uploadDate);
+
       debug(` uplaodDate = ${uploadDate} , source=${source} `);
       debug('file path: ' + filePath);
       debug('download link: ' + downloadLink);

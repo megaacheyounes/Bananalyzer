@@ -30,7 +30,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as analyzer from './analyzer.js';
-import { saveResult } from './ExcelHelper.js';
+import { saveResult } from './ExcelHelper.mjs';
 
 // good ol' require
 

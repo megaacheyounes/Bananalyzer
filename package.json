@@ -13,6 +13,7 @@
     "build-impl": "pkg -t node16-win-x64 --out-path build -C GZip --public --options experimental-modules bananalyzer.js ",
     "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"AppCheck.jar\" build"
   },
+  "bin": "bananalyzer.js",
   "type": "module",
   "keywords": [
     "hms",
@@ -40,7 +41,6 @@
     "xlsx": "^0.18.4",
     "yauzl": "^2.7.0"
   },
-  "bin": "bananalyzer.js",
   "pkg": {
     "scripts": [
       "node_modules/puppeteer/lib/*.js",
