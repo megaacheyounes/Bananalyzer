@@ -251,22 +251,23 @@ export const downloadAPK = (packageName) =>
 
     const filePath = path.join(downloadPath, packageName + '.apk');
 
-    if (fs.existsSync(filePath)) {
-      if (global.useExisting) console.log(`using existing apk: ${packageName}  → ${filePath}`);
-      else console.log(`apk will be overwritten: ${packageName}  → ${filePath}`);
-
-      if (global.useExisting) {
-        resolve({ packageName, filePath });
-        return;
-      }
-    }
-
     try {
       if (!browser) {
         browser = await puppeteer.launch({
           executablePath: global.chromiumExecPath, // comment when debugging, to use chromium thats included with pupputeer
         });
       }
+
+      // todo: test
+      // if (fs.existsSync(filePath)) {
+      //   if (global.useExisting) console.log(`using existing apk: ${packageName}  → ${filePath}`);
+      //   else console.log(`apk will be overwritten: ${packageName}  → ${filePath}`);
+
+      //   if (global.useExisting) {
+      //     resolve({ packageName, filePath });
+      //     return;
+      //   }
+      // }
 
       const page = await browser.newPage();
       // set viewport to a random mobile screen resolution
@@ -312,15 +313,24 @@ export const downloadAPK = (packageName) =>
       }
       const { downloadLink, versionName, apkSize, uploadDate, source } = downloadData;
 
-      console.log(
-        `→ Downloading ${packageName} → version= ${versionName}, download size = ${apkSize ? apkSize : '? Mb'} `
-      );
-
-      console.log(packageName, ' upload date: ', uploadDate);
-
       debug(` uplaodDate = ${uploadDate} , source=${source} `);
       debug('file path: ' + filePath);
       debug('download link: ' + downloadLink);
+
+      // todo: remove
+      if (fs.existsSync(filePath)) {
+        if (global.useExisting) console.log(`using existing apk: ${packageName}  → ${filePath}`);
+        else console.log(`apk will be overwritten: ${packageName}  → ${filePath}`);
+
+        if (global.useExisting) {
+          resolve({ packageName, filePath, uploadDate });
+          return;
+        }
+      }
+
+      console.log(
+        `→ Downloading ${packageName} → version= ${versionName}, download size = ${apkSize ? apkSize : '? Mb'} `
+      );
 
       await downloadFileGot(downloadLink, filePath);
       resolve({ packageName, filePath, uploadDate });

@@ -120,8 +120,8 @@ const writeExcel = async (data, filename) =>
       { wch: 40 }, // hms kits
       { wch: 20 }, // app id
       { wch: 40 }, // market metadata
-      { wch: 40 }, // huawei Metadata
-      { wch: 40 }, // permissions
+      { wch: 50 }, // huawei Metadata
+      { wch: 100 }, // permissions
     ];
 
     worksheet['!cols'] = wscols;

@@ -240,7 +240,10 @@ export const analyzeAPKs = (apps) =>
         const androidMarketObj = metaData.find((v) => v.name.toLowerCase().indexOf('androidMarket') != -1);
         androidMarketMetaData = androidMarketObj ? JSON.stringify(androidMarketObj) : '';
 
-        huaweiMetadata = metaData.filter((m) => m.name.indexOf('huawei') != -1).map((m) => `${m.name}:${m.value},\n`);
+        huaweiMetadata = metaData
+          .filter((m) => m.name.indexOf('huawei') != -1)
+          .map((m) => `${m.name}:${m.value}`)
+          .join(', \n');
         try {
           permissions = manifestData.usesPermissions
             .map((obj) => obj.name)
