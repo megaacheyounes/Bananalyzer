@@ -28,8 +28,8 @@
 import { default as puppeteer } from 'puppeteer-extra';
 import { default as adblockerPlugin } from 'puppeteer-extra-plugin-adblocker';
 import { default as stealthPlugin } from 'puppeteer-extra-plugin-stealth';
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 
 import { delay, downloadFileGot } from './utils.js';
 

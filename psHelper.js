@@ -2,7 +2,7 @@
 /**
  * this file contains PowerShell scripts to open file picker and set env variable
  */
-import * as fs from 'fs';
+import fs from 'fs';
 // var spawn = require("child_process").spawn  ;
 import * as childProcess from 'child_process';
 const spawn = childProcess.spawn;

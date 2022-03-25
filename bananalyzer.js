@@ -27,9 +27,8 @@
 // hide all nodejs warnings
 // process.removeAllListeners('warning');
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as analyzer from './analyzer.js';
+import fs from 'fs';
+import path from 'path';
 import { saveResult } from './ExcelHelper.mjs';
 
 // good ol' require
@@ -43,6 +42,7 @@ import { delay, pause, printLogs, currentPlatform } from './utils.js';
 import { pickFile } from './psHelper.js';
 
 import debugModule from 'debug';
+import { analyzeAPKs, APP_CHECK_JAR, cleanDataFolder } from './analyzer.js';
 const debug = debugModule('');
 
 const MAX_PACKAGE_NAME = 200;
@@ -107,7 +107,7 @@ const main = async () => {
     );
   }
 
-  if (!fs.existsSync(analyzer.APP_CHECK_JAR)) {
+  if (!fs.existsSync(APP_CHECK_JAR)) {
     return commitSuicide("(ಠ_ಠ) some parts of me are missing! I coudn't find AppCheck.jar");
   }
 
@@ -206,8 +206,8 @@ const main = async () => {
     }
     // 2- analyze the batch
     // delete previous batch (not original (downloaded) APKs) if exists
-    await analyzer.cleanDataFolder();
-    const analyzerRes = await analyzer.analyzeAPKs(downloadedApks);
+    await cleanDataFolder();
+    const analyzerRes = await analyzeAPKs(downloadedApks);
 
     try {
       await saveResult(analyzerRes, resultFileName);
@@ -232,7 +232,7 @@ const main = async () => {
   if (successCount > 0) console.log(`✔✔ DONE → ${path.join(process.cwd(), resultFileName + '.xlsx')}  ( ͡~ ͜ʖ ͡°) `);
 
   console.log('Releasing resources...');
-  await analyzer.cleanDataFolder();
+  await cleanDataFolder();
   await closeBrowser();
 
   pause();

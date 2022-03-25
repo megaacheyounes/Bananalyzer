@@ -1,6 +1,6 @@
 'use strict';
 
-import * as path from 'path';
+import path from 'path';
 import { moveFile } from './mv.js';
 import * as os from 'os';
 

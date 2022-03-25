@@ -3,8 +3,8 @@
 /**
  * this script helps to move files, i think!
  */
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 import { default as ncp } from 'ncp';
 import * as rimraf from 'rimraf';
 import * as mkdirp from 'mkdirp';
