@@ -130,8 +130,12 @@ const getDownloadLink2 = (page, packageName, attempt = 0) =>
     const link = `https://apps.evozi.com/apk-downloader/?id=${packageName}`;
     debug('page link ' + link);
 
-    await page.goto(link, { waitUntil: 'domcontentloaded' });
-
+    try {
+      await page.goto(link, { waitUntil: 'domcontentloaded' });
+    } catch (e) {
+      debug(e);
+      return reject(Error('no Internet'));
+    }
     await page.waitForSelector('.card-body .btn');
     debug('page loaded');
 

@@ -237,11 +237,11 @@ export const analyzeAPKs = (apps) =>
           huaweiAppId = '';
         }
 
-        const androidMarketObj = metaData.find((v) => v.name.toLowerCase().indexOf('androidMarket') != -1);
+        const androidMarketObj = metaData.find((v) => !!v.name && v.name.toLowerCase().indexOf('androidmarket') != -1);
         androidMarketMetaData = androidMarketObj ? JSON.stringify(androidMarketObj) : '';
 
         huaweiMetadata = metaData
-          .filter((m) => m.name.indexOf('huawei') != -1)
+          .filter((m) =>!!m.name && m.name.indexOf('huawei') != -1)
           .map((m) => `${m.name}:${m.value}`)
           .join(', \n');
         try {
