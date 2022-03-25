@@ -56,6 +56,7 @@
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "pkg": "^5.5.2"
+    "pkg": "^5.5.2",
+    "ts-migrate": "^0.1.28"
   }
 }
