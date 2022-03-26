@@ -8,8 +8,8 @@ import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
 
+import { AnalyzedApk } from './models/analyzedApk';
 import { APK } from './models/apk';
-import { AnalyzerResult } from './models/app';
 import { Kits } from './models/kits';
 import { Manifest } from './models/manifest';
 import { moveFile } from './mv';
@@ -134,7 +134,7 @@ export const cleanDataFolder = async () => {
  *
  */
 export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
-  new Promise<AnalyzerResult>(async (resolve, reject) => {
+  new Promise<AnalyzedApk[]>(async (resolve, reject) => {
     debug('analyzer:analyzing ', apks);
     if (!fs.existsSync(appDataFolder)) fs.mkdirSync(appDataFolder);
 
@@ -217,7 +217,7 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
     const allHms: Kits = await getKits(hmsEntries, headers);
     const allGms: Kits = await getKits(gmsEntries, headers);
 
-    const results: AnalyzerResult = {};
+    const results: AnalyzedApk[] = [];
     for (const app of apks) {
       const packageName = app.packageName;
 
@@ -226,7 +226,8 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
       let huaweiAppId = '⚠';
       let versionName = '⚠';
       let permissions = '⚠';
-      let huaweiMetadata = '!';
+      let googleMetadatas = '⚠';
+      let huaweiMetadatas = '⚠';
       try {
         manifestData = await getApkInfo(app.filePath);
 
@@ -247,10 +248,15 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
         const androidMarketObj = metaData.find((v) => !!v.name && v.name.toLowerCase().indexOf('androidmarket') != -1);
         androidMarketMetaData = androidMarketObj ? JSON.stringify(androidMarketObj) : '';
 
-        huaweiMetadata = metaData
+        huaweiMetadatas = metaData
           .filter((m) => !!m.name && m.name.indexOf('huawei') != -1)
           .map((m) => `${m.name}:${m.value}`)
           .join(', \n');
+        googleMetadatas = metaData
+          .filter((m) => !!m.name && m.name.indexOf('google') != -1)
+          .map((m) => `${m.name}:${m.value}`)
+          .join(', \n');
+
         try {
           permissions = manifestData.usesPermissions
             .map((obj) => obj.name)
@@ -264,7 +270,7 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
         console.log(e);
         debug('analyzer:failed to parse apk ', packageName);
         // hmmms is an XAPK? a split APK?
-        console.log(`⤫ failed to analyze APK → ${app.packageName} : ${e.message}`);
+        console.log(`⤫ failed to parse AndroidManifest.xml → ${app.packageName} : ${e.message}`);
         debug(e);
       }
 
@@ -278,7 +284,8 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
         debug(e);
       }
 
-      results[packageName] = {
+      results.push({
+        packageName,
         versionName,
         uploadDate: app.uploadDate || '',
         apkCreationTime,
@@ -286,9 +293,10 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
         HMS: allHms[packageName] || [],
         huaweiAppId,
         androidMarketMetaData,
-        huaweiMetadata,
+        huaweiMetadatas,
+        googleMetadatas,
         permissions,
-      };
+      });
     }
     resolve(results);
   });

@@ -1,6 +1,8 @@
 /* eslint-disable require-jsdoc */
 'use strict';
 
+import debugModule from 'debug';
+
 import BinaryXmlParser from './binaryxml';
 
 // const { default: BinaryXmlParser } = require('./binaryxml');
@@ -10,6 +12,7 @@ import BinaryXmlParser from './binaryxml';
 // const NS_ANDROID = 'http://schemas.android.com/apk/res/android'
 const INTENT_MAIN = 'android.intent.action.MAIN';
 const CATEGORY_LAUNCHER = 'android.intent.category.LAUNCHER';
+const debug = debugModule('manifestParser');
 
 interface Element {
   nodeName: any;
@@ -17,10 +20,10 @@ interface Element {
   attributes: Iterable<any> | ArrayLike<any>;
 }
 class ManifestParser {
-  buffer: unknown;
+  buffer: Buffer;
   xmlParser: BinaryXmlParser;
 
-  constructor(buffer: unknown, options = { debug: false }) {
+  constructor(buffer: Buffer, options = { debug: false }) {
     this.buffer = buffer;
     this.xmlParser = new BinaryXmlParser(this.buffer, options);
   }
@@ -163,6 +166,7 @@ class ManifestParser {
 
   parse() {
     const document = this.xmlParser.parse();
+    debug('parsed xml');
     const manifest = this.collapseAttributes(document);
 
     manifest.usesPermissions = [];

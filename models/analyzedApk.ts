@@ -1,4 +1,5 @@
-export interface App {
+export interface AnalyzedApk {
+  packageName: string;
   HMS: string[];
   GMS: string[];
   versionName: string;
@@ -6,10 +7,7 @@ export interface App {
   apkCreationTime: string;
   huaweiAppId: string;
   androidMarketMetaData: string;
-  huaweiMetadata: string;
+  huaweiMetadatas: string;
+  googleMetadatas: string;
   permissions: string;
-}
-
-export interface AnalyzerResult {
-  [packageName: string]: App;
 }

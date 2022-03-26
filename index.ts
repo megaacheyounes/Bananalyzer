@@ -42,6 +42,7 @@ import {
   downoadChromiumIfMissing,
 } from './downloader';
 import { saveResult } from './ExcelHelper';
+import { AnalyzedApk } from './models/analyzedApk';
 import { APK } from './models/apk';
 import { pickFile } from './psHelper';
 import {
@@ -185,9 +186,10 @@ const main = async () => {
   // 3- download, analyze and write result of 2 apps , to avoid loosing results
 
   let batchNum = 0;
-  const batchCount = Math.ceil(packageNames.length / batchSize);
-  const resultFileName = path.basename(packageNamesFile).split('.')[0];
-  const failedApks = [];
+  const batchCount: number = Math.ceil(packageNames.length / batchSize);
+  const resultFileName: string = path.basename(packageNamesFile).split('.')[0];
+  const failedToDownload: string[] = [];
+  const failedToAnalyze: string[] = [];
   for (let i = 0; i < packageNames.length; i += batchSize) {
     const promises: Promise<APK | null>[] = [];
     batchNum++;
@@ -200,13 +202,14 @@ const main = async () => {
     const prs = await Promise.allSettled(promises);
     // done downloading X apks, lets analyze them
 
-    const downloadedApks = prs.map((pr: any) => pr.value).filter((pr) => pr != null);
+    const downloadedApks = prs.map((pr: any) => pr.value).filter((result: APK | null) => result != null);
+    debug(downloadedApks);
     const downloadedApksCount = downloadedApks.length;
     debug('downloaded apks: ' + downloadedApksCount);
 
     const batchFailed = nextBatch.filter((pn) => !downloadedApks.map((c) => c.packageName).includes(pn));
     debug('batch #' + batchNum + ' failed ==>> ' + batchFailed);
-    failedApks.push(...batchFailed);
+    failedToDownload.push(...batchFailed);
 
     if (downloadedApksCount == 0) {
       continue; // all dowlnoads failed, proces to next batch
@@ -214,7 +217,10 @@ const main = async () => {
     // 2- analyze the batch
     // delete previous batch (not original (downloaded) APKs) if exists
     await cleanDataFolder();
-    const analyzerRes = await analyzeAPKs(downloadedApks, keepApks);
+    const analyzerRes: AnalyzedApk[] = await analyzeAPKs(downloadedApks, keepApks);
+    console.log('anlyzer res: ', analyzerRes);
+    const batchNotAnalyzed = nextBatch.filter((pn) => !analyzerRes.map((app) => app.packageName).includes(pn));
+    failedToAnalyze.push(...batchNotAnalyzed);
 
     try {
       await saveResult(analyzerRes, resultFileName);
@@ -226,14 +232,17 @@ const main = async () => {
     console.log(`✓ Batch #${batchNum} of ${batchCount} finished`);
   }
 
-  const successCount = packageNames.length - failedApks.length;
+  const successCount = packageNames.length - failedToDownload.length - failedToAnalyze.length;
+  const showAll = successCount == 0 && failedToDownload.length > 2;
 
   console.log(
-    `Analyzed ${successCount} of ${packageNames.length} apps (${failedApks.length} failed${
-      successCount == 0 && failedApks.length > 2 ? ' (ALL) ' : ''
+    `Analyzed ${successCount} of ${packageNames.length} apps  (${failedToDownload.length} failed${
+      showAll ? ' (ALL) ' : ''
     })`
   );
-  if (failedApks.length > 0) console.log('APKs not analyzed ==> ', failedApks);
+
+  if (failedToDownload.length > 0) console.log('APKs not downloaded ==> ', failedToDownload);
+  if (failedToAnalyze.length > 0) console.log('APKs not analyzed ==> ', failedToAnalyze);
 
   console.log();
   if (successCount > 0) console.log(`✔✔ DONE → ${path.join(process.cwd(), resultFileName + '.xlsx')}  ( ͡~ ͜ʖ ͡°) `);

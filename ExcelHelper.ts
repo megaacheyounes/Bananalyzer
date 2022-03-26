@@ -2,8 +2,8 @@
 import debugModule from 'debug';
 import xlsx from 'xlsx';
 
-import { AnalyzerResult } from './models/app';
-import { ExcelData } from './models/excelData';
+import { AnalyzedApk } from './models/analyzedApk';
+import { ExcelRow } from './models/excelRow';
 
 const debug = debugModule('excleHelper');
 
@@ -16,7 +16,7 @@ const HEADER_HMS_KITS = 'HMS kits';
 const HEADER_HUAWEI_APP_ID = 'Hawei App Id';
 const HEADER_ANDROID_MARKET_METADATA = 'AndroidMarket metadata';
 const HEADER_HUAWEI_METADATAS = 'Huawei Metadatas';
-const HEADER_GOOGLE_METADATAS = 'Huawei Metadatas';
+const HEADER_GOOGLE_METADATAS = 'Google Metadatas';
 const HEADER_PERMISSIONS = 'Permissions (Google/Huawei)';
 
 // 3- write to excel file
@@ -34,27 +34,29 @@ const HEADERS = [
   HEADER_PERMISSIONS,
 ];
 
-export const saveResult = async (analyzerRes: AnalyzerResult, resultFileName: string) =>
+export const saveResult = async (apps: AnalyzedApk[], resultFileName: string) =>
   new Promise(async (resolve, reject) => {
     // transform data
-    const data: ExcelData = [];
-    Object.keys(analyzerRes).forEach((pn) => {
-      const appAnalyzerRes = analyzerRes[pn];
-      debug(appAnalyzerRes);
+    const data: ExcelRow[] = [];
+    apps.forEach((app) => {
+      debug(app);
       // keys must equal headers
       // todo: use constants for keys
-      data.push({
-        HEADER_PACKAGE_NAME: pn,
-        HEADER_VERSION_NAME: appAnalyzerRes.versionName,
-        HEADER_APK_CREATION_DATE: appAnalyzerRes.apkCreationTime,
-        HEADER_GOOGLE_METADATAS: appAnalyzerRes.uploadDate,
-        HEADER_GMS_KITS: appAnalyzerRes['GMS'].join(' , '),
-        HEADER_HMS_KITS: appAnalyzerRes['HMS'].join(' , '),
-        HEADER_HUAWEI_APP_ID: appAnalyzerRes.huaweiAppId,
-        HEADER_ANDROID_MARKET_METADATA: appAnalyzerRes.androidMarketMetaData,
-        HEADER_HUAWEI_METADATAS: appAnalyzerRes.huaweiMetadata,
-        HEADER_PERMISSIONS: appAnalyzerRes.permissions,
-      });
+      const appAsRow: ExcelRow = {};
+
+      appAsRow[HEADER_PACKAGE_NAME] = app.packageName;
+      appAsRow[HEADER_VERSION_NAME] = app.versionName;
+      appAsRow[HEADER_APK_CREATION_DATE] = app.apkCreationTime;
+      appAsRow[HEADER_GOOGLE_METADATAS] = app.uploadDate;
+      appAsRow[HEADER_GMS_KITS] = app['GMS'].join(' | ');
+      appAsRow[HEADER_HMS_KITS] = app['HMS'].join(' | ');
+      appAsRow[HEADER_HUAWEI_APP_ID] = app.huaweiAppId;
+      appAsRow[HEADER_ANDROID_MARKET_METADATA] = app.androidMarketMetaData;
+      appAsRow[HEADER_HUAWEI_METADATAS] = app.huaweiMetadatas;
+      appAsRow[HEADER_GOOGLE_METADATAS] = app.googleMetadatas;
+      appAsRow[HEADER_PERMISSIONS] = app.permissions;
+
+      data.push(appAsRow);
     });
 
     try {
@@ -77,7 +79,7 @@ export const saveResult = async (analyzerRes: AnalyzerResult, resultFileName: st
  * @param {array} filename excel filename
  * @return {Promise}
  */
-const writeExcel = async (data: ExcelData, filename: string) =>
+const writeExcel = async (data: ExcelRow[], filename: string) =>
   new Promise(async (resolve, reject) => {
     const exportFileName = `${filename}.xlsx`;
 
@@ -111,7 +113,7 @@ const writeExcel = async (data: ExcelData, filename: string) =>
     sheetName = workbook.SheetNames[0];
     let worksheet = workbook.Sheets[sheetName];
 
-    const existingData: ExcelData = xlsx.utils.sheet_to_json(worksheet);
+    const existingData: ExcelRow[] = xlsx.utils.sheet_to_json(worksheet);
 
     data = [...existingData, ...data];
 
@@ -138,10 +140,14 @@ const writeExcel = async (data: ExcelData, filename: string) =>
       { wch: 40 }, // hms kits
       { wch: 20 }, // app id
       { wch: 40 }, // market metadata
-      { wch: 50 }, // huawei Metadata
+      { wch: 50 }, // huawei Metadatas
+      { wch: 60 }, // google Metadatas
       { wch: 100 }, // permissions
     ];
 
+    if (wscols.length != HEADERS.length) {
+      throw Error('Missing column width');
+    }
     worksheet['!cols'] = wscols;
     // worksheet = excel.utils.book(worksheet, data, { headers });
 

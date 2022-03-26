@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 'use strict';
 
+import debugModule from 'debug';
 import internal from 'stream';
 import * as Zip from 'yauzl';
 
@@ -15,11 +16,13 @@ const MANIFEST = 'AndroidManifest.xml';
 // const readContent = (path) => {
 //   return usingFile(path, (content) => content);
 // };
+const debug = debugModule('apkreader');
 
 export const readManifest = (apk: string, options = { debug: false }) =>
   new Promise<Manifest>(async (resolve, reject) => {
     try {
       const content = await usingFile(apk, MANIFEST);
+      debug('got manifest content');
       resolve(new ManifestParser(content, options).parse());
     } catch (e) {
       reject(e);
@@ -27,11 +30,12 @@ export const readManifest = (apk: string, options = { debug: false }) =>
   });
 
 const usingFile = async (apk: string, innerFile: string) =>
-  new Promise(async (resolve, reject) => {
+  new Promise<Buffer>(async (resolve, reject) => {
     let stream: internal.Readable;
     try {
       stream = await getFileStream(apk, innerFile);
     } catch (e) {
+      debug(e);
       return reject(e);
     }
 
@@ -68,8 +72,10 @@ const usingFile = async (apk: string, innerFile: string) =>
 const _open = (apk: string) =>
   new Promise<Zip.ZipFile | undefined>((resolve, reject) => {
     Zip.open(apk, { lazyEntries: true }, (err, zipFile) => {
-      if (err) reject(err);
-      else resolve(zipFile);
+      if (err) {
+        debug(err);
+        reject(err);
+      } else resolve(zipFile);
     });
   });
 
@@ -78,7 +84,8 @@ const getFileStream = (apk: any, innerFile: any) =>
     let zipfile: Zip.ZipFile;
     try {
       const zipFileTemp = await _open(apk);
-      if (zipFileTemp) {
+      if (!zipFileTemp) {
+        debug('could not open zip file');
         reject('APK corrupt or does not exist');
         return;
       }
