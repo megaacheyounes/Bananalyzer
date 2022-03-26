@@ -1,9 +1,12 @@
 /* eslint-disable require-jsdoc */
 'use strict';
 
-import ManifestParser from './parser/manifest.js';
-
+import internal from 'stream';
 import * as Zip from 'yauzl';
+
+import { Manifest } from '../models/manifest';
+import ManifestParser from './manifestParser';
+
 const MANIFEST = 'AndroidManifest.xml';
 
 // it has been updated to include application meta data
@@ -13,8 +16,8 @@ const MANIFEST = 'AndroidManifest.xml';
 //   return usingFile(path, (content) => content);
 // };
 
-export const readManifest = (apk, options = {}) =>
-  new Promise(async (resolve, reject) => {
+export const readManifest = (apk: string, options = { debug: false }) =>
+  new Promise<Manifest>(async (resolve, reject) => {
     try {
       const content = await usingFile(apk, MANIFEST);
       resolve(new ManifestParser(content, options).parse());
@@ -23,16 +26,16 @@ export const readManifest = (apk, options = {}) =>
     }
   });
 
-const usingFile = async (apk, innerFile) =>
+const usingFile = async (apk: string, innerFile: string) =>
   new Promise(async (resolve, reject) => {
-    let stream;
+    let stream: internal.Readable;
     try {
       stream = await getFileStream(apk, innerFile);
     } catch (e) {
       return reject(e);
     }
 
-    const chunks = [];
+    const chunks: Uint8Array[] = [];
     let totalLength = 0;
 
     const tryRead = () => {
@@ -44,7 +47,7 @@ const usingFile = async (apk, innerFile) =>
     };
 
     const readableListener = () => tryRead();
-    const errorListener = (err) => {
+    const errorListener = (err: any) => {
       stream.destroy();
       reject(err);
     };
@@ -62,32 +65,37 @@ const usingFile = async (apk, innerFile) =>
     tryRead();
   });
 
-const _open = (apk) =>
-  new Promise((resolve, reject) => {
+const _open = (apk: string) =>
+  new Promise<Zip.ZipFile | undefined>((resolve, reject) => {
     Zip.open(apk, { lazyEntries: true }, (err, zipFile) => {
       if (err) reject(err);
       else resolve(zipFile);
     });
   });
 
-const getFileStream = (apk, innerFile) =>
-  new Promise(async (resolve, reject) => {
-    let zipfile;
+const getFileStream = (apk: any, innerFile: any) =>
+  new Promise<internal.Readable>(async (resolve, reject) => {
+    let zipfile: Zip.ZipFile;
     try {
-      zipfile = await _open(apk);
+      const zipFileTemp = await _open(apk);
+      if (zipFileTemp) {
+        reject('APK corrupt or does not exist');
+        return;
+      }
+      zipfile = zipFileTemp!!;
     } catch (e) {
       return reject(e);
     }
 
-    zipfile.on('entry', (entry) => {
+    zipfile.on('entry', (entry: Zip.Entry) => {
       // called once for every file inside the apk
 
       if (entry.fileName === innerFile) {
         // we got the manifest file
-        zipfile.openReadStream(entry, (err, stream) => {
+        zipfile.openReadStream(entry, (err: any, stream: internal.Readable | undefined) => {
           if (err) reject(err);
           else {
-            resolve(stream);
+            resolve(stream!!);
             zipfile.removeAllListeners();
             zipfile.close();
           }
@@ -95,7 +103,7 @@ const getFileStream = (apk, innerFile) =>
       } else zipfile.readEntry(); // read next file
     });
 
-    zipfile.on('error', (err) => {
+    zipfile.on('error', (err: any) => {
       reject(err);
       return true;
     });

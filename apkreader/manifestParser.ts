@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 'use strict';
 
-import BinaryXmlParser from './binaryxml.js';
+import BinaryXmlParser from './binaryxml';
 
 // const { default: BinaryXmlParser } = require('./binaryxml');
 
@@ -11,25 +11,35 @@ import BinaryXmlParser from './binaryxml.js';
 const INTENT_MAIN = 'android.intent.action.MAIN';
 const CATEGORY_LAUNCHER = 'android.intent.category.LAUNCHER';
 
+interface Element {
+  nodeName: any;
+  childNodes: any[];
+  attributes: Iterable<any> | ArrayLike<any>;
+}
 class ManifestParser {
-  constructor(buffer, options = {}) {
+  buffer: unknown;
+  xmlParser: BinaryXmlParser;
+
+  constructor(buffer: unknown, options = { debug: false }) {
     this.buffer = buffer;
     this.xmlParser = new BinaryXmlParser(this.buffer, options);
   }
 
-  collapseAttributes(element) {
+  collapseAttributes(element: Element) {
     const collapsed = Object.create(null);
+
     for (const attr of Array.from(element.attributes)) {
       collapsed[attr.name] = attr.typedValue.value;
     }
+
     return collapsed;
   }
 
-  parseIntents(element, target) {
+  parseIntents(element: { childNodes: any[] }, target: { intentFilters: any[]; metaData: any[] }) {
     target.intentFilters = [];
     target.metaData = [];
 
-    return element.childNodes.forEach((element) => {
+    return element.childNodes.forEach((element: Element) => {
       switch (element.nodeName) {
         case 'intent-filter': {
           const intentFilter = this.collapseAttributes(element);
@@ -38,7 +48,7 @@ class ManifestParser {
           intentFilter.categories = [];
           intentFilter.data = [];
 
-          element.childNodes.forEach((element) => {
+          element.childNodes.forEach((element: Element) => {
             switch (element.nodeName) {
               case 'action':
                 intentFilter.actions.push(this.collapseAttributes(element));
@@ -62,7 +72,7 @@ class ManifestParser {
     });
   }
 
-  parseApplication(element) {
+  parseApplication(element: Element) {
     const app = this.collapseAttributes(element);
 
     app.activities = [];
@@ -73,7 +83,7 @@ class ManifestParser {
     app.providers = [];
     app.usesLibraries = [];
     app.metaDatas = [];
-    element.childNodes.forEach((element) => {
+    element.childNodes.forEach((element: Element) => {
       switch (element.nodeName) {
         case 'activity': {
           const activity = this.collapseAttributes(element);
@@ -112,7 +122,7 @@ class ManifestParser {
           provider.metaData = [];
           provider.pathPermissions = [];
 
-          element.childNodes.forEach((element) => {
+          element.childNodes.forEach((element: Element) => {
             switch (element.nodeName) {
               case 'grant-uri-permission':
                 provider.grantUriPermissions.push(this.collapseAttributes(element));
@@ -141,13 +151,13 @@ class ManifestParser {
     return app;
   }
 
-  isLauncherActivity(activity) {
-    return activity.intentFilters.some(function (filter) {
-      const hasMain = filter.actions.some((action) => action.name === INTENT_MAIN);
+  isLauncherActivity(activity: { intentFilters: any[] }) {
+    return activity.intentFilters.some(function (filter: { actions: any[]; categories: any[] }) {
+      const hasMain = filter.actions.some((action: { name: string }) => action.name === INTENT_MAIN);
       if (!hasMain) {
         return false;
       }
-      return filter.categories.some((category) => category.name === CATEGORY_LAUNCHER);
+      return filter.categories.some((category: { name: string }) => category.name === CATEGORY_LAUNCHER);
     });
   }
 
@@ -168,7 +178,7 @@ class ManifestParser {
     manifest.supportsGlTextures = [];
     manifest.application = Object.create(null);
 
-    document.childNodes.forEach((element) => {
+    document.childNodes.forEach((element: Element) => {
       switch (element.nodeName) {
         case 'uses-permission':
           manifest.usesPermissions.push(this.collapseAttributes(element));
@@ -198,7 +208,7 @@ class ManifestParser {
           manifest.supportsScreens = this.collapseAttributes(element);
           break;
         case 'compatible-screens':
-          element.childNodes.forEach((screen) => {
+          element.childNodes.forEach((screen: any) => {
             return manifest.compatibleScreens.push(this.collapseAttributes(screen));
           });
           break;

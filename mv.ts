@@ -1,13 +1,21 @@
 'use strict';
-// stolen from https://github.com/andrewrk/node-mv/edit/master/index.js lol
+// stolen from https://github.com/andrewrk/node-mv/edit/master/index lol
 /**
  * this script helps to move files, i think!
  */
 import fs from 'fs';
+import mkdirp from 'mkdirp';
+import ncp from 'ncp';
 import path from 'path';
-import { default as ncp } from 'ncp';
-import * as rimraf from 'rimraf';
-import * as mkdirp from 'mkdirp';
+import rimraf from 'rimraf';
+
+type Callback = (err: any | null) => void;
+
+interface Options {
+  mkdirp?: boolean;
+  clobber?: boolean;
+  limit?: number;
+}
 
 /**
  * move file
@@ -17,7 +25,7 @@ import * as mkdirp from 'mkdirp';
  * @param {func} cb callback
  *
  */
-function mv(source, dest, options, cb) {
+function mv(source: string, dest: string, options: Options | Callback, cb: Callback) {
   if (typeof options === 'function') {
     cb = options;
     options = {};
@@ -34,11 +42,17 @@ function mv(source, dest, options, cb) {
   /**
    * make directory
    */
-  function mkdirs() {
-    mkdirp(path.dirname(dest), function (err) {
-      if (err) return cb(err);
+  async function mkdirs() {
+    try {
+      await mkdirp(path.dirname(dest));
       doRename();
-    });
+    } catch (e) {
+      cb(e);
+    }
+    // mkdirp(path.dirname(dest), (err) => {
+    //   if (err) return cb(err);
+    //   doRename();
+    // });
   }
 
   /**
@@ -47,7 +61,7 @@ function mv(source, dest, options, cb) {
   function doRename() {
     if (clobber) {
       fs.rename(source, dest, function (err) {
-        if (!err) return cb();
+        if (!err) return cb(null);
         if (err.code !== 'EXDEV') return cb(err);
         moveFileAcrossDevice(source, dest, clobber, limit, cb);
       });
@@ -76,13 +90,13 @@ function mv(source, dest, options, cb) {
  * @param {string} dest
  * @param {boolean} clobber
  * @param {number} limit
- * @param {callback} cb
+ * @param {Callback} cb
  */
-function moveFileAcrossDevice(source, dest, clobber, limit, cb) {
+function moveFileAcrossDevice(source: string, dest: string, clobber: boolean, limit: number, cb: Callback) {
   const outFlags = clobber ? 'w' : 'wx';
   const ins = fs.createReadStream(source);
   const outs = fs.createWriteStream(dest, { flags: outFlags });
-  ins.on('error', function (err) {
+  ins.on('error', function (err: any) {
     ins.destroy();
     outs.destroy();
     outs.removeListener('close', onClose);
@@ -114,16 +128,16 @@ function moveFileAcrossDevice(source, dest, clobber, limit, cb) {
  * @param {string} dest
  * @param {boolean} clobber
  * @param {number} limit
- * @param {callback} cb
+ * @param {Callback} cb
  */
-function moveDirAcrossDevice(source, dest, clobber, limit, cb) {
+function moveDirAcrossDevice(source: string, dest: string, clobber: boolean, limit: number, cb: Callback) {
   const options = {
     stopOnErr: true,
     clobber: false,
     limit: limit,
   };
   if (clobber) {
-    rimraf(dest, { disableGlob: true }, function (err) {
+    rimraf(dest, { disableGlob: true }, (err) => {
       if (err) return cb(err);
       startNcp();
     });
@@ -134,16 +148,16 @@ function moveDirAcrossDevice(source, dest, clobber, limit, cb) {
    *
    */
   function startNcp() {
-    ncp(source, dest, options, function (errList) {
+    ncp(source, dest, options, (errList) => {
       if (errList) return cb(errList[0]);
       rimraf(source, { disableGlob: true }, cb);
     });
   }
 }
 
-export const moveFile = (source, dest, options = {}) =>
+export const moveFile = (source: string, dest: string, options = {}) =>
   new Promise((resolve, reject) => {
-    mv(source, dest, options, function (err) {
+    mv(source, dest, options, (err: Error | null) => {
       // done. it tried fs.rename first, and then falls back to
       // piping the source file to the dest file and then unlinking
       // the source file.
@@ -151,7 +165,7 @@ export const moveFile = (source, dest, options = {}) =>
       if (err) {
         reject(err);
       } else {
-        resolve();
+        resolve(true);
       }
     });
   });

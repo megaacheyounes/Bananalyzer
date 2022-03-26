@@ -4,17 +4,16 @@
   "description": "A tool to downloads APKs from Google Playstore and lists the GMS and HMS kits that each APK includes and other metadata",
   "author": "Younes Megaache",
   "homepage": "https://github.com/megaacheyounes/bananalyzer",
-  "main": "bananalyzer.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "start": "node --experimental-modules  bananalyzer.js --keep-apks --use-existing",
+    "start": "ts-node  index.ts --keep-apks --use-existing",
     "debug": "npm run start -- --enable-logs",
-    "dev": "node --experimental-modules dev.js ",
+    "dev": "ts-node  dev.js ",
     "build": "npm run copy-files && npm run build-impl",
-    "build-impl": "pkg -t node16-win-x64 --out-path build -C GZip --public --options experimental-modules bananalyzer.js ",
+    "build-impl": "pkg -t node16-win-x64 --out-path build -C GZip --public index.ts ",
     "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"AppCheck.jar\" build"
   },
-  "bin": "bananalyzer.js",
-  "type": "module",
+  "bin": "index.ts",
   "keywords": [
     "hms",
     "gms",
@@ -25,6 +24,7 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^17.0.23",
     "debug": "^4.3.4",
     "decompress-zip": "^0.3.3",
     "download-chromium": "^2.2.1",
@@ -52,11 +52,17 @@
     ]
   },
   "devDependencies": {
+    "@types/mkdirp": "^1.0.2",
+    "@types/ncp": "^2.0.5",
+    "@types/puppeteer": "^5.4.5",
+    "@types/rimraf": "^3.0.2",
     "eslint": "^8.11.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "pkg": "^5.5.2",
-    "ts-migrate": "^0.1.28"
+    "rimraf": "^2.7.1",
+    "ts-migrate": "^0.1.28",
+    "ts-node": "^10.7.0"
   }
 }

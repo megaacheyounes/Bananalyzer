@@ -1,47 +1,65 @@
 'use strict';
-import xlsx from 'xlsx';
 import debugModule from 'debug';
+import xlsx from 'xlsx';
+
+import { AnalyzerResult } from './models/app';
+import { ExcelData } from './models/excelData';
+
 const debug = debugModule('excleHelper');
+
+const HEADER_PACKAGE_NAME = 'Package name'; //
+const HEADER_VERSION_NAME = 'Version name';
+const HEADER_APK_CREATION_DATE = 'APK creation date';
+const HEADER_PLAY_STORE_UPDATE_DATE = 'Google Play update date';
+const HEADER_GMS_KITS = 'GMS kits';
+const HEADER_HMS_KITS = 'HMS kits';
+const HEADER_HUAWEI_APP_ID = 'Hawei App Id';
+const HEADER_ANDROID_MARKET_METADATA = 'AndroidMarket metadata';
+const HEADER_HUAWEI_METADATAS = 'Huawei Metadatas';
+const HEADER_GOOGLE_METADATAS = 'Huawei Metadatas';
+const HEADER_PERMISSIONS = 'Permissions (Google/Huawei)';
 
 // 3- write to excel file
 const HEADERS = [
-  'Package name', //
-  'Version name',
-  'APK creation date',
-  'Google Play update date',
-  'GMS kits',
-  'HMS kits',
-  'Hawei App Id',
-  'AndroidMarket metadata',
-  'Huawei Metadata',
-  'Permissions (Google/Huawei)',
+  HEADER_PACKAGE_NAME,
+  HEADER_VERSION_NAME,
+  HEADER_APK_CREATION_DATE,
+  HEADER_PLAY_STORE_UPDATE_DATE,
+  HEADER_GMS_KITS,
+  HEADER_HMS_KITS,
+  HEADER_HUAWEI_APP_ID,
+  HEADER_ANDROID_MARKET_METADATA,
+  HEADER_HUAWEI_METADATAS,
+  HEADER_GOOGLE_METADATAS,
+  HEADER_PERMISSIONS,
 ];
-export const saveResult = async (analyzerRes, resultFileName) =>
+
+export const saveResult = async (analyzerRes: AnalyzerResult, resultFileName: string) =>
   new Promise(async (resolve, reject) => {
     // transform data
-    const data = [];
+    const data: ExcelData = [];
     Object.keys(analyzerRes).forEach((pn) => {
       const appAnalyzerRes = analyzerRes[pn];
       debug(appAnalyzerRes);
       // keys must equal headers
       // todo: use constants for keys
       data.push({
-        'Package name': pn,
-        'Version name': appAnalyzerRes.versionName,
-        'APK creation date': appAnalyzerRes.apkCreationTime,
-        'Google Play update date': appAnalyzerRes.uploadDate,
-        'GMS kits': appAnalyzerRes['GMS'].join(' , '),
-        'HMS kits': appAnalyzerRes['HMS'].join(' , '),
-        'Hawei App Id': appAnalyzerRes.huaweiAppId,
-        'AndroidMarket metadata': appAnalyzerRes.androidMarketMetaData,
-        'Huawei Metadata': appAnalyzerRes.huaweiMetadata,
-        'Permissions (Google/Huawei)': appAnalyzerRes.permissions,
+        HEADER_PACKAGE_NAME: pn,
+        HEADER_VERSION_NAME: appAnalyzerRes.versionName,
+        HEADER_APK_CREATION_DATE: appAnalyzerRes.apkCreationTime,
+        HEADER_GOOGLE_METADATAS: appAnalyzerRes.uploadDate,
+        HEADER_GMS_KITS: appAnalyzerRes['GMS'].join(' , '),
+        HEADER_HMS_KITS: appAnalyzerRes['HMS'].join(' , '),
+        HEADER_HUAWEI_APP_ID: appAnalyzerRes.huaweiAppId,
+        HEADER_ANDROID_MARKET_METADATA: appAnalyzerRes.androidMarketMetaData,
+        HEADER_HUAWEI_METADATAS: appAnalyzerRes.huaweiMetadata,
+        HEADER_PERMISSIONS: appAnalyzerRes.permissions,
       });
     });
 
     try {
       await writeExcel(data, resultFileName);
-      resolve();
+      resolve(true);
     } catch (e) {
       debug(e);
       reject(e);
@@ -59,7 +77,7 @@ export const saveResult = async (analyzerRes, resultFileName) =>
  * @param {array} filename excel filename
  * @return {Promise}
  */
-const writeExcel = async (data, filename) =>
+const writeExcel = async (data: ExcelData, filename: string) =>
   new Promise(async (resolve, reject) => {
     const exportFileName = `${filename}.xlsx`;
 
@@ -93,7 +111,7 @@ const writeExcel = async (data, filename) =>
     sheetName = workbook.SheetNames[0];
     let worksheet = workbook.Sheets[sheetName];
 
-    const existingData = xlsx.utils.sheet_to_json(worksheet);
+    const existingData: ExcelData = xlsx.utils.sheet_to_json(worksheet);
 
     data = [...existingData, ...data];
 
@@ -129,5 +147,5 @@ const writeExcel = async (data, filename) =>
 
     xlsx.writeFileXLSX(workbook, exportFileName);
 
-    resolve();
+    resolve(true);
   });

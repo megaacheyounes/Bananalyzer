@@ -27,22 +27,32 @@
 // hide all nodejs warnings
 // process.removeAllListeners('warning');
 
+import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
-import { saveResult } from './ExcelHelper.mjs';
 
-// good ol' require
+import {
+  analyzeAPKs,
+  APP_CHECK_JAR,
+  cleanDataFolder,
+} from './analyzer';
+import {
+  closeBrowser,
+  downloadAPK,
+  downoadChromiumIfMissing,
+} from './downloader';
+import { saveResult } from './ExcelHelper';
+import { APK } from './models/apk';
+import { pickFile } from './psHelper';
+import {
+  currentPlatform,
+  delay,
+  pause,
+  printLogs,
+} from './utils';
 
-// import info from './package.json' assert { type: 'json' }; //eslint fucking hates this line
-// ugly workaround to import package.json
-import { readFileSync } from 'fs';
-const info = JSON.parse(readFileSync('package.json'));
-import { downoadChromiumIfMissing, downloadAPK, closeBrowser } from './downloader.js';
-import { delay, pause, printLogs, currentPlatform } from './utils.js';
-import { pickFile } from './psHelper.js';
+const info = JSON.parse(fs.readFileSync('package.json').toString());
 
-import debugModule from 'debug';
-import { analyzeAPKs, APP_CHECK_JAR, cleanDataFolder } from './analyzer.js';
 const debug = debugModule('');
 
 const MAX_PACKAGE_NAME = 200;
@@ -51,14 +61,14 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const args = process.argv.slice(2);
 
-global.useExisting = args.includes('--use-existing'); // if true, will use existing apk in ./download, if false, will force download apks
-global.keepApks = args.includes('--keep-apks'); // if set, the program will not delete the downloaded apks, apks can be found ./downloads folder
-global.logs = args.includes('--enable-logs'); // debug logs
+const useExisting = args.includes('--use-existing'); // if true, will use existing apk in ./download, if false, will force download apks
+const keepApks = args.includes('--keep-apks'); // if set, the program will not delete the downloaded apks, apks can be found ./downloads folder
+const enableLogs = args.includes('--enable-logs'); // debug logs
 
-if (global.logs) {
+if (enableLogs) {
   debugModule.enable('*');
 } else {
-  debugModule.disable('');
+  debugModule.disable();
 }
 
 console.log(`${info.name} V${info.version} (${info.homepage})`);
@@ -67,29 +77,30 @@ debug('args: ' + args);
 
 printLogs();
 
+let batchSize: number;
 // set batch size
 const batchArg = args.find((arg) => arg.indexOf('batch') != -1);
 if (!!batchArg) {
   // download and anlyze X apps at the same time, default value is 3
-  const sizeTemp = batchArg.replace('--batch-', '');
-  if (isNaN(sizeTemp) || +sizeTemp < 1) {
+  const sizeTemp: string = batchArg.replace('--batch-', '');
+  if (isNaN(Number(sizeTemp)) || +sizeTemp < 1) {
     console.log(`the batch size you provided is not valid ("${sizeTemp}"), will fallback to deafult size ()`);
-    global.batchSize = DEFAULT_BATCH_SIZE;
+    batchSize = DEFAULT_BATCH_SIZE;
   } else {
-    global.batchSize = +sizeTemp;
+    batchSize = +sizeTemp;
   }
 } else {
-  global.batchSize = DEFAULT_BATCH_SIZE;
+  batchSize = DEFAULT_BATCH_SIZE;
 }
 
 console.log(
-  'DebugLogs =' + global.logs,
-  ' UseExisting =' + global.useExisting,
-  ', BatchSize = ' + global.batchSize,
-  ', KeepAPKs = ' + global.keepApks
+  'DebugLogs =' + enableLogs,
+  ' UseExisting =' + useExisting,
+  ', BatchSize = ' + batchSize,
+  ', KeepAPKs = ' + keepApks
 );
 
-const commitSuicide = (msg) => {
+const commitSuicide = (msg: string) => {
   console.log(''); // empty line
   console.log(' ☹  Banana analyzer has commit suicide  ☹ ');
   console.log('[last words]', msg);
@@ -134,14 +145,14 @@ const main = async () => {
   }
 
   debug('continue after file selections');
-  let packageNames = '';
+  let packageNames: string[];
   try {
     const data = fs.readFileSync(packageNamesFile, 'utf8').toString();
 
     // convert data into array
-    packageNames = data.split('\n');
-    // remove empty lines and any spaces after or before package names
-    packageNames = packageNames
+    packageNames = data
+      .split('\n')
+      // remove empty lines and any spaces after or before package names
       .map((pn) => pn.trim())
       .filter((pn) => pn.length > 0)
       // ignore commented package names (that starts with // )  :)
@@ -161,12 +172,9 @@ const main = async () => {
     );
   }
 
-  const downloadOneAPK = async (packageName) => {
+  const downloadOneAPK = async (packageName: string): Promise<APK | null> => {
     try {
-      const dlRes = await downloadAPK(packageName);
-
-      console.log('✓ APK file is ready → ' + packageName);
-      return dlRes;
+      return downloadAPK(packageName, useExisting);
     } catch (e) {
       debug(e);
       console.log('⤫ failed to download apk → ', packageName, ': The requested app is not found or invalid');
@@ -177,12 +185,11 @@ const main = async () => {
   // 3- download, analyze and write result of 2 apps , to avoid loosing results
 
   let batchNum = 0;
-  const batchSize = global.batchSize;
   const batchCount = Math.ceil(packageNames.length / batchSize);
   const resultFileName = path.basename(packageNamesFile).split('.')[0];
   const failedApks = [];
   for (let i = 0; i < packageNames.length; i += batchSize) {
-    const promises = [];
+    const promises: Promise<APK | null>[] = [];
     batchNum++;
     const nextBatch = packageNames.slice(i, i + batchSize);
     console.log('Batch #' + batchNum + ' =', nextBatch);
@@ -193,7 +200,7 @@ const main = async () => {
     const prs = await Promise.allSettled(promises);
     // done downloading X apks, lets analyze them
 
-    const downloadedApks = prs.map((pr) => pr.value).filter((pr) => pr != null);
+    const downloadedApks = prs.map((pr: any) => pr.value).filter((pr) => pr != null);
     const downloadedApksCount = downloadedApks.length;
     debug('downloaded apks: ' + downloadedApksCount);
 
@@ -207,7 +214,7 @@ const main = async () => {
     // 2- analyze the batch
     // delete previous batch (not original (downloaded) APKs) if exists
     await cleanDataFolder();
-    const analyzerRes = await analyzeAPKs(downloadedApks);
+    const analyzerRes = await analyzeAPKs(downloadedApks, keepApks);
 
     try {
       await saveResult(analyzerRes, resultFileName);

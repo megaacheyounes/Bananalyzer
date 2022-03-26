@@ -1,17 +1,21 @@
 'use strict';
 
-import path from 'path';
-import { moveFile } from './mv.js';
-import * as os from 'os';
+import fs from 'node:fs';
+import stream from 'node:stream';
+import { promisify } from 'node:util';
 
 import debugModule from 'debug';
+import os from 'os';
+import path from 'path';
 
-import { promisify } from 'node:util';
-import stream from 'node:stream';
-import fs from 'node:fs';
-import got from 'got';
-import { readManifest } from './adbkit-apkreader/apkreader.js';
-import DecompressZip from 'decompress-zip';
+import { readManifest } from './apkreader/apkreader';
+import { Manifest } from './models/manifest';
+import { moveFile } from './mv';
+
+// import DecompressZip from 'decompress-zip';
+const DecompressZip = require('decompress-zip');
+// import got from 'got';
+const got = require('got');
 
 const debug = debugModule('');
 
@@ -26,7 +30,7 @@ const getOutLogFile = () => path.join(getLogFolder(), OUT_LOG_FILE);
 const getErrLogFile = () => path.join(getLogFolder(), ERR_LOG_FILE);
 
 // remove styling
-const cleanLogs = (buffer) => `${buffer}`.replace(/\[(.*?)m/g, '').replace(/\[(.*?)m/g, '');
+const cleanLogs = (buffer: Uint8Array | string) => `${buffer}`.replace(/\[(.*?)m/g, '').replace(/\[(.*?)m/g, '');
 /**
  * print console output and nodejs errors into files
  * console outut goes to out.log
@@ -44,16 +48,21 @@ export const printLogs = () => {
   if (!fs.existsSync(outFile)) {
     fs.writeFileSync(outFile, '');
   }
-  process.stdout.write_orig = process.stdout.write;
 
-  process.stdout.write = (buffer) => {
+  const stdout = process.stdout.write as any;
+  const stderr = process.stderr as any;
+
+  stdout.write_orig = stdout.write;
+
+  stdout.write = (buffer: Uint8Array | string) => {
     fs.appendFileSync(outFile, cleanLogs(buffer), 'utf-8');
-    process.stdout.write_orig(buffer);
+    stdout.write_orig(buffer);
   };
-  process.stderr.write_orig = process.stderr.write;
-  process.stderr.write = (buffer) => {
+
+  stderr.write_orig = stderr.write;
+  stderr.write = (buffer: Uint8Array | string) => {
     fs.appendFileSync(errFile, cleanLogs(buffer), 'utf-8');
-    process.stderr.write_orig(buffer);
+    stderr.write_orig(buffer);
   };
 };
 
@@ -62,9 +71,9 @@ export const printLogs = () => {
  * @param {int} millis delay in milli-seconds
  *  @return {Promise}
  */
-export const delay = (millis) =>
+export const delay = (millis: number) =>
   new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), millis);
+    setTimeout(() => resolve(true), millis);
   });
 
 /**
@@ -74,8 +83,8 @@ export const delay = (millis) =>
  * @return {Promise} json object that includs all information from manifest file
  *
  */
-export const getApkInfo = (apkPath, lookForRootApkIfFailed = true) =>
-  new Promise(async (resolve, reject) => {
+export const getApkInfo = (apkPath: string, lookForRootApkIfFailed = true) =>
+  new Promise<Manifest>(async (resolve, reject) => {
     // local fork (lol) of adbkit-apkreader with support to read meta data
     // const ApkReader = require('./adbkit-apkreader');
 
@@ -88,8 +97,11 @@ export const getApkInfo = (apkPath, lookForRootApkIfFailed = true) =>
     try {
       const manifest = await readManifest(apkPath);
       resolve(manifest);
-    } catch (e) {
-      if (e.message.indexOf('does not contain') != -1) {
+    } catch (e: any) {
+      let message;
+      if (typeof e == 'string') message = e;
+      else message = e.message;
+      if (message && message.indexOf('does not contain') != -1) {
         const apkpath2 = await getInnerApk(apkPath);
         debug('got inner apk path ' + apkpath2);
         if (lookForRootApkIfFailed) {
@@ -97,26 +109,26 @@ export const getApkInfo = (apkPath, lookForRootApkIfFailed = true) =>
         } else {
           reject(Error('APK does not contain AndroidManifest.xml'));
         }
-      } else if (e.message.indexOf('end of central directory record signature not found') != -1) {
+      } else if (message.indexOf('end of central directory record signature not found') != -1) {
         reject(Error('APK is corrupt or partially downloaded!'));
       } else reject(e);
     }
   });
 
 // get the apk inside another apk (xapk, apks)
-export const getInnerApk = (apkPath) =>
-  new Promise(async (resolve, reject) => {
+export const getInnerApk = (apkPath: string) =>
+  new Promise<string>(async (resolve, reject) => {
     debug('looking for root APK inside ' + apkPath);
     const unzipper = new DecompressZip(apkPath);
 
-    unzipper.on('error', function (err) {
+    unzipper.on('error', function (err: Error) {
       debug('getInnerApk:Caught an error');
       debug('on erro: ' + err);
     });
 
     const fileName = path.basename(apkPath);
     debug('filename: ' + fileName);
-    unzipper.on('extract', async (files) => {
+    unzipper.on('extract', async (files: any[]) => {
       files = files.map((f) => f.stored);
       if (files.includes(fileName)) {
         // found the damn apk, move it to app data folder
@@ -137,7 +149,7 @@ export const getInnerApk = (apkPath) =>
 
     unzipper.extract({
       path: 'temp',
-      filter: function (file) {
+      filter: function (file: File) {
         return file.type !== 'SymbolicLink';
       },
     });
@@ -151,18 +163,12 @@ export const currentPlatform = () => {
   return '';
 };
 
-export const downloadFileGot = (downloadLink, downloadPath) =>
+export const downloadFileGot = (downloadLink: string, downloadPath: string) =>
   new Promise(async (resolve, reject) => {
     const pipeline = promisify(stream.pipeline);
 
     await pipeline(got.stream(downloadLink), fs.createWriteStream(downloadPath));
-    resolve();
-    // // For POST, PUT, PATCH, and DELETE methods, `got.stream` returns a `stream.Writable`.
-    // await pipeline(
-    //   fs.createReadStream('index.html'),
-    //   got.stream.post('https://sindresorhus.com'),
-    //   new stream.PassThrough()
-    // );
+    resolve(true);
   });
 
 export const pause = async () => {
