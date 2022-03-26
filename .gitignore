@@ -4,7 +4,7 @@ downloads/
 downloads_backup/
 appdataxsj/
 *.xlsx
-dev.js
+dev.ts
 .local-chromium/
 .log
 m.*.json
