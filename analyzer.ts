@@ -250,11 +250,11 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
 
         huaweiMetadatas = metaData
           .filter((m) => !!m.name && m.name.indexOf('huawei') != -1)
-          .map((m) => `${m.name}:${m.value}`)
+          .map((m) => `${m.name}=${m.value}`)
           .join(', \n');
         googleMetadatas = metaData
           .filter((m) => !!m.name && m.name.indexOf('google') != -1)
-          .map((m) => `${m.name}:${m.value}`)
+          .map((m) => `${m.name}=${m.value}`)
           .join(', \n');
 
         try {
