@@ -9,3 +9,4 @@ dev.ts
 .log
 m.*.json
 dist/
+esm/
