@@ -9,6 +9,8 @@ import ncp from 'ncp';
 import path from 'path';
 import rimraf from 'rimraf';
 
+import { IS_PROD } from './consts';
+
 type Callback = (err: any | null) => void;
 
 interface Options {
@@ -164,6 +166,7 @@ export const moveFile = (source: string, dest: string, options = {}) =>
 
       if (err) {
         reject(err);
+        if (!IS_PROD) console.log(err);
       } else {
         resolve(true);
       }

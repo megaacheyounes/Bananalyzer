@@ -1,16 +1,16 @@
 import path from 'path';
 
 export const IS_PROD = process.env.NODE_ENV != 'debug';
-console.log('NODE ENV=', process.env.NODE_ENV);
+
 export const SRC_DIR = __dirname;
 
-export var EXPORT_DIR = SRC_DIR;
+export var EXPORT_DIR = process.cwd();
 
-if (!IS_PROD) {
-  const filename_parents = path.dirname(__filename).split(path.sep);
-  filename_parents.pop(); //when running nodejs localy (debug) remove /src from path
-  EXPORT_DIR = filename_parents.join(path.sep);
-}
+// if (!IS_PROD) {
+//   const filename_parents = path.dirname(__filename).split(path.sep);
+//   filename_parents.pop(); //when running nodejs localy (debug) remove /src from path
+//   EXPORT_DIR = filename_parents.join(path.sep);
+// }
 
 //app check
 export const APP_DATA_XSJ = 'appdataxsj';

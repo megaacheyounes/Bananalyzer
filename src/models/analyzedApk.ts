@@ -7,7 +7,7 @@ export interface AnalyzedApk {
   apkCreationTime: string;
   huaweiAppId: string;
   androidMarketMetaData: string;
-  huaweiMetadatas: string;
-  googleMetadatas: string;
-  permissions: string;
+  huaweiMetadatas: string[];
+  googleMetadatas: string[];
+  permissions: string[];
 }

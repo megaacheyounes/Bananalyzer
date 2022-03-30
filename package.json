@@ -23,9 +23,9 @@
     "distro": "npm run clean && npm run build:esm && yarn distro:ncc && yarn distro:pkg",
     "distro:ncc": "ncc build dist/build/main.js -o dist/ncc",
     "distro:pkg": "pkg -t node10-macos-x64,node10-win-x64 dist/ncc/index.js -o dist/bin/ncc-pkg-demo",
-    "devider12341324": " __________________ ignore __________________ ",
-    "dev": "npm run env:dev &&  npm run dev:impl",
-    "dev:impl": "ts-node dev.ts"
+    "devider12341324": " __________________ test __________________ ",
+    "test": "jest",
+    "test1": "jest tests/analyzer.test.ts"
   },
   "bin": "index.ts",
   "keywords": [
@@ -66,6 +66,7 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^27.4.1",
     "@types/mkdirp": "^1.0.2",
     "@types/ncp": "^2.0.5",
     "@types/puppeteer": "^5.4.5",
@@ -75,9 +76,11 @@
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.5.1",
     "ncc": "^0.3.6",
     "pkg": "^5.5.2",
     "rimraf": "^2.7.1",
+    "ts-jest": "^27.1.4",
     "ts-migrate": "^0.1.28",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"

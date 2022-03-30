@@ -1,6 +1,11 @@
 'use strict';
 
-import fs from 'node:fs';
+import fs, {
+  copyFileSync,
+  existsSync,
+  readFileSync,
+  rmSync,
+} from 'node:fs';
 import stream from 'node:stream';
 import { promisify } from 'node:util';
 
@@ -11,14 +16,13 @@ import path from 'path';
 import { readManifest } from './apkreader/apkreader';
 // import DecompressZip from 'decompress-zip';
 import {
-  APP_DATA_XSJ,
+  APP_DATA_FOLDER,
   ERR_LOG_FILE,
   LOG_FOLDER,
   OUT_LOG_FILE,
   TEMP_FOLDER,
 } from './consts';
 import { Manifest } from './models/manifest';
-import { moveFile } from './mv';
 
 const DecompressZip = require('decompress-zip');
 
@@ -99,7 +103,10 @@ export const getApkInfo = (apkPath: string, lookForRootApkIfFailed = true) =>
       if (typeof e == 'string') message = e;
       else message = e.message;
       if (message && message.indexOf('does not contain') != -1) {
-        const apkpath2 = await getInnerApk(apkPath);
+        const fileName = path.basename(apkPath);
+        const destPath = path.join(APP_DATA_FOLDER, fileName);
+
+        const apkpath2 = await getInnerApk(apkPath, destPath);
         debug('got inner apk path ' + apkpath2);
         if (lookForRootApkIfFailed) {
           resolve(await getApkInfo(apkpath2, false));
@@ -113,7 +120,7 @@ export const getApkInfo = (apkPath: string, lookForRootApkIfFailed = true) =>
   });
 
 // get the apk inside another apk (xapk, apks)
-export const getInnerApk = (apkPath: string) =>
+export const getInnerApk = (apkPath: string, destinationPath: string) =>
   new Promise<string>(async (resolve, reject) => {
     debug('looking for root APK inside ' + apkPath);
     const unzipper = new DecompressZip(apkPath);
@@ -125,22 +132,27 @@ export const getInnerApk = (apkPath: string) =>
 
     const fileName = path.basename(apkPath);
     debug('filename: ' + fileName);
+
     unzipper.on('extract', async (files: any[]) => {
-      files = files.map((f) => f.stored);
+      files = files.map((f) => f.stored || f.deflated);
+
       if (files.includes(fileName)) {
         // found the damn apk, move it to app data folder
         const rootApkPath = path.join(TEMP_FOLDER, fileName);
         debug(' root apk  ' + rootApkPath);
-        const destPath = path.join(APP_DATA_XSJ, fileName);
-        debug('moved root apk to ' + APP_DATA_XSJ);
-        await moveFile(rootApkPath, destPath);
+
+        if (existsSync(destinationPath)) rmSync(destinationPath);
+        var r = readFileSync(rootApkPath);
+
+        copyFileSync(rootApkPath, destinationPath);
+        debug('moved root apk to ' + destinationPath);
+
         // delete all extracted files
-        // todo: use rm instead
-        fs.rmdirSync(TEMP_FOLDER, { recursive: true });
-        resolve(destPath);
+        fs.rmSync(TEMP_FOLDER, { recursive: true });
+        resolve(destinationPath);
       } else {
         // shit!
-        reject(Error('What kind of APK is this?'));
+        reject(Error('Could not parse APK, what kind of APK is this?'));
       }
     });
 

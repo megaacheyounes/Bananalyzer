@@ -1,0 +1,402 @@
+{
+    "versionCode": 16,
+    "versionName": "3.1.1",
+    "compileSdkVersion": 30,
+    "compileSdkVersionCodename": "11",
+    "package": "com.twitter.android.lite",
+    "platformBuildVersionCode": 30,
+    "platformBuildVersionName": 11,
+    "usesPermissions": [
+        {
+            "name": "android.permission.INTERNET"
+        }
+    ],
+    "permissions": [],
+    "permissionTrees": [],
+    "permissionGroups": [],
+    "instrumentation": null,
+    "usesSdk": {
+        "minSdkVersion": 19,
+        "targetSdkVersion": 30
+    },
+    "usesConfiguration": null,
+    "usesFeatures": [],
+    "supportsScreens": null,
+    "compatibleScreens": [],
+    "supportsGlTextures": [],
+    "application": {
+        "theme": "resourceId:0x1030010",
+        "label": "resourceId:0x7f0b0000",
+        "icon": "resourceId:0x7f090000",
+        "name": "com.twitter.android.lite.Application",
+        "allowBackup": true,
+        "supportsRtl": true,
+        "appComponentFactory": "androidx.core.app.CoreComponentFactory",
+        "isSplitRequired": true,
+        "activities": [
+            {
+                "label": "resourceId:0x7f0b000b",
+                "name": "com.twitter.android.lite.LauncherActivity",
+                "alwaysRetainTaskState": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.SEND"
+                            },
+                            {
+                                "name": "android.intent.action.SEND_MULTIPLE"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "mimeType": "text/plain"
+                            },
+                            {
+                                "mimeType": "image/jpeg"
+                            },
+                            {
+                                "mimeType": "image/png"
+                            },
+                            {
+                                "mimeType": "image/gif"
+                            },
+                            {
+                                "mimeType": "video/quicktime"
+                            },
+                            {
+                                "mimeType": "video/mp4"
+                            }
+                        ]
+                    },
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.LAUNCHER"
+                            }
+                        ],
+                        "data": []
+                    },
+                    {
+                        "autoVerify": true,
+                        "actions": [
+                            {
+                                "name": "android.intent.action.VIEW"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            },
+                            {
+                                "name": "android.intent.category.BROWSABLE"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "https",
+                                "host": "resourceId:0x7f0b0009"
+                            }
+                        ]
+                    }
+                ],
+                "metaData": [
+                    {
+                        "name": "android.support.customtabs.trusted.DEFAULT_URL",
+                        "value": "resourceId:0x7f0b000a"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.STATUS_BAR_COLOR",
+                        "resource": "resourceId:0x7f030005"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.NAVIGATION_BAR_COLOR",
+                        "resource": "resourceId:0x7f030006"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.NAVIGATION_BAR_COLOR_DARK",
+                        "resource": "resourceId:0x7f030007"
+                    },
+                    {
+                        "name": "androix.browser.trusted.NAVIGATION_BAR_DIVIDER_COLOR",
+                        "resource": "resourceId:0x7f030008"
+                    },
+                    {
+                        "name": "androix.browser.trusted.NAVIGATION_BAR_DIVIDER_COLOR_DARK",
+                        "resource": "resourceId:0x7f030009"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE",
+                        "resource": "resourceId:0x7f050014"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR",
+                        "resource": "resourceId:0x7f030000"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION",
+                        "value": "resourceId:0x7f070000"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY",
+                        "value": "resourceId:0x7f0b0010"
+                    },
+                    {
+                        "name": "android.app.shortcuts",
+                        "resource": "resourceId:0x7f0e0002"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.FALLBACK_STRATEGY",
+                        "value": "resourceId:0x7f0b0004"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.METADATA_SHARE_TARGET",
+                        "resource": "resourceId:0x7f0b0011"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.SCREEN_ORIENTATION",
+                        "value": "resourceId:0x7f0b000f"
+                    }
+                ]
+            },
+            {
+                "name": "com.google.androidbrowserhelper.trusted.FocusActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "com.google.androidbrowserhelper.trusted.WebViewFallbackActivity",
+                "configChanges": 1152,
+                "intentFilters": [],
+                "metaData": []
+            }
+        ],
+        "activityAliases": [],
+        "launcherActivities": [
+            {
+                "label": "resourceId:0x7f0b000b",
+                "name": "com.twitter.android.lite.LauncherActivity",
+                "alwaysRetainTaskState": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.SEND"
+                            },
+                            {
+                                "name": "android.intent.action.SEND_MULTIPLE"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "mimeType": "text/plain"
+                            },
+                            {
+                                "mimeType": "image/jpeg"
+                            },
+                            {
+                                "mimeType": "image/png"
+                            },
+                            {
+                                "mimeType": "image/gif"
+                            },
+                            {
+                                "mimeType": "video/quicktime"
+                            },
+                            {
+                                "mimeType": "video/mp4"
+                            }
+                        ]
+                    },
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.LAUNCHER"
+                            }
+                        ],
+                        "data": []
+                    },
+                    {
+                        "autoVerify": true,
+                        "actions": [
+                            {
+                                "name": "android.intent.action.VIEW"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            },
+                            {
+                                "name": "android.intent.category.BROWSABLE"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "https",
+                                "host": "resourceId:0x7f0b0009"
+                            }
+                        ]
+                    }
+                ],
+                "metaData": [
+                    {
+                        "name": "android.support.customtabs.trusted.DEFAULT_URL",
+                        "value": "resourceId:0x7f0b000a"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.STATUS_BAR_COLOR",
+                        "resource": "resourceId:0x7f030005"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.NAVIGATION_BAR_COLOR",
+                        "resource": "resourceId:0x7f030006"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.NAVIGATION_BAR_COLOR_DARK",
+                        "resource": "resourceId:0x7f030007"
+                    },
+                    {
+                        "name": "androix.browser.trusted.NAVIGATION_BAR_DIVIDER_COLOR",
+                        "resource": "resourceId:0x7f030008"
+                    },
+                    {
+                        "name": "androix.browser.trusted.NAVIGATION_BAR_DIVIDER_COLOR_DARK",
+                        "resource": "resourceId:0x7f030009"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE",
+                        "resource": "resourceId:0x7f050014"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR",
+                        "resource": "resourceId:0x7f030000"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION",
+                        "value": "resourceId:0x7f070000"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY",
+                        "value": "resourceId:0x7f0b0010"
+                    },
+                    {
+                        "name": "android.app.shortcuts",
+                        "resource": "resourceId:0x7f0e0002"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.FALLBACK_STRATEGY",
+                        "value": "resourceId:0x7f0b0004"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.METADATA_SHARE_TARGET",
+                        "resource": "resourceId:0x7f0b0011"
+                    },
+                    {
+                        "name": "android.support.customtabs.trusted.SCREEN_ORIENTATION",
+                        "value": "resourceId:0x7f0b000f"
+                    }
+                ]
+            }
+        ],
+        "services": [
+            {
+                "name": "com.twitter.android.lite.DelegationService",
+                "enabled": "resourceId:0x7f020000",
+                "exported": "resourceId:0x7f020000",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.support.customtabs.trusted.TRUSTED_WEB_ACTIVITY_SERVICE"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": []
+                    }
+                ],
+                "metaData": [
+                    {
+                        "name": "android.support.customtabs.trusted.SMALL_ICON",
+                        "resource": "resourceId:0x7f050001"
+                    }
+                ]
+            }
+        ],
+        "receivers": [],
+        "providers": [
+            {
+                "name": "androidx.core.content.FileProvider",
+                "exported": false,
+                "authorities": "resourceId:0x7f0b0010",
+                "grantUriPermissions": [],
+                "metaData": [
+                    {
+                        "name": "android.support.FILE_PROVIDER_PATHS",
+                        "resource": "resourceId:0x7f0e0000"
+                    }
+                ],
+                "pathPermissions": []
+            }
+        ],
+        "usesLibraries": [],
+        "metaDatas": [
+            {
+                "name": "asset_statements",
+                "resource": "resourceId:0x7f0b0002"
+            },
+            {
+                "name": "web_manifest_url",
+                "value": "resourceId:0x7f0b001c"
+            },
+            {
+                "name": "twa_generator",
+                "value": "resourceId:0x7f0b0008"
+            },
+            {
+                "name": "com.android.vending.splits.required",
+                "value": true
+            },
+            {
+                "name": "com.android.stamp.source",
+                "value": "https://play.google.com/store"
+            },
+            {
+                "name": "com.android.stamp.type",
+                "value": "STAMP_TYPE_DISTRIBUTION_APK"
+            },
+            {
+                "name": "com.android.vending.splits",
+                "value": "resourceId:0x7f0e0003"
+            },
+            {
+                "name": "com.android.vending.derived.apk.id",
+                "value": 8
+            }
+        ]
+    }
+}

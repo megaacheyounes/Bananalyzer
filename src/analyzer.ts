@@ -223,9 +223,9 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
       let androidMarketMetaData = '⚠';
       let huaweiAppId = '⚠';
       let versionName = '⚠';
-      let permissions = '⚠';
-      let googleMetadatas = '⚠';
-      let huaweiMetadatas = '⚠';
+      let permissions: string[] = [];
+      let googleMetadatas: string[] = [];
+      let huaweiMetadatas: string[] = [];
       try {
         manifestData = await getApkInfo(app.filePath);
 
@@ -248,19 +248,17 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
 
         huaweiMetadatas = metaData
           .filter((m) => !!m.name && m.name.indexOf('huawei') != -1)
-          .map((m) => `${m.name}=${m.value}`)
-          .join(', \n');
+          .map((m) => `${m.name}=${m.value}`);
+
         googleMetadatas = metaData
           .filter((m) => !!m.name && m.name.indexOf('google') != -1)
-          .map((m) => `${m.name}=${m.value}`)
-          .join(', \n');
+          .map((m) => `${m.name}=${m.value}`);
 
         try {
           permissions = manifestData.usesPermissions
-            .map((obj: UsesPermission) => obj.name)
+            .map((obj: UsesPermission | any) => obj.name || obj[''])
             .filter((p: string) => !!p && p.length > 0)
-            .filter((p: string) => p.toLowerCase().indexOf('huawei') != -1 || p.toLowerCase().indexOf('google') != -1)
-            .join(', \n ');
+            .filter((p: string) => p.toLowerCase().indexOf('huawei') != -1 || p.toLowerCase().indexOf('google') != -1);
         } catch (e) {
           debug(e);
         }

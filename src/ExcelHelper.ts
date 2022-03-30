@@ -53,9 +53,9 @@ export const saveResult = async (apps: AnalyzedApk[], resultPath: string) =>
       appAsRow[HEADER_HMS_KITS] = app['HMS'].join(' | ');
       appAsRow[HEADER_HUAWEI_APP_ID] = app.huaweiAppId;
       appAsRow[HEADER_ANDROID_MARKET_METADATA] = app.androidMarketMetaData;
-      appAsRow[HEADER_HUAWEI_METADATAS] = app.huaweiMetadatas;
-      appAsRow[HEADER_GOOGLE_METADATAS] = app.googleMetadatas;
-      appAsRow[HEADER_PERMISSIONS] = app.permissions;
+      appAsRow[HEADER_HUAWEI_METADATAS] = app.huaweiMetadatas.join(',\n');
+      appAsRow[HEADER_GOOGLE_METADATAS] = app.googleMetadatas.join(',\n');
+      appAsRow[HEADER_PERMISSIONS] = app.permissions.join(',\n');
 
       data.push(appAsRow);
     });

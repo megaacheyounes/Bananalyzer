@@ -1,0 +1,1775 @@
+{
+    "versionCode": 35591,
+    "": false,
+    "installLocation": 0,
+    "package": "com.netflix.mediaclient",
+    "platformBuildVersionCode": 30,
+    "platformBuildVersionName": 11,
+    "usesPermissions": [
+        {
+            "": "com.netflix.partner.activation.permission.CHANNEL_ID"
+        },
+        {
+            "": "android.permission.ACCESS_NETWORK_STATE"
+        },
+        {
+            "": "android.permission.ACCESS_WIFI_STATE"
+        },
+        {
+            "": "android.permission.BLUETOOTH"
+        },
+        {
+            "": "android.permission.CHANGE_WIFI_MULTICAST_STATE"
+        },
+        {
+            "": "android.permission.INTERNET"
+        },
+        {
+            "": "android.permission.WAKE_LOCK"
+        },
+        {
+            "": "android.permission.RECORD_AUDIO"
+        },
+        {
+            "": "android.permission.MODIFY_AUDIO_SETTINGS"
+        },
+        {
+            "": "android.permission.WRITE_EXTERNAL_STORAGE"
+        },
+        {
+            "": "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
+        },
+        {
+            "": "com.amazon.permission.SET_FLAG_NOSOFTKEYS"
+        },
+        {
+            "": "android.permission.FOREGROUND_SERVICE"
+        },
+        {
+            "": "com.google.android.c2dm.permission.RECEIVE"
+        }
+    ],
+    "permissions": [
+        {
+            "": 18
+        }
+    ],
+    "permissionTrees": [],
+    "permissionGroups": [],
+    "instrumentation": null,
+    "usesSdk": {
+        "": 30
+    },
+    "usesConfiguration": null,
+    "usesFeatures": [
+        {
+            "": false
+        },
+        {
+            "": false
+        },
+        {
+            "": false
+        },
+        {
+            "": false
+        },
+        {
+            "": false
+        }
+    ],
+    "supportsScreens": {
+        "": true
+    },
+    "compatibleScreens": [],
+    "supportsGlTextures": [],
+    "application": {
+        "": "androidx.core.app.CoreComponentFactory",
+        "icon": "resourceId:0x7f100000",
+        "extractNativeLibs": true,
+        "isSplitRequired": true,
+        "localeConfig": "resourceId:0x7f160010",
+        "activities": [
+            {
+                "": true,
+                "name": ".ui.launch.UIWebViewActivity",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.LAUNCHER"
+                            }
+                        ],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": ".ui.launch.UIWebViewTabletActivity",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.LAUNCHER"
+                            }
+                        ],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": 1152,
+                "name": "o.bvl",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 19,
+                "name": ".ui.filters.impl.FiltersActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": ".ui.player.PlayerActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": "o.biH",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": ".ui.player.PostPlayActivity",
+                "": true,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.aUK",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1152,
+                "name": "o.aGj",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": ".ui.instantjoy.impl.InstantJoyActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "o.aTB",
+                "": true,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1152,
+                "name": ".ui.extras.ExtrasFeedActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": ".ui.extras.ExtrasFeedActivity_Ab36897",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": -1,
+                "name": ".ui.extras.ExtrasPostActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f130771",
+                "name": ".ui.profiles.ProfileSelectionActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.boh",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f1403eb",
+                "name": "o.bol",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.boe",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1073745332,
+                "name": "o.boa",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1152,
+                "name": "o.brY",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "name": "o.bpf",
+                "": 1,
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "name": "o.bpz",
+                "": 1,
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "name": "o.bps",
+                "": 1,
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "name": "o.boY",
+                "": 1,
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": 19,
+                "name": ".ui.search.SearchActivity",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.SEARCH"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": [
+                    {
+                        "name": "android.app.searchable",
+                        "": "resourceId:0x7f160005"
+                    }
+                ]
+            },
+            {
+                "": 19,
+                "name": ".ui.search.PortraitSearchActivity",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.SEARCH"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": [
+                    {
+                        "name": "android.app.searchable",
+                        "": "resourceId:0x7f160005"
+                    }
+                ]
+            },
+            {
+                "": 19,
+                "name": ".ui.search.NoDefaultHintsPortraitSearchActivity_Ab30132",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.SEARCH"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": [
+                    {
+                        "name": "android.app.searchable",
+                        "": "resourceId:0x7f160006"
+                    }
+                ]
+            },
+            {
+                "": 19,
+                "name": ".ui.search.NoDefaultHintsSearchActivity_Ab30132",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.SEARCH"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": [
+                    {
+                        "name": "android.app.searchable",
+                        "": "resourceId:0x7f160006"
+                    }
+                ]
+            },
+            {
+                "": "resourceId:0x7f1309c1",
+                "name": "o.boK",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.boL",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f1403f1",
+                "name": "o.bbw",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.bbB",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "o.bbA",
+                "": 1184,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "o.bbz",
+                "": 1184,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1184,
+                "name": ".acquisition2.screens.webSignup.SignupActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1184,
+                "name": ".acquisition2.screens.webSignup.SignupTabletActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1184,
+                "name": ".acquisition2.screens.signupContainer.SignupNativeActivity",
+                "intentFilters": [
+                    {
+                        "autoVerify": true,
+                        "actions": [
+                            {
+                                "name": "android.intent.action.VIEW"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            },
+                            {
+                                "name": "android.intent.category.BROWSABLE"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "nflx",
+                                "host": "www.netflix.com"
+                            },
+                            {
+                                "pathPrefix": "/confirmpageinfosignout"
+                            }
+                        ]
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": 1056,
+                "name": ".acquisition2.screens.signupContainer.SignupNativeTabletActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 2,
+                "name": ".ui.launch.LaunchActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": ".ui.launch.NetflixComLaunchActivity",
+                "intentFilters": [
+                    {
+                        "autoVerify": true,
+                        "actions": [
+                            {
+                                "name": "android.intent.action.VIEW"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            },
+                            {
+                                "name": "android.intent.category.BROWSABLE"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "http",
+                                "host": "www.netflix.com"
+                            },
+                            {
+                                "scheme": "https",
+                                "host": "www.netflix.com"
+                            },
+                            {
+                                "pathPattern": "/browse"
+                            },
+                            {
+                                "pathPattern": "/.*/browse"
+                            },
+                            {
+                                "pathPattern": "/browse/genre/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/browse/genre/.*"
+                            },
+                            {
+                                "pathPattern": "/browse/coming-soon"
+                            },
+                            {
+                                "pathPattern": "/.*/browse/coming-soon"
+                            },
+                            {
+                                "pathPattern": "/browse/audio-description"
+                            },
+                            {
+                                "pathPattern": "/.*/browse/audio-description"
+                            },
+                            {
+                                "pathPattern": "/specials/.*"
+                            },
+                            {
+                                "pathPattern": "/Kids/title/.*"
+                            },
+                            {
+                                "pathPattern": "/Kids/character/.*"
+                            },
+                            {
+                                "pathPattern": "/game/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/game/.*"
+                            },
+                            {
+                                "pathPattern": "/title/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/title/.*"
+                            },
+                            {
+                                "pathPattern": "/watch/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/watch/.*"
+                            },
+                            {
+                                "pathPattern": "/nmwatch/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/nmwatch/.*"
+                            },
+                            {
+                                "pathPattern": "/clips/.*"
+                            },
+                            {
+                                "pathPattern": "/search"
+                            },
+                            {
+                                "pathPattern": "/search/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/search"
+                            },
+                            {
+                                "pathPattern": "/.*/search/.*"
+                            },
+                            {
+                                "pathPattern": "/add/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/add/.*"
+                            },
+                            {
+                                "pathPattern": "/download/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/download/.*"
+                            },
+                            {
+                                "pathPattern": "/sync/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/sync/.*"
+                            },
+                            {
+                                "pathPattern": "/profiles"
+                            },
+                            {
+                                "pathPattern": "/.*/profiles"
+                            },
+                            {
+                                "pathPattern": "/profiles/icon.*"
+                            },
+                            {
+                                "pathPattern": "/.*/profiles/icon.*"
+                            },
+                            {
+                                "pathPattern": "/mobilehelp"
+                            },
+                            {
+                                "pathPattern": "/like/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/like/.*"
+                            },
+                            {
+                                "pathPattern": "/dislike/.*"
+                            },
+                            {
+                                "pathPattern": "/.*/dislike/.*"
+                            },
+                            {
+                                "pathPattern": "/notification/.*"
+                            },
+                            {
+                                "scheme": "http",
+                                "host": "www.netflix.com",
+                                "pathPrefix": "/profiles/icon"
+                            },
+                            {
+                                "scheme": "https",
+                                "host": "www.netflix.com",
+                                "pathPrefix": "/profiles/icon"
+                            },
+                            {
+                                "pathPattern": "/extras/.*"
+                            },
+                            {
+                                "pathPattern": "/extrasFeed"
+                            },
+                            {
+                                "pathPattern": "/extrasFeed/.*"
+                            },
+                            {
+                                "pathPattern": "/extrasfeed"
+                            },
+                            {
+                                "pathPattern": "/extrasfeed/.*"
+                            },
+                            {
+                                "pathPattern": "/remind-me/.*"
+                            },
+                            {
+                                "pathPattern": "/account/signup"
+                            }
+                        ]
+                    },
+                    {
+                        "autoVerify": true,
+                        "actions": [
+                            {
+                                "name": "android.intent.action.VIEW"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            },
+                            {
+                                "name": "android.intent.category.BROWSABLE"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "http",
+                                "host": "www.netflix.com"
+                            },
+                            {
+                                "scheme": "https",
+                                "host": "www.netflix.com"
+                            },
+                            {
+                                "scheme": "nflx",
+                                "host": "www.netflix.com"
+                            },
+                            {
+                                "pathPrefix": "/MemberReferral"
+                            },
+                            {
+                                "pathPattern": "/multimonth.*"
+                            },
+                            {
+                                "pathPrefix": "/Browse"
+                            },
+                            {
+                                "pathPrefix": "/browse"
+                            }
+                        ]
+                    },
+                    {
+                        "autoVerify": true,
+                        "actions": [
+                            {
+                                "name": "android.intent.action.VIEW"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            },
+                            {
+                                "name": "android.intent.category.BROWSABLE"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "http",
+                                "host": "msg.netflix.com"
+                            },
+                            {
+                                "scheme": "https",
+                                "host": "msg.netflix.com"
+                            }
+                        ]
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f1403ed",
+                "name": "o.aUy",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.aUA",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "o.bth",
+                "": 1,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "o.bti",
+                "": 1,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "o.bwo",
+                "": 1184,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 4,
+                "name": ".ui.login.LoginActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 4,
+                "name": "o.aVk",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f130868",
+                "name": ".ui.notifications.NotificationsActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.bcN",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f13060a",
+                "name": ".ui.notifications.multititle.MultiTitleNotificationsActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.bdb",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f13060a",
+                "name": "o.bdg",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f13060a",
+                "name": "o.bdM",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.beb",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f13060a",
+                "name": "o.bdY",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f1306f7",
+                "name": "o.aVq",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.aVr",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f13067d",
+                "name": "o.buX",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.bvc",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": ".ui.home.HomeActivity",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": 1073745332,
+                "name": "o.aRe",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": 1152,
+                "name": "o.aRf",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1073745332,
+                "name": ".ui.home.MoreTabActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "o.aRg",
+                "": 1152,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "o.aRc",
+                "": 1073745332,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.aJk",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": 1,
+                "name": "o.aJm",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": 1152,
+                "name": "o.aJh",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": "resourceId:0x7f1403f5",
+                "name": ".ui.diagnosis.DiagnosisActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.aNb",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1152,
+                "name": "o.bgu",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": ".ui.offline.OfflineActivityV2",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f130706",
+                "name": "o.brH",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.brJ",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f130686",
+                "name": "o.brE",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.brA",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": "resourceId:0x7f130648",
+                "name": "o.brB",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.brv",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.brD",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.bwk",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.bwn",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1152,
+                "name": "o.aFb",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": "resourceId:0x7f1403fb",
+                "name": ".ui.kids.character_details.KidsCharacterDetailsActivity",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": 1152,
+                "name": "o.brK",
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "name": "android.app.default_searchable",
+                        "value": "com.netflix.mediaclient.ui.search.SearchActivity"
+                    }
+                ]
+            },
+            {
+                "": "resourceId:0x7f13060b",
+                "name": "o.aXx",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1,
+                "name": "o.aXA",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1184,
+                "name": "o.bus",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": 1184,
+                "name": "o.bux",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": "com.google.android.gms.auth.api.signin.internal.SignInHubActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": "com.google.android.gms.recaptcha.ChallengeAndVerifyAccountActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "name": "com.google.android.gms.common.api.GoogleApiActivity",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "name": "com.google.android.play.core.missingsplits.PlayCoreMissingSplitsActivity",
+                "": 3,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": "com.google.android.play.core.common.PlayCoreDialogWrapperActivity",
+                "intentFilters": [],
+                "metaData": []
+            }
+        ],
+        "activityAliases": [],
+        "launcherActivities": [
+            {
+                "": true,
+                "name": ".ui.launch.UIWebViewActivity",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.LAUNCHER"
+                            }
+                        ],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "name": ".ui.launch.UIWebViewTabletActivity",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "categories": [
+                            {
+                                "name": "android.intent.category.LAUNCHER"
+                            }
+                        ],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            }
+        ],
+        "services": [
+            {
+                "": ".service.NetflixService",
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.google.firebase.MESSAGING_EVENT"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.firebase.jobdispatcher.ACTION_EXECUTE"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [
+                    {
+                        "": -500,
+                        "actions": [
+                            {
+                                "name": "com.google.firebase.MESSAGING_EVENT"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "": "com.google.firebase.components.ComponentRegistrar"
+                    },
+                    {
+                        "": "com.google.firebase.components.ComponentRegistrar"
+                    },
+                    {
+                        "": "com.google.firebase.components.ComponentRegistrar"
+                    },
+                    {
+                        "": "com.google.firebase.components.ComponentRegistrar"
+                    }
+                ]
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": [
+                    {
+                        "": "cct"
+                    }
+                ]
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.google.android.gms.gcm.ACTION_TASK_READY"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": "partnermodule",
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.netflix.intent.action.BIND"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            }
+        ],
+        "receivers": [
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.GET_RESTRICTION_ENTRIES"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.extra.CHOSEN_COMPONENT"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.USER_STATUS"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.android.vending.INSTALL_REFERRER"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.MY_PACKAGE_REPLACED"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.NOTIFICATION_CANCELED"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.NOTIFICATION_BROWSER_REDIRECT"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.NOTIFICATION_MOVIE_DETAILS"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.NOTIFICATION_SHOW_DETAILS"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.NOTIFICATION_PLAY"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.REFRESH_FROM_PREAPP_WIDGET"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.HOME_FROM_PREAPP_WIDGET"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.PLAY_1_FROM_PREAPP_WIDGET"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.PLAY_2_FROM_PREAPP_WIDGET"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.PLAY_3_FROM_PREAPP_WIDGET"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.DETAILS_1_FROM_PREAPP_WIDGET"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.DETAILS_2_FROM_PREAPP_WIDGET"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.intent.action.DETAILS_3_FROM_PREAPP_WIDGET"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.appwidget.action.APPWIDGET_UPDATE"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": [
+                    {
+                        "": "resourceId:0x7f160004"
+                    }
+                ]
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.appwidget.action.APPWIDGET_UPDATE"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": [
+                    {
+                        "": "resourceId:0x7f160003"
+                    }
+                ]
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.netflix.mediaclient.partner.intent.action.POST_INSTALL_ACTION"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.netflix.mediaclient.ui.perf.PerfTestManager.DUMP_PERF_CAPTURE_DATA"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.ui.perf.PerfTestManager.STOP_PERF_CAPTURE_DATA"
+                            },
+                            {
+                                "name": "com.netflix.mediaclient.ui.perf.PerfTestManager.LOG_PERF_DATA_AND_SHUTDOWN_APP"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.google.android.c2dm.intent.RECEIVE"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": true,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "com.android.vending.INSTALL_REFERRER"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.ACTION_POWER_CONNECTED"
+                            },
+                            {
+                                "name": "android.intent.action.ACTION_POWER_DISCONNECTED"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.BATTERY_OKAY"
+                            },
+                            {
+                                "name": "android.intent.action.BATTERY_LOW"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.DEVICE_STORAGE_LOW"
+                            },
+                            {
+                                "name": "android.intent.action.DEVICE_STORAGE_OK"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.net.conn.CONNECTIVITY_CHANGE"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "android.intent.action.BOOT_COMPLETED"
+                            },
+                            {
+                                "name": "android.intent.action.TIME_SET"
+                            },
+                            {
+                                "name": "android.intent.action.TIMEZONE_CHANGED"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "androidx.work.impl.background.systemalarm.UpdateProxies"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [
+                    {
+                        "actions": [
+                            {
+                                "name": "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+                            }
+                        ],
+                        "categories": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "": false,
+                "intentFilters": [],
+                "metaData": []
+            }
+        ],
+        "providers": [
+            {
+                "": true,
+                "grantUriPermissions": [],
+                "metaData": [],
+                "pathPermissions": []
+            },
+            {
+                "": true,
+                "grantUriPermissions": [],
+                "metaData": [
+                    {
+                        "": "resourceId:0x7f160000"
+                    }
+                ],
+                "pathPermissions": []
+            },
+            {
+                "": 100,
+                "grantUriPermissions": [],
+                "metaData": [],
+                "pathPermissions": []
+            },
+            {
+                "": false,
+                "grantUriPermissions": [],
+                "metaData": [],
+                "pathPermissions": []
+            },
+            {
+                "": "com.netflix.mediaclient.lifecycle-process",
+                "grantUriPermissions": [],
+                "metaData": [],
+                "pathPermissions": []
+            }
+        ],
+        "usesLibraries": [
+            {
+                "": false
+            }
+        ],
+        "metaDatas": [
+            {
+                "name": "firebase_analytics_collection_deactivated",
+                "value": true
+            },
+            {
+                "name": "google_analytics_adid_collection_enabled",
+                "value": false
+            },
+            {
+                "name": "com.google.android.gms.version",
+                "value": "resourceId:0x7f0c0012"
+            },
+            {
+                "name": "com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME",
+                "value": "com.netflix.mediaclient.service.mdx.caf.CastOptionsProvider"
+            },
+            {
+                "name": "com.bugsnag.android.APP_VERSION",
+                "value": "7.120.2"
+            },
+            {
+                "name": "com.bugsnag.android.VERSION_CODE",
+                "value": 14
+            },
+            {
+                "name": "com.bugsnag.android.API_KEY",
+                "value": "046c09611a886f10d1201353b77c886f"
+            },
+            {
+                "name": "com.bugsnag.android.BUILD_UUID",
+                "value": "95f9a121-39e2-4092-ba96-27c77e682029"
+            },
+            {
+                "name": "com.android.vending.splits.required",
+                "value": true
+            },
+            {
+                "name": "com.android.stamp.source",
+                "value": "https://play.google.com/store"
+            },
+            {
+                "name": "com.android.stamp.type",
+                "value": "STAMP_TYPE_DISTRIBUTION_APK"
+            },
+            {
+                "name": "com.android.vending.splits",
+                "value": "resourceId:0x7f16000f"
+            },
+            {
+                "name": "com.android.vending.derived.apk.id",
+                "value": 2
+            }
+        ]
+    }
+}
