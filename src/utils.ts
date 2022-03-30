@@ -9,25 +9,22 @@ import os from 'os';
 import path from 'path';
 
 import { readManifest } from './apkreader/apkreader';
+// import DecompressZip from 'decompress-zip';
+import {
+  APP_DATA_XSJ,
+  ERR_LOG_FILE,
+  LOG_FOLDER,
+  OUT_LOG_FILE,
+  TEMP_FOLDER,
+} from './consts';
 import { Manifest } from './models/manifest';
 import { moveFile } from './mv';
 
-// import DecompressZip from 'decompress-zip';
 const DecompressZip = require('decompress-zip');
-// import got from 'got';
+
 const got = require('got');
 
 const debug = debugModule('');
-
-const TEMP_FOLDER = 'temp';
-const APP_DATA_XSJ = 'appdataxsj';
-const LOG_FOLDER = '.log';
-const ERR_LOG_FILE = 'err.log';
-const OUT_LOG_FILE = 'out.log';
-
-const getLogFolder = () => path.join(process.cwd(), LOG_FOLDER);
-const getOutLogFile = () => path.join(getLogFolder(), OUT_LOG_FILE);
-const getErrLogFile = () => path.join(getLogFolder(), ERR_LOG_FILE);
 
 // remove styling
 const cleanLogs = (buffer: Uint8Array | string) => `${buffer}`.replace(/\[(.*?)m/g, '').replace(/\[(.*?)m/g, '');
@@ -37,10 +34,10 @@ const cleanLogs = (buffer: Uint8Array | string) => `${buffer}`.replace(/\[(.*?)
  * uncaught erros goes to err.og
  */
 export const printLogs = () => {
-  const errFile = getErrLogFile();
-  const outFile = getOutLogFile();
-  if (!fs.existsSync(getLogFolder())) {
-    fs.mkdirSync(getLogFolder());
+  const errFile = ERR_LOG_FILE;
+  const outFile = OUT_LOG_FILE;
+  if (!fs.existsSync(LOG_FOLDER)) {
+    fs.mkdirSync(LOG_FOLDER);
   }
   if (!fs.existsSync(errFile)) {
     fs.writeFileSync(errFile, '');

@@ -1,5 +1,6 @@
 'use strict';
 import debugModule from 'debug';
+import path from 'path';
 import xlsx from 'xlsx';
 
 import { AnalyzedApk } from './models/analyzedApk';
@@ -34,7 +35,7 @@ const HEADERS = [
   HEADER_PERMISSIONS,
 ];
 
-export const saveResult = async (apps: AnalyzedApk[], resultFileName: string) =>
+export const saveResult = async (apps: AnalyzedApk[], resultPath: string) =>
   new Promise(async (resolve, reject) => {
     // transform data
     const data: ExcelRow[] = [];
@@ -60,7 +61,7 @@ export const saveResult = async (apps: AnalyzedApk[], resultFileName: string) =>
     });
 
     try {
-      await writeExcel(data, resultFileName);
+      await writeExcel(data, resultPath);
       resolve(true);
     } catch (e) {
       debug(e);
@@ -79,13 +80,13 @@ export const saveResult = async (apps: AnalyzedApk[], resultFileName: string) =>
  * @param {array} filename excel filename
  * @return {Promise}
  */
-const writeExcel = async (data: ExcelRow[], filename: string) =>
+const writeExcel = async (data: ExcelRow[], resultPath: string) =>
   new Promise(async (resolve, reject) => {
-    const exportFileName = `${filename}.xlsx`;
+    const exportFileName = path.basename(resultPath);
 
     // read from a XLS file
 
-    let sheetName = filename;
+    let sheetName = exportFileName.replace('.xlsx', '');
 
     // {readFile,utils,writeFile}
     // read from a XLS file
@@ -93,14 +94,14 @@ const writeExcel = async (data: ExcelRow[], filename: string) =>
     try {
       workbook = xlsx.readFile(exportFileName);
     } catch (e) {
-      debug(filename + ' not found, will be created');
+      debug(exportFileName + ' not found, will be created');
       // file does not exist
       // create excel  missing
       const emptySheet = xlsx.utils.json_to_sheet([]);
       workbook = xlsx.utils.book_new();
       xlsx.utils.book_append_sheet(workbook, emptySheet, sheetName);
       try {
-        xlsx.writeFileXLSX(workbook, exportFileName);
+        xlsx.writeFileXLSX(workbook, resultPath);
       } catch (e) {
         reject(e);
       }

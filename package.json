@@ -5,13 +5,27 @@
   "author": "Younes Megaache",
   "homepage": "https://github.com/megaacheyounes/bananalyzer",
   "main": "./dist/index.js",
+  "module": "./esm/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "start": "ts-node  index.ts --keep-apks --use-existing",
-    "debug": "npm run start -- --enable-logs",
-    "dev": "ts-node  dev.ts",
-    "build": "npm run copy-files && npm run build-impl",
-    "build-impl": "pkg -t node16-win-x64 --out-path build -C GZip --public index.ts ",
-    "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"AppCheck.jar\" build"
+    "preinstall": "npx npm-force-resolutions",
+    "start": "cross-env NODE_ENV=debug ts-node index.ts --keep-apks --use-existing",
+    "start:debug": "cross-env NODE_ENV=debug ts-node index.ts --keep-apks --use-existing --enable-logs",
+    "debug": "cross-env NODE_ENV=debug npm run start -- --enable-logs",
+    "devider1sdsdaas": " __________________ build (pkg) __________________ ",
+    "build": "npm run copy-files && npm run clean &&  npm run build:js && npm run build:exe",
+    "build2": "npm run clean &&  npm run build:esm && npm run build:exe",
+    "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"AppCheck.jar\" build",
+    "clean": "rimraf dist esm build",
+    "build:esm": "tsc --target ESNext --module ES6 --outDir esm",
+    "build:js": "ncc build index.ts -o dist",
+    "build:exe": "pkg -t node16-win-x64 --out-path build -C GZip --public  esm/index.js ",
+    "distro": "npm run clean && npm run build:esm && yarn distro:ncc && yarn distro:pkg",
+    "distro:ncc": "ncc build dist/build/main.js -o dist/ncc",
+    "distro:pkg": "pkg -t node10-macos-x64,node10-win-x64 dist/ncc/index.js -o dist/bin/ncc-pkg-demo",
+    "devider12341324": " __________________ ignore __________________ ",
+    "dev": "npm run env:dev &&  npm run dev:impl",
+    "dev:impl": "ts-node dev.ts"
   },
   "bin": "index.ts",
   "keywords": [
@@ -56,13 +70,19 @@
     "@types/ncp": "^2.0.5",
     "@types/puppeteer": "^5.4.5",
     "@types/rimraf": "^3.0.2",
+    "cross-env": "^7.0.3",
     "eslint": "^8.11.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "ncc": "^0.3.6",
     "pkg": "^5.5.2",
     "rimraf": "^2.7.1",
     "ts-migrate": "^0.1.28",
-    "ts-node": "^10.7.0"
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  },
+  "resolutions": {
+    "clone-deep": "4.0.1"
   }
 }

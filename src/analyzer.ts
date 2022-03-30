@@ -8,25 +8,23 @@ import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
 
+import {
+  APP_CHECK_JAR,
+  APP_DATA_FOLDER,
+  GMS_OUTPUT,
+  HMS_OUTPUT,
+} from './consts';
 import { AnalyzedApk } from './models/analyzedApk';
 import { APK } from './models/apk';
 import { Kits } from './models/kits';
-import { Manifest } from './models/manifest';
+import {
+  Manifest,
+  UsesPermission,
+} from './models/manifest';
 import { moveFile } from './mv';
 import { getApkInfo } from './utils';
 
 const JavaCallerModule = require('java-caller');
-
-const APP_DATA_XSJ = 'appdataxsj';
-export const APP_CHECK_JAR = 'AppCheck.jar';
-
-// eslint-disable-next-line no-unused-vars
-const command = `java -jar ${APP_CHECK_JAR} -Dfalse -Gtrue -Cfalse`;
-// eslint-disable-next-line no-unused-vars
-const jarPath = path.join(process.cwd(), APP_CHECK_JAR);
-const GMS_OUTPUT = path.join(process.cwd(), APP_DATA_XSJ, 'output_gms.txt');
-const HMS_OUTPUT = path.join(process.cwd(), APP_DATA_XSJ, 'output_hms.txt');
-const appDataFolder = path.join(process.cwd(), APP_DATA_XSJ);
 
 const debug = debugModule('analyzer');
 
@@ -102,13 +100,13 @@ const mapSdkNames = (arr: string[]) => {
  * @return {nothing}
  */
 export const cleanDataFolder = async () => {
-  if (!fs.existsSync(appDataFolder)) return;
-  const files = fs.readdirSync(appDataFolder);
+  if (!fs.existsSync(APP_DATA_FOLDER)) return;
+  const files = fs.readdirSync(APP_DATA_FOLDER);
 
   if (!files || files.length == 0) return;
   files.forEach((file) => {
     if (file.match('.*.apk')) {
-      const filePath = path.join(appDataFolder, file);
+      const filePath = path.join(APP_DATA_FOLDER, file);
       try {
         fs.unlinkSync(filePath);
         debug('analyzer:deleted ' + file + ' from analyzer folder');
@@ -136,11 +134,11 @@ export const cleanDataFolder = async () => {
 export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
   new Promise<AnalyzedApk[]>(async (resolve, reject) => {
     debug('analyzer:analyzing ', apks);
-    if (!fs.existsSync(appDataFolder)) fs.mkdirSync(appDataFolder);
+    if (!fs.existsSync(APP_DATA_FOLDER)) fs.mkdirSync(APP_DATA_FOLDER);
 
     // 2- move apks from /downloads to /appdataxsj
     apks.forEach(async (app) => {
-      const dest = path.join(appDataFolder, `${app.packageName}.apk`);
+      const dest = path.join(APP_DATA_FOLDER, `${app.packageName}.apk`);
       try {
         if (keepApks) fs.copyFileSync(app.filePath, dest);
         else await moveFile(app.filePath, dest);
@@ -259,9 +257,9 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
 
         try {
           permissions = manifestData.usesPermissions
-            .map((obj) => obj.name)
-            .filter((p) => !!p && p.length > 0)
-            .filter((p) => p.toLowerCase().indexOf('huawei') != -1 || p.toLowerCase().indexOf('google') != -1)
+            .map((obj: UsesPermission) => obj.name)
+            .filter((p: string) => !!p && p.length > 0)
+            .filter((p: string) => p.toLowerCase().indexOf('huawei') != -1 || p.toLowerCase().indexOf('google') != -1)
             .join(', \n ');
         } catch (e) {
           debug(e);

@@ -1,23 +1,23 @@
 /**
  * No Copyright 2022 Younes Megaache
  * All right can be abused (respectfully)
- * 
+ *
  * 💀💀💀 DANGER 💀💀💀
  * Reading this code can cause headaches, and may reduce your IQ level or give you a permanent brain damage
- * 
+ *
 1.  create a txt file and write the package names into it, one package name per line, see `example/example_social.txt`
-2.  open a terminal (cmd)   
-3.  navigate to the folder that contains this sofware, exmaple: `cd C://banana_analyzer`    
-4.  run the command `banana_analyzer.exe`   
-5.  the program will open a file picker, choose the txt file that you created in step 1 and click `Open`   
-6.  the program will start working, analyzing 3 apks at a time. 
+2.  open a terminal (cmd)
+3.  navigate to the folder that contains this sofware, exmaple: `cd C://banana_analyzer`
+4.  run the command `banana_analyzer.exe`
+5.  the program will open a file picker, choose the txt file that you created in step 1 and click `Open`
+6.  the program will start working, analyzing 3 apks at a time.
 7.  when finished, the results can be found in an excel file, that has the same as name as the txt file (example: `example_social.xlsx`)
  */
 
 /*
   Arguments:
     1.  `--enable-logs`: print debug logs, useful to debug this program, or if you want to submit an issue (caution: you may hurt your eyes )
-    2.  `--keep-apks`: by default, the program will delete the apks that are downloaded to save space. if this flag is specified, the program will keep the apks which can be found in a folder named `downloads` (useful if you have a personal data center )      
+    2.  `--keep-apks`: by default, the program will delete the apks that are downloaded to save space. if this flag is specified, the program will keep the apks which can be found in a folder named `downloads` (useful if you have a personal data center )
     3.  `--use-existing`: by default the program will always download latest apk from playstore. if you happend to analyze an apk, then decide that you have to re-analyze it without re-downloading it, then use this flag. (by using this flag, banana_analyzer will **NOT** check if a newer version is available)
     4.  `--batch-(num)`: to improve efficiancy, this program handles apks in batches, the default batch size is 3. means it downloads 3 APKs in parallel, analyze them, write the results into the excel sheet, then moves to the next 3 APKs. usage example: `--batch-1`, `--batch-5` (using a large batch size may break the program, your PC or the whole universe)
 
@@ -33,24 +33,31 @@ import path from 'path';
 
 import {
   analyzeAPKs,
-  APP_CHECK_JAR,
   cleanDataFolder,
-} from './analyzer';
+} from './src/analyzer';
+import {
+  APP_CHECK_JAR,
+  APP_DATA_FOLDER,
+  DOWNLOAD_FOLDER,
+  EXPORT_DIR,
+  IS_PROD,
+  SRC_DIR,
+} from './src/consts';
 import {
   closeBrowser,
   downloadAPK,
   downoadChromiumIfMissing,
-} from './downloader';
-import { saveResult } from './ExcelHelper';
-import { AnalyzedApk } from './models/analyzedApk';
-import { APK } from './models/apk';
-import { pickFile } from './psHelper';
+} from './src/downloader';
+import { saveResult } from './src/ExcelHelper';
+import { AnalyzedApk } from './src/models/analyzedApk';
+import { APK } from './src/models/apk';
+import { pickFile } from './src/psHelper';
 import {
   currentPlatform,
   delay,
   pause,
   printLogs,
-} from './utils';
+} from './src/utils';
 
 const info = JSON.parse(fs.readFileSync('package.json').toString());
 
@@ -76,11 +83,17 @@ console.log(`${info.name} V${info.version} (${info.homepage})`);
 
 debug('args: ' + args);
 
+debug('IS_PROD=', IS_PROD);
+debug('SRC_DIR=', SRC_DIR);
+debug('EXPORT_DIR=', EXPORT_DIR);
+debug('APP_DATA_FOLDER =', APP_DATA_FOLDER);
+debug('APP_DATA_FOLDER =', DOWNLOAD_FOLDER);
+
 printLogs();
 
 let batchSize: number;
 // set batch size
-const batchArg = args.find((arg) => arg.indexOf('batch') != -1);
+const batchArg: string = args.find((arg) => arg.indexOf('batch') != -1) || '';
 if (!!batchArg) {
   // download and anlyze X apps at the same time, default value is 3
   const sizeTemp: string = batchArg.replace('--batch-', '');
@@ -129,7 +142,7 @@ const main = async () => {
     await downoadChromiumIfMissing();
   } catch (e) {
     debug(e);
-    return commitSuicide('failed to download chromium');
+    return commitSuicide('failed to download Chromium');
   }
 
   // 1 - get package names
@@ -167,6 +180,9 @@ const main = async () => {
     );
   }
 
+  const resultFileName: string = path.basename(packageNamesFile).split('.')[0];
+  const RESULT_PATH = `${path.join(__dirname, resultFileName + '.xlsx')}`;
+
   if (packageNames.length > MAX_PACKAGE_NAME) {
     return commitSuicide(
       '(●_●) Downloading and Analyzing more than 200 apps at a time can have serious consquences on you, your gf, your crypto wallet and the future of humanity!'
@@ -187,7 +203,6 @@ const main = async () => {
 
   let batchNum = 0;
   const batchCount: number = Math.ceil(packageNames.length / batchSize);
-  const resultFileName: string = path.basename(packageNamesFile).split('.')[0];
   const failedToDownload: string[] = [];
   const failedToAnalyze: string[] = [];
   for (let i = 0; i < packageNames.length; i += batchSize) {
@@ -223,10 +238,10 @@ const main = async () => {
     failedToAnalyze.push(...batchNotAnalyzed);
 
     try {
-      await saveResult(analyzerRes, resultFileName);
+      await saveResult(analyzerRes, RESULT_PATH);
     } catch (e) {
       return commitSuicide(
-        `(╯°□°)╯︵ ┻━┻ I couldn't write to excel file (close the file '${resultFileName}.xlsx' if its open)`
+        `(╯°□°)╯︵ ┻━┻ I couldn't write to excel file (close the file '${RESULT_PATH}' if its open)`
       );
     }
     console.log(`✓ Batch #${batchNum} of ${batchCount} finished`);
@@ -245,7 +260,7 @@ const main = async () => {
   if (failedToAnalyze.length > 0) console.log('APKs not analyzed ==> ', failedToAnalyze);
 
   console.log();
-  if (successCount > 0) console.log(`✔✔ DONE → ${path.join(process.cwd(), resultFileName + '.xlsx')}  ( ͡~ ͜ʖ ͡°) `);
+  if (successCount > 0) console.log(`✔✔ DONE → ${RESULT_PATH}  ( ͡~ ͜ʖ ͡°) `);
 
   console.log('Releasing resources...');
   await cleanDataFolder();

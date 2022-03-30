@@ -4,35 +4,20 @@
  * it download apps from playstore using puppeteer and the website https://apps.evozi.com/apk-downloader
  * (this script is identical to ./downloader.ts, except it uses a different website which i found faster and more reliable)
  */
-
-/** SHIT:START please ignore this shit, its a workaround for PKG (.exe generator)  */
-// import 'puppeteer-extra-plugin-stealth/evasions/chrome.app';
-// import 'puppeteer-extra-plugin-stealth/evasions/chrome.csi';
-// import 'puppeteer-extra-plugin-stealth/evasions/chrome.loadTimes';
-// import 'puppeteer-extra-plugin-stealth/evasions/chrome.runtime';
-// import 'puppeteer-extra-plugin-stealth/evasions/defaultArgs'; // pkg warned me this one was missing
-// import 'puppeteer-extra-plugin-stealth/evasions/iframe.contentWindow';
-// import 'puppeteer-extra-plugin-stealth/evasions/media.codecs';
-// import 'puppeteer-extra-plugin-stealth/evasions/navigator.hardwareConcurrency';
-// import 'puppeteer-extra-plugin-stealth/evasions/navigator.languages';
-// import 'puppeteer-extra-plugin-stealth/evasions/navigator.permissions';
-// import 'puppeteer-extra-plugin-stealth/evasions/navigator.plugins';
-// import 'puppeteer-extra-plugin-stealth/evasions/navigator.vendor';
-// import 'puppeteer-extra-plugin-stealth/evasions/navigator.webdriver';
-// import 'puppeteer-extra-plugin-stealth/evasions/sourceurl';
-// import 'puppeteer-extra-plugin-stealth/evasions/user-agent-override';
-// import 'puppeteer-extra-plugin-stealth/evasions/webgl.vendor';
-// import 'puppeteer-extra-plugin-stealth/evasions/window.outerdimensions';
-/** SHIT:END*/
-
 import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
 import { Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
-import adblockerPlugin from 'puppeteer-extra-plugin-adblocker';
+// import adblockerPlugin from 'puppeteer-extra-plugin-adblocker';
 import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 
+import {
+  CHROMIUM_EXEC_PATH,
+  CHROMIUM_INSTALL_PATH,
+  CHROMIUM_REVISION,
+  DOWNLOAD_FOLDER,
+} from './consts';
 import { APK } from './models/apk';
 import {
   ApkSource,
@@ -46,27 +31,15 @@ import {
 const debug = debugModule('downloader');
 
 const downloadChromium = require('download-chromium');
-// folder where the APKs will be stored
-const DOWNLOAD_FOLDER = 'downloads';
+
 // max number of attempts of downloading an apk from source 2, there is one minute delay between each attempt
 const MAX_ATTEMPTS_COUNT = 2;
-
-const CHROMIUM_REVISION = 970485;
-
-const CHROMIUM_EXEC_PATH = path.join(
-  process.cwd(),
-  '.local-chromium',
-  `chromium-win64-${CHROMIUM_REVISION}`,
-  'chrome-win',
-  'chrome.exe'
-);
-const CHROMIUM_INSTALL_PATH = path.join(process.cwd(), '.local-chromium');
 
 // use one browser
 let browser: any;
 
 // block ads and tracker to speed page loading
-puppeteer.use(adblockerPlugin({ blockTrackers: true }));
+// puppeteer.use(adblockerPlugin({ blockTrackers: true }));
 
 // trying to hide that we are using a headless browser
 puppeteer.use(stealthPlugin());
@@ -249,16 +222,7 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
       return;
     }
     storeInfo.downloadLink = downloadLink;
-    resolve(
-      storeInfo
-      //   {
-      //   downloadLink,
-      //   versionName,
-      //   apkSize,
-      //   uploadDate: 'NOT FOUND',
-      //   source: 'apps.evozi',
-      // }
-    );
+    resolve(storeInfo);
   });
 /**
  * this function will try to download an apk for app represted by @param packageName,
@@ -272,17 +236,16 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
   new Promise<APK>(async (resolve, reject) => {
     debug('download APK → ' + packageName);
     // create download folder if missing
-    let downloadPath = '';
+
     try {
-      downloadPath = path.join(process.cwd(), DOWNLOAD_FOLDER);
-      if (!fs.existsSync(downloadPath)) fs.mkdirSync(downloadPath);
+      if (!fs.existsSync(DOWNLOAD_FOLDER)) fs.mkdirSync(DOWNLOAD_FOLDER);
     } catch (e: any) {
       console.log("Bruhhh I coulnd't mkdir a folder!!!");
       reject(Error(e));
       return;
     }
 
-    const filePath = path.join(downloadPath, packageName + '.apk');
+    const filePath = path.join(DOWNLOAD_FOLDER, packageName + '.apk');
     let page;
     try {
       if (!browser) {
@@ -417,17 +380,16 @@ const attemptToOpenOrDownloadChrome = () =>
  * if chrome keeps failing to lunch, this function will give up after 3 attempts, and probably move to another place where it will start a new life as a vegan transgender
  */
 export const downoadChromiumIfMissing = async () => {
-  let chromLaunched = false;
-  let attemps = 0;
-  while (!chromLaunched && attemps < 3) {
-    attemps++;
-    chromLaunched = await attemptToOpenOrDownloadChrome();
-    debug('chrom launched', chromLaunched);
+  var chromLaunched = false;
+
+  for (let i = 0; i < 3 && !chromLaunched; i++) {
+    chromLaunched = true; //await attemptToOpenOrDownloadChrome();
+    debug('chrom launched' + chromLaunched);
+    return;
   }
-  if (attemps == 3) {
-    console.log('3 attemps at downloading Chormium have all failed!');
-    process.exit();
-  }
+
+  console.log('3 attemps at downloading Chormium have all failed!');
+  throw Error('3 attemps at downloading Chormium have all failed!');
 };
 
 /**
