@@ -56,7 +56,7 @@ If you like to use this tool to analyze an APK that not in the playstore. then f
 
 - [x]   Use a proper logging library for debugging instead of console.log 
 - [x]   Migrate to TypeScript 
-- [ ]   Add unit tests
+- [x]   Add unit tests
 - [ ]   Improve and add missing documentation
 
 
