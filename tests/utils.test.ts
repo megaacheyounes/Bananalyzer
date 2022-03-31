@@ -1,15 +1,7 @@
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  rmSync,
-} from 'fs';
+import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
 import path from 'path';
 
-import {
-  getApkInfo,
-  getInnerApk,
-} from '../src/utils';
+import { getApkInfo, getInnerApk } from '../src/core/utils';
 
 //normal apk
 const twitterApk = path.join(__dirname, 'apks', 'com.twitter.android.lite.apk');

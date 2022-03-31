@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { analyzeAPKs } from '../src/analyzer';
+import { analyzeAPKs } from '../src/core/analyzer';
 import { APK } from '../src/models/apk';
 
 //normal apk

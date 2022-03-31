@@ -7,14 +7,14 @@
 import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
-import { Browser, Page, Puppeteer } from 'puppeteer';
+import { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 // import adblockerPlugin from 'puppeteer-extra-plugin-adblocker';
 import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 
-import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from './consts';
-import { APK } from './models/apk';
-import { ApkSource, StoreInfo } from './models/storeInfo';
+import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from '../consts';
+import { APK } from '../models/apk';
+import { ApkSource, StoreInfo } from '../models/storeInfo';
 import { delay, downloadFileGot } from './utils';
 
 const debug = debugModule('downloader');
@@ -25,7 +25,7 @@ const downloadChromium = require('download-chromium');
 const MAX_ATTEMPTS_COUNT = 2;
 
 // use one browser
-let browser: Browser | undefined;
+let browser: undefined | Browser;
 
 // block ads and tracker to speed page loading
 // puppeteer.use(adblockerPlugin({ blockTrackers: true }));

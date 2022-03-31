@@ -6,12 +6,6 @@ export const SRC_DIR = __dirname;
 
 export var EXPORT_DIR = process.cwd();
 
-// if (!IS_PROD) {
-//   const filename_parents = path.dirname(__filename).split(path.sep);
-//   filename_parents.pop(); //when running nodejs localy (debug) remove /src from path
-//   EXPORT_DIR = filename_parents.join(path.sep);
-// }
-
 //app check
 export const APP_DATA_XSJ = 'appdataxsj';
 export const APP_CHECK_JAR = 'AppCheck.jar';
@@ -42,6 +36,8 @@ const ERR_LOG_FILENAME = 'err.log';
 const OUT_LOG_FILENAME = 'out.log';
 export const OUT_LOG_FILE = path.join(LOG_FOLDER, OUT_LOG_FILENAME);
 export const ERR_LOG_FILE = path.join(LOG_FOLDER, ERR_LOG_FILENAME);
+
+export const MAX_PACKAGE_NAMES = 200;
 
 //args defaults
 export const DEFAULT_BATCH_SIZE = 3;

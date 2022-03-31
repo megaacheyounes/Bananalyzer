@@ -1,11 +1,6 @@
 'use strict';
 
-import fs, {
-  copyFileSync,
-  existsSync,
-  readFileSync,
-  rmSync,
-} from 'node:fs';
+import fs, { copyFileSync, existsSync, readFileSync, rmSync } from 'node:fs';
 import stream from 'node:stream';
 import { promisify } from 'node:util';
 
@@ -15,14 +10,8 @@ import path from 'path';
 
 import { readManifest } from './apkreader/apkreader';
 // import DecompressZip from 'decompress-zip';
-import {
-  APP_DATA_FOLDER,
-  ERR_LOG_FILE,
-  LOG_FOLDER,
-  OUT_LOG_FILE,
-  TEMP_FOLDER,
-} from './consts';
-import { Manifest } from './models/manifest';
+import { APP_DATA_FOLDER, ERR_LOG_FILE, LOG_FOLDER, OUT_LOG_FILE, TEMP_FOLDER } from '../consts';
+import { Manifest } from '../models/manifest';
 
 const DecompressZip = require('decompress-zip');
 
@@ -148,8 +137,8 @@ export const getInnerApk = (apkPath: string, destinationPath: string) =>
         debug('moved root apk to ' + destinationPath);
 
         // delete all extracted files
-     fs.rmSync(TEMP_FOLDER, { recursive: true });
-           resolve(destinationPath);
+        fs.rmSync(TEMP_FOLDER, { recursive: true });
+        resolve(destinationPath);
       } else {
         // shit!
         reject(Error('Could not parse APK, what kind of APK is this?'));

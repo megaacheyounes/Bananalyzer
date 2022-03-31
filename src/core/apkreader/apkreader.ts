@@ -5,7 +5,7 @@ import debugModule from 'debug';
 import internal from 'stream';
 import * as Zip from 'yauzl';
 
-import { Manifest } from '../models/manifest';
+import { Manifest } from '../../models/manifest';
 import ManifestParser from './manifestParser';
 
 const MANIFEST = 'AndroidManifest.xml';

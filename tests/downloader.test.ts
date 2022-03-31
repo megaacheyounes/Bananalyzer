@@ -4,9 +4,9 @@ import {
   getDownloadLink1,
   getChromiumPage,
   getDownloadLink2,
-} from '../src/downloader';
+} from '../src/core/downloader';
 import { ApkSource } from '../src/models/storeInfo';
-import { closeBrowser } from '../src/downloader';
+import { closeBrowser } from '../src/core/downloader';
 
 const packageName = 'com.ubercab.uberlite';
 const wrongPackageName = 'com.blahblah.does.not.exist.x234asdfc';

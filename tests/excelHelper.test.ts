@@ -1,11 +1,11 @@
-import { saveResult, getRowFromApp, HEADERS } from '../src/ExcelHelper';
+import { saveResult, getRowFromApp, HEADERS } from '../src/core/ExcelHelper';
 import { AnalyzedApk } from '../src/models/analyzedApk';
 import path from 'path';
 import { existsSync, mkdirSync, rmSync, stat, statSync } from 'fs';
 
 import { ExcelRow } from '../src/models/excelRow';
 import { exec } from 'child_process';
-import { delay } from '../src/utils';
+import { delay } from '../src/core/utils';
 
 const uploadDate = 'Mar 31, 2022';
 const packageName = 'com.twitter.android.lite';

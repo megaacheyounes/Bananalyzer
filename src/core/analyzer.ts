@@ -8,19 +8,11 @@ import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
 
-import {
-  APP_CHECK_JAR,
-  APP_DATA_FOLDER,
-  GMS_OUTPUT,
-  HMS_OUTPUT,
-} from './consts';
-import { AnalyzedApk } from './models/analyzedApk';
-import { APK } from './models/apk';
-import { Kits } from './models/kits';
-import {
-  Manifest,
-  UsesPermission,
-} from './models/manifest';
+import { APP_CHECK_JAR, APP_DATA_FOLDER, GMS_OUTPUT, HMS_OUTPUT } from '../consts';
+import { AnalyzedApk } from '../models/analyzedApk';
+import { APK } from '../models/apk';
+import { Kits } from '../models/kits';
+import { Manifest, UsesPermission } from '../models/manifest';
 import { moveFile } from './mv';
 import { getApkInfo } from './utils';
 

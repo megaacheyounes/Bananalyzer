@@ -9,7 +9,7 @@ import ncp from 'ncp';
 import path from 'path';
 import rimraf from 'rimraf';
 
-import { IS_PROD } from './consts';
+import { IS_PROD } from '../consts';
 
 type Callback = (err: any | null) => void;
 

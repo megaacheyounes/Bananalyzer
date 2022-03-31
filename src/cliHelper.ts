@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import meow, { AnyFlags, AnyFlag, Flag, FlagType } from 'meow';
-import { pause } from './utils';
+import { pause } from './core/utils';
 import { DEFAULT_BATCH_SIZE } from './consts';
 const meowHelp = require('cli-meow-help');
 
@@ -91,9 +91,9 @@ const cliHelper = meow(helpText, options);
 
 export default cliHelper;
 
-export const commitSuicide = (msg: string) => {
+export const commitSuicide = (msg: string): boolean => {
   console.log(''); // empty line
-  console.log(' ☹  Banana analyzer has commit suicide  ☹ ');
+  console.log(` ☹  ${cliHelper.pkg.name} has commit suicide  ☹ `);
   console.log('[last words]', msg);
   console.log(
     '(if you think this is an issue with the tool, re-run it with the flag `--enable-logs`, then submit an issue at:',
@@ -101,4 +101,5 @@ export const commitSuicide = (msg: string) => {
     ' and include the logs)'
   );
   pause();
+  return false;
 };
