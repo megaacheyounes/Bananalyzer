@@ -26,7 +26,8 @@
     "devider12341324": " __________________ test __________________ ",
     "test": "jest",
     "test:analyzer": "jest tests/analyzer.test.ts",
-    "test:downloader": "jest tests/downloader.test.ts"
+    "test:downloader": "jest tests/downloader.test.ts",
+    "test:excelHelper": "jest tests/excelHelper.test.ts"
   },
   "bin": "index.ts",
   "keywords": [

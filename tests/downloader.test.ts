@@ -10,6 +10,7 @@ import { closeBrowser } from '../src/downloader';
 
 const packageName = 'com.ubercab.uberlite';
 const wrongPackageName = 'com.blahblah.does.not.exist.x234asdfc';
+
 describe('Downloader', () => {
   it('should download chromium if missing', async () => {
     expect(await downoadChromiumIfMissing()).toBeTruthy();

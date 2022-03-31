@@ -11,7 +11,7 @@ const debug = debugModule('excleHelper');
 const HEADER_PACKAGE_NAME = 'Package name'; //
 const HEADER_VERSION_NAME = 'Version name';
 const HEADER_APK_CREATION_DATE = 'APK creation date';
-const HEADER_PLAY_STORE_UPDATE_DATE = 'Google Play update date';
+const HEADER_GOOGLE_PLAY_UPDATE_DATE = 'Google Play update date';
 const HEADER_GMS_KITS = 'GMS kits';
 const HEADER_HMS_KITS = 'HMS kits';
 const HEADER_HUAWEI_APP_ID = 'Hawei App Id';
@@ -21,11 +21,11 @@ const HEADER_GOOGLE_METADATAS = 'Google Metadatas';
 const HEADER_PERMISSIONS = 'Permissions (Google/Huawei)';
 
 // 3- write to excel file
-const HEADERS = [
+export const HEADERS = [
   HEADER_PACKAGE_NAME,
   HEADER_VERSION_NAME,
   HEADER_APK_CREATION_DATE,
-  HEADER_PLAY_STORE_UPDATE_DATE,
+  HEADER_GOOGLE_PLAY_UPDATE_DATE,
   HEADER_GMS_KITS,
   HEADER_HMS_KITS,
   HEADER_HUAWEI_APP_ID,
@@ -34,30 +34,33 @@ const HEADERS = [
   HEADER_GOOGLE_METADATAS,
   HEADER_PERMISSIONS,
 ];
+export const getRowFromApp = (app: AnalyzedApk): ExcelRow => {
+  const appAsRow: ExcelRow = {};
+
+  appAsRow[HEADER_PACKAGE_NAME] = app.packageName;
+  appAsRow[HEADER_VERSION_NAME] = app.versionName;
+  appAsRow[HEADER_APK_CREATION_DATE] = app.apkCreationTime;
+  appAsRow[HEADER_GOOGLE_PLAY_UPDATE_DATE] = app.uploadDate;
+  appAsRow[HEADER_GMS_KITS] = (app['GMS'] || []).join(' | ');
+  appAsRow[HEADER_HMS_KITS] = (app['HMS'] || []).join(' | ');
+  appAsRow[HEADER_HUAWEI_APP_ID] = app.huaweiAppId;
+  appAsRow[HEADER_ANDROID_MARKET_METADATA] = app.androidMarketMetaData;
+  appAsRow[HEADER_HUAWEI_METADATAS] = (app.huaweiMetadatas || []).join(',\n');
+  appAsRow[HEADER_GOOGLE_METADATAS] = (app.googleMetadatas || []).join(',\n');
+  appAsRow[HEADER_PERMISSIONS] = (app.permissions || []).join(',\n');
+
+  return appAsRow;
+};
 
 export const saveResult = async (apps: AnalyzedApk[], resultPath: string) =>
-  new Promise(async (resolve, reject) => {
+  new Promise<boolean>(async (resolve, reject) => {
     // transform data
     const data: ExcelRow[] = [];
-    apps.forEach((app) => {
+    apps.forEach(async (app) => {
       debug(app);
-      // keys must equal headers
-      // todo: use constants for keys
-      const appAsRow: ExcelRow = {};
+      const row = getRowFromApp(app);
 
-      appAsRow[HEADER_PACKAGE_NAME] = app.packageName;
-      appAsRow[HEADER_VERSION_NAME] = app.versionName;
-      appAsRow[HEADER_APK_CREATION_DATE] = app.apkCreationTime;
-      appAsRow[HEADER_GOOGLE_METADATAS] = app.uploadDate;
-      appAsRow[HEADER_GMS_KITS] = app['GMS'].join(' | ');
-      appAsRow[HEADER_HMS_KITS] = app['HMS'].join(' | ');
-      appAsRow[HEADER_HUAWEI_APP_ID] = app.huaweiAppId;
-      appAsRow[HEADER_ANDROID_MARKET_METADATA] = app.androidMarketMetaData;
-      appAsRow[HEADER_HUAWEI_METADATAS] = app.huaweiMetadatas.join(',\n');
-      appAsRow[HEADER_GOOGLE_METADATAS] = app.googleMetadatas.join(',\n');
-      appAsRow[HEADER_PERMISSIONS] = app.permissions.join(',\n');
-
-      data.push(appAsRow);
+      data.push(row);
     });
 
     try {
@@ -81,7 +84,7 @@ export const saveResult = async (apps: AnalyzedApk[], resultPath: string) =>
  * @return {Promise}
  */
 const writeExcel = async (data: ExcelRow[], resultPath: string) =>
-  new Promise(async (resolve, reject) => {
+  new Promise<boolean>(async (resolve, reject) => {
     const exportFileName = path.basename(resultPath);
 
     // read from a XLS file
@@ -92,7 +95,7 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
     // read from a XLS file
     let workbook;
     try {
-      workbook = xlsx.readFile(exportFileName);
+      workbook = xlsx.readFile(resultPath);
     } catch (e) {
       debug(exportFileName + ' not found, will be created');
       // file does not exist
@@ -152,7 +155,7 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
     worksheet['!cols'] = wscols;
     // worksheet = excel.utils.book(worksheet, data, { headers });
 
-    xlsx.writeFileXLSX(workbook, exportFileName);
+    xlsx.writeFileXLSX(workbook, resultPath);
 
     resolve(true);
   });
