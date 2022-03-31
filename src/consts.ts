@@ -42,3 +42,6 @@ const ERR_LOG_FILENAME = 'err.log';
 const OUT_LOG_FILENAME = 'out.log';
 export const OUT_LOG_FILE = path.join(LOG_FOLDER, OUT_LOG_FILENAME);
 export const ERR_LOG_FILE = path.join(LOG_FOLDER, ERR_LOG_FILENAME);
+
+//args defaults
+export const DEFAULT_BATCH_SIZE = 3;

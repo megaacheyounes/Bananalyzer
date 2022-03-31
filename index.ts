@@ -15,7 +15,7 @@
  */
 
 /*
-  Arguments:
+  Arguments (outdated)
     1.  `--enable-logs`: print debug logs, useful to debug this program, or if you want to submit an issue (caution: you may hurt your eyes )
     2.  `--keep-apks`: by default, the program will delete the apks that are downloaded to save space. if this flag is specified, the program will keep the apks which can be found in a folder named `downloads` (useful if you have a personal data center )
     3.  `--use-existing`: by default the program will always download latest apk from playstore. if you happend to analyze an apk, then decide that you have to re-analyze it without re-downloading it, then use this flag. (by using this flag, banana_analyzer will **NOT** check if a newer version is available)
@@ -27,14 +27,10 @@
 // hide all nodejs warnings
 // process.removeAllListeners('warning');
 
-import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
 
-import {
-  analyzeAPKs,
-  cleanDataFolder,
-} from './src/analyzer';
+import { analyzeAPKs, cleanDataFolder } from './src/analyzer';
 import {
   APP_CHECK_JAR,
   APP_DATA_FOLDER,
@@ -42,36 +38,66 @@ import {
   EXPORT_DIR,
   IS_PROD,
   SRC_DIR,
+  DEFAULT_BATCH_SIZE,
 } from './src/consts';
-import {
-  closeBrowser,
-  downloadAPK,
-  downoadChromiumIfMissing,
-} from './src/downloader';
+import { closeBrowser, downloadAPK, downoadChromiumIfMissing } from './src/downloader';
 import { saveResult } from './src/ExcelHelper';
 import { AnalyzedApk } from './src/models/analyzedApk';
 import { APK } from './src/models/apk';
 import { pickFile } from './src/psHelper';
-import {
-  currentPlatform,
-  delay,
-  pause,
-  printLogs,
-} from './src/utils';
+import { currentPlatform, delay, pause, printLogs } from './src/utils';
 
-const info = JSON.parse(fs.readFileSync('package.json').toString());
+import cliHelper from './src/cliHelper';
+import { type } from 'os';
+import { CMD_APK, CMD_FILE, CMD_HELP, CMD_PACKAGE, CMD_VERSION, commitSuicide, MyFlags } from './src/cliHelper';
+import debugModule from 'debug';
+
+if (
+  !cliHelper.input ||
+  typeof cliHelper.input != typeof [] ||
+  cliHelper.input.length < 1 ||
+  cliHelper.input.length > 2
+) {
+  // cliHelper.showHelp();
+  cliHelper.input[0] = CMD_FILE;
+}
+
+const cmd = cliHelper.input[0];
+const flags = cliHelper.flags as MyFlags;
+
+const useExisting = flags.reuse; // if true, will use existing apk in ./download, if false, will force download apks
+const keepApks = flags.keep; // if set, the program will not delete the downloaded apks, apks can be found ./downloads folder
+const enableLogs = flags.debug; // debug logs
+let batchSize: number = +(flags.batch as any); // download and anlyze X apps at the same time, default value is 3
+
+switch (cmd) {
+  case CMD_PACKAGE: {
+    //downlaod ana anlyze package
+    break;
+  }
+  case CMD_APK: {
+    //analyze apk
+    break;
+  }
+  case CMD_FILE: {
+    //dowlnoad and analyze list of apps
+    break;
+  }
+  case CMD_HELP: {
+    //show help
+    cliHelper.showHelp();
+    break;
+  }
+  case CMD_VERSION: {
+    // console.log('Banalyzer version=', info.version);
+    // process.exit(2)
+    cliHelper.showVersion();
+    break;
+  }
+}
 
 const debug = debugModule('');
-
 const MAX_PACKAGE_NAME = 200;
-const DEFAULT_BATCH_SIZE = 3;
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
-const args = process.argv.slice(2);
-
-const useExisting = args.includes('--use-existing'); // if true, will use existing apk in ./download, if false, will force download apks
-const keepApks = args.includes('--keep-apks'); // if set, the program will not delete the downloaded apks, apks can be found ./downloads folder
-const enableLogs = args.includes('--enable-logs'); // debug logs
 
 if (enableLogs) {
   debugModule.enable('*');
@@ -79,33 +105,13 @@ if (enableLogs) {
   debugModule.disable();
 }
 
-console.log(`${info.name} V${info.version} (${info.homepage})`);
-
-debug('args: ' + args);
-
 debug('IS_PROD=', IS_PROD);
 debug('SRC_DIR=', SRC_DIR);
 debug('EXPORT_DIR=', EXPORT_DIR);
 debug('APP_DATA_FOLDER =', APP_DATA_FOLDER);
 debug('APP_DATA_FOLDER =', DOWNLOAD_FOLDER);
 
-printLogs();
-
-let batchSize: number;
 // set batch size
-const batchArg: string = args.find((arg) => arg.indexOf('batch') != -1) || '';
-if (!!batchArg) {
-  // download and anlyze X apps at the same time, default value is 3
-  const sizeTemp: string = batchArg.replace('--batch-', '');
-  if (isNaN(Number(sizeTemp)) || +sizeTemp < 1) {
-    console.log(`the batch size you provided is not valid ("${sizeTemp}"), will fallback to deafult size ()`);
-    batchSize = DEFAULT_BATCH_SIZE;
-  } else {
-    batchSize = +sizeTemp;
-  }
-} else {
-  batchSize = DEFAULT_BATCH_SIZE;
-}
 
 console.log(
   'DebugLogs =' + enableLogs,
@@ -114,17 +120,6 @@ console.log(
   ', KeepAPKs = ' + keepApks
 );
 
-const commitSuicide = (msg: string) => {
-  console.log(''); // empty line
-  console.log(' ☹  Banana analyzer has commit suicide  ☹ ');
-  console.log('[last words]', msg);
-  console.log(
-    '(if you think this is an issue with the tool, re-run it with the flag `--enable-logs`, then submit an issue at:',
-    info.homepage,
-    ' and include the logs)'
-  );
-  pause();
-};
 const main = async () => {
   if (currentPlatform() == 'win32') {
     return commitSuicide(
@@ -218,12 +213,14 @@ const main = async () => {
     // done downloading X apks, lets analyze them
 
     const downloadedApks = prs.map((pr: any) => pr.value).filter((result: APK | null) => result != null);
-    debug(downloadedApks);
+    //debug(downloadedApks);
     const downloadedApksCount = downloadedApks.length;
-    debug('downloaded apks: ' + downloadedApksCount);
+    //debug('downloaded apks: ' + downloadedApksCount);
 
     const batchFailed = nextBatch.filter((pn) => !downloadedApks.map((c) => c.packageName).includes(pn));
-    debug('batch #' + batchNum + ' failed ==>> ' + batchFailed);
+
+    //debug('batch #' + batchNum + ' failed ==>> ' + batchFailed);
+
     failedToDownload.push(...batchFailed);
 
     if (downloadedApksCount == 0) {

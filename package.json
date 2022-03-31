@@ -7,10 +7,11 @@
   "main": "./dist/index.js",
   "module": "./esm/index.js",
   "types": "./dist/index.d.ts",
+  "displayName": "Banana Analyzer",
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "start": "cross-env NODE_ENV=debug ts-node index.ts --keep-apks --use-existing",
-    "start:debug": "cross-env NODE_ENV=debug ts-node index.ts --keep-apks --use-existing --enable-logs",
+    "start": "cross-env NODE_ENV=debug ts-node index.ts --keep --reuse",
+    "start:debug": "cross-env NODE_ENV=debug ts-node index.ts --keep --reuse --debug",
     "debug": "cross-env NODE_ENV=debug npm run start -- --enable-logs",
     "devider1sdsdaas": " __________________ build (pkg) __________________ ",
     "build": "npm run copy-files && npm run clean &&  npm run build:js && npm run build:exe",
@@ -41,12 +42,14 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^17.0.23",
+    "cli-meow-help": "^2.0.2",
     "debug": "^4.3.4",
     "decompress-zip": "^0.3.3",
     "download-chromium": "^2.2.1",
     "fetch": "^1.1.0",
     "fs": "0.0.1-security",
     "java-caller": "^2.4.0",
+    "meow": "^9.0.0",
     "ncp": "^2.0.0",
     "path": "^0.12.7",
     "puppeteer": "^13.5.1",
@@ -68,7 +71,9 @@
     ]
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
     "@types/jest": "^27.4.1",
+    "@types/meow": "^6.0.0",
     "@types/mkdirp": "^1.0.2",
     "@types/ncp": "^2.0.5",
     "@types/puppeteer": "^5.4.5",
