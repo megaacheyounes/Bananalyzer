@@ -25,7 +25,8 @@
     "distro:pkg": "pkg -t node10-macos-x64,node10-win-x64 dist/ncc/index.js -o dist/bin/ncc-pkg-demo",
     "devider12341324": " __________________ test __________________ ",
     "test": "jest",
-    "test1": "jest tests/analyzer.test.ts"
+    "test:analyzer": "jest tests/analyzer.test.ts",
+    "test:downloader": "jest tests/downloader.test.ts"
   },
   "bin": "index.ts",
   "keywords": [

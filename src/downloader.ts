@@ -7,26 +7,15 @@
 import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
-import { Page } from 'puppeteer';
+import { Browser, Page, Puppeteer } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 // import adblockerPlugin from 'puppeteer-extra-plugin-adblocker';
 import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 
-import {
-  CHROMIUM_EXEC_PATH,
-  CHROMIUM_INSTALL_PATH,
-  CHROMIUM_REVISION,
-  DOWNLOAD_FOLDER,
-} from './consts';
+import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from './consts';
 import { APK } from './models/apk';
-import {
-  ApkSource,
-  StoreInfo,
-} from './models/storeInfo';
-import {
-  delay,
-  downloadFileGot,
-} from './utils';
+import { ApkSource, StoreInfo } from './models/storeInfo';
+import { delay, downloadFileGot } from './utils';
 
 const debug = debugModule('downloader');
 
@@ -36,7 +25,7 @@ const downloadChromium = require('download-chromium');
 const MAX_ATTEMPTS_COUNT = 2;
 
 // use one browser
-let browser: any;
+let browser: Browser | undefined;
 
 // block ads and tracker to speed page loading
 // puppeteer.use(adblockerPlugin({ blockTrackers: true }));
@@ -44,7 +33,7 @@ let browser: any;
 // trying to hide that we are using a headless browser
 puppeteer.use(stealthPlugin());
 // download from https://apk.support/download-app
-const getDownloadLink1 = (page: Page, packageName: string) =>
+export const getDownloadLink1 = (page: Page, packageName: string) =>
   new Promise<StoreInfo>(async (resolve, reject) => {
     try {
       debug('getDownloadLink1 => ' + packageName);
@@ -113,7 +102,7 @@ const getDownloadLink1 = (page: Page, packageName: string) =>
   });
 
 // download from https://apps.evozi.com/apk-downloader/
-const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
+export const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
   new Promise<StoreInfo>(async (resolve, reject) => {
     attempt++;
     debug('getDownloadLink2 attempt#' + attempt);
@@ -191,7 +180,7 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
 
     const storeInfo: StoreInfo = {
       packageName,
-      source: ApkSource.EVONZI,
+      source: ApkSource.APPS_EVOZI,
     };
 
     const apkInfoEl = await page.$('.card-body .text-success');
@@ -224,6 +213,39 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
     storeInfo.downloadLink = downloadLink;
     resolve(storeInfo);
   });
+
+/**
+ * return chromium tab object (page)
+ * @param {boolean} openBrowser if true, it will force create new instance of browser (usefull for tesitng)
+ */
+export const getChromiumPage = async (openBrowser = false): Promise<Page> => {
+  if (!browser || openBrowser) {
+    browser = await puppeteer.launch({
+      executablePath: CHROMIUM_EXEC_PATH, // comment when debugging, to use chromium thats included with pupputeer
+    });
+  }
+  const page = await browser.newPage();
+  // set viewport to a random mobile screen resolution
+  await page.setViewport({
+    width: 390 + Math.floor(Math.random() * 100),
+    height: 844 + Math.floor(Math.random() * 100),
+  });
+
+  // skip loading images and visual resources to reduce loding time
+  await page.setRequestInterception(true);
+  page.on('request', (request: any) => {
+    if (request.isInterceptResolutionHandled()) {
+      return;
+    }
+    const REQUESTS_TO_IGNORE = ['font', 'image', 'stylesheet', 'media', 'imageset'];
+    if (REQUESTS_TO_IGNORE.indexOf(request.resourceType()) !== -1) {
+      return request.abort();
+    }
+    request.continue();
+  });
+  return page;
+};
+
 /**
  * this function will try to download an apk for app represted by @param packageName,
  * sometimes we may get rate limited, therefore this function will call it self (recursive call) again if it detects rate limit, one every minute, 10 times max
@@ -248,12 +270,6 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
     const filePath = path.join(DOWNLOAD_FOLDER, packageName + '.apk');
     let page;
     try {
-      if (!browser) {
-        browser = await puppeteer.launch({
-          executablePath: CHROMIUM_EXEC_PATH, // comment when debugging, to use chromium thats included with pupputeer
-        });
-      }
-
       if (fs.existsSync(filePath)) {
         if (useExisting) console.log(`using existing apk: ${packageName}  → ${filePath}`);
         else console.log(`apk will be overwritten: ${packageName}  → ${filePath}`);
@@ -263,26 +279,7 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
           return;
         }
       }
-
-      page = await browser.newPage();
-      // set viewport to a random mobile screen resolution
-      await page.setViewport({
-        width: 390 + Math.floor(Math.random() * 100),
-        height: 844 + Math.floor(Math.random() * 100),
-      });
-
-      // skip loading images and visual resources to reduce loding time
-      await page.setRequestInterception(true);
-      page.on('request', (request: any) => {
-        if (request.isInterceptResolutionHandled()) {
-          return;
-        }
-        const REQUESTS_TO_IGNORE = ['font', 'image', 'stylesheet', 'media', 'imageset'];
-        if (REQUESTS_TO_IGNORE.indexOf(request.resourceType()) !== -1) {
-          return request.abort();
-        }
-        request.continue();
-      });
+      page = await getChromiumPage();
       console.log('Searching for APK File → ' + packageName, '(can take up to 3 minutes!)');
 
       let downloadData: StoreInfo;
@@ -334,9 +331,9 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
     } catch (e) {
       debug(e);
       debug('APK file not found → ' + packageName);
-      try {
-        await page.close();
-      } catch (e) {}
+
+      if (!!page) await page.close();
+
       reject(e);
     }
   });
@@ -383,9 +380,9 @@ export const downoadChromiumIfMissing = async () => {
   var chromLaunched = false;
 
   for (let i = 0; i < 3 && !chromLaunched; i++) {
-    chromLaunched = true; //await attemptToOpenOrDownloadChrome();
+    chromLaunched = await attemptToOpenOrDownloadChrome();
     debug('chrom launched' + chromLaunched);
-    return;
+    return true;
   }
 
   console.log('3 attemps at downloading Chormium have all failed!');
@@ -398,6 +395,7 @@ export const downoadChromiumIfMissing = async () => {
 export const closeBrowser = async () => {
   if (!!browser) {
     await browser.close();
+    browser = undefined;
   } else {
     debug('failed to close browser');
   }

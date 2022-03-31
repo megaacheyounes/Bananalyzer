@@ -53,6 +53,7 @@ describe('Analyzer', () => {
     expect(result[0].permissions).toHaveLength(0);
 
     expect(result[1].GMS).toHaveLength(6);
+
     expect(result[1].permissions).toHaveLength(2);
     expect(result[1].permissions).toContain('com.google.android.c2dm.permission.RECEIVE');
   });

@@ -148,8 +148,8 @@ export const getInnerApk = (apkPath: string, destinationPath: string) =>
         debug('moved root apk to ' + destinationPath);
 
         // delete all extracted files
-        fs.rmSync(TEMP_FOLDER, { recursive: true });
-        resolve(destinationPath);
+     fs.rmSync(TEMP_FOLDER, { recursive: true });
+           resolve(destinationPath);
       } else {
         // shit!
         reject(Error('Could not parse APK, what kind of APK is this?'));

@@ -1,6 +1,6 @@
 export enum ApkSource {
   APK_SUPPORT = 'apk.support',
-  EVONZI = 'apps.evoni',
+  APPS_EVOZI = 'apps.evozi',
 }
 
 export interface StoreInfo {
