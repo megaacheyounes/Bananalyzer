@@ -9,8 +9,6 @@ import fs from 'fs';
 import path from 'path';
 import { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
-// import adblockerPlugin from 'puppeteer-extra-plugin-adblocker';
-// import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from '../consts';
 import { APK } from '../models/apk';
