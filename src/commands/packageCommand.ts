@@ -18,6 +18,13 @@ export default class PackageCommand extends Command {
     const packageName = this.flags.name;
     debug('packagename= ' + packageName);
 
+    if (!packageName) {
+      console.log(
+        'You must spicify a package name using --name, Example: ` bananalyzer package --name "com.twitter.lite" `'
+      );
+      this.die();
+    }
+
     const resultFileName: string = packageName;
     const resultPath = this.getResultFilePath(resultFileName);
 
@@ -43,6 +50,7 @@ export default class PackageCommand extends Command {
       return false; //failed to analyze
     }
 
+    this.finishSuccessMessage(resultPath);
     this.clean();
     return true;
   }

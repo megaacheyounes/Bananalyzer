@@ -94,9 +94,10 @@ export default cliHelper;
 export const commitSuicide = (msg: string): boolean => {
   console.log(''); // empty line
   console.log(` ☹  ${cliHelper.pkg.name} has commit suicide  ☹ `);
+  console.log(''); // empty line
   console.log('[last words]', msg);
   console.log(
-    '(if you think this is an issue with the tool, re-run it with the flag `--enable-logs`, then submit an issue at:',
+    '(if you think this is an issue with the tool, re-run the command with the flag `--debug`, then submit an issue at:',
     cliHelper.pkg.homepage,
     ' and include the logs)'
   );

@@ -41,3 +41,5 @@ export const MAX_PACKAGE_NAMES = 200;
 
 //args defaults
 export const DEFAULT_BATCH_SIZE = 3;
+
+export const UNKNOWN_INFO = '⚠';

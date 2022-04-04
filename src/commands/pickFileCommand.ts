@@ -96,7 +96,7 @@ export class PickFileCommand extends PackageCommand {
 
       const batchNotAnalyzed = await this.analyzeAndSave(batchDownloadedApks, resultPath);
 
-      failedToAnalyze.push(...batchNotAnalyzed.map((apk: APK) => apk.packageName));
+      failedToAnalyze.push(...batchNotAnalyzed.map((apk: APK) => apk.packageName!!));
 
       console.log(`✓ Batch #${batchNum} of ${batchCount} finished`);
     }
@@ -113,6 +113,7 @@ export class PickFileCommand extends PackageCommand {
     if (failedToDownload.length > 0) console.log('APKs not downloaded ==> ', failedToDownload);
     if (failedToAnalyze.length > 0) console.log('APKs not analyzed ==> ', failedToAnalyze);
 
+    this.finishSuccessMessage(resultPath);
     return this.clean();
   } //exec
 }

@@ -1,5 +1,5 @@
 export interface APK {
-  packageName: string;
+  packageName?: string;
   filePath: string;
   uploadDate?: string;
 }

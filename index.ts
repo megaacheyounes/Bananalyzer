@@ -53,6 +53,7 @@ import { CMD_APK, CMD_FILE, CMD_HELP, CMD_PACKAGE, CMD_VERSION, commitSuicide, M
 import debugModule from 'debug';
 import { PickFileCommand } from './src/commands/pickFileCommand';
 import PackageCommand from './src/commands/packageCommand';
+import ApkCommand from './src/commands/apkCommand';
 
 const debug = debugModule('index');
 
@@ -121,7 +122,8 @@ const main = async () => {
     }
     case CMD_APK: {
       //analyze apk
-
+      await new ApkCommand(flags).exec();
+      pause();
       break;
     }
     case CMD_HELP: {

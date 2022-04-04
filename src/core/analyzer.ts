@@ -8,7 +8,7 @@ import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
 
-import { APP_CHECK_JAR, APP_DATA_FOLDER, GMS_OUTPUT, HMS_OUTPUT } from '../consts';
+import { APP_CHECK_JAR, APP_DATA_FOLDER, GMS_OUTPUT, HMS_OUTPUT, UNKNOWN_INFO } from '../consts';
 import { AnalyzedApk } from '../models/analyzedApk';
 import { APK } from '../models/apk';
 import { Kits } from '../models/kits';
@@ -129,16 +129,18 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
     if (!fs.existsSync(APP_DATA_FOLDER)) fs.mkdirSync(APP_DATA_FOLDER);
 
     // 2- move apks from /downloads to /appdataxsj
-    apks.forEach(async (app) => {
-      const dest = path.join(APP_DATA_FOLDER, `${app.packageName}.apk`);
+    apks.forEach(async (apk) => {
+      const apkName = path.basename(apk.filePath);
+
+      const dest = path.join(APP_DATA_FOLDER, `${apkName}`);
       try {
-        if (keepApks) fs.copyFileSync(app.filePath, dest);
-        else await moveFile(app.filePath, dest);
-        app.filePath = dest;
+        if (keepApks) fs.copyFileSync(apk.filePath, dest);
+        else await moveFile(apk.filePath, dest);
+        apk.filePath = dest;
       } catch (e) {
-        debug('analyzer:failed to move apk ' + app.packageName + '.apk' + ' from /downloads to /appdataxsj');
-        debug('analyzer:apk path= ' + app.filePath + ' ,dest = ' + dest);
-        // console.log(`⤫ failed to analyze apk → ${app.packageName} : ${e.message}`);
+        debug('analyzer:failed to move apk ' + apkName + ' from /downloads to /appdataxsj');
+        debug('analyzer:apk path= ' + apk.filePath + ' ,dest = ' + dest);
+        // console.log(`⤫ failed to analyze apk → ${apkName} : ${e.message}`);
         debug(e);
       }
     });
@@ -194,8 +196,8 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
                 .slice(1, appEntries.length - 2)
                 .map((val, index) => (val == 'true' ? headers[index + 1] : ''))
                 .filter((v) => v && v.length > 0);
-              const packageName = appEntries[0].replace('.apk', '');
-              res[packageName] = kits;
+              const apkName = appEntries[0]; //.replace('.apk', '');
+              res[apkName] = kits;
             });
 
           resolve(res);
@@ -208,23 +210,25 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
     const allGms: Kits = await getKits(gmsEntries, headers);
 
     const results: AnalyzedApk[] = [];
-    for (const app of apks) {
-      const packageName = app.packageName;
-
+    for (const apk of apks) {
+      const apkName = path.basename(apk.filePath);
       let manifestData: Manifest;
-      let androidMarketMetaData = '⚠';
-      let huaweiAppId = '⚠';
-      let versionName = '⚠';
-      let permissions: string[] = [];
-      let googleMetadatas: string[] = [];
-      let huaweiMetadatas: string[] = [];
+      let packageName: string = UNKNOWN_INFO;
+      let androidMarketMetaData = UNKNOWN_INFO;
+      let huaweiAppId = UNKNOWN_INFO;
+      let versionName = UNKNOWN_INFO;
+      let permissions: string[] = [UNKNOWN_INFO];
+      let googleMetadatas: string[] = [UNKNOWN_INFO];
+      let huaweiMetadatas: string[] = [UNKNOWN_INFO];
       try {
-        manifestData = await getApkInfo(app.filePath);
+        manifestData = await getApkInfo(apk.filePath);
+
+        packageName = manifestData.package;
 
         // console.dir(manifestData)
         versionName = manifestData ? manifestData.versionName : 'NOT FOUND';
 
-        debug('manifest of ' + app.packageName + ' is ' + typeof manifestData);
+        debug('manifest of ' + apk.filePath + ' is ' + typeof manifestData);
         const metaData = manifestData['application']['metaDatas'];
 
         const appIdObj = metaData.find((v) => v.name == 'com.huawei.hms.client.appid');
@@ -255,17 +259,16 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
           debug(e);
         }
       } catch (e: any) {
-        console.log(e);
-        debug('analyzer:failed to parse apk ', packageName);
+        debug('analyzer:failed to parse apk ', apkName);
         // hmmms is an XAPK? a split APK?
-        console.log(`⤫ failed to parse AndroidManifest.xml → ${app.packageName} : ${e.message}`);
+        console.log(`⤫ failed to parse AndroidManifest.xml → ${apkName} : ${e.message}`);
         debug(e);
       }
 
       // get apk last modificationm time
       let apkCreationTime = '';
       try {
-        const stat = fs.statSync(app.filePath);
+        const stat = fs.statSync(apk.filePath);
         // console.log(stat);
         if (!!stat.mtime) apkCreationTime = stat.mtime.toLocaleString();
       } catch (e) {
@@ -275,10 +278,10 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
       results.push({
         packageName,
         versionName,
-        uploadDate: app.uploadDate || '',
+        uploadDate: apk.uploadDate || '',
         apkCreationTime,
-        GMS: mapSdkNames(allGms[packageName]),
-        HMS: allHms[packageName] || [],
+        GMS: mapSdkNames(allGms[apkName]),
+        HMS: allHms[apkName] || [],
         huaweiAppId,
         androidMarketMetaData,
         huaweiMetadatas,

@@ -155,7 +155,10 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
     worksheet['!cols'] = wscols;
     // worksheet = excel.utils.book(worksheet, data, { headers });
 
-    xlsx.writeFileXLSX(workbook, resultPath);
-
+    try {
+      xlsx.writeFileXLSX(workbook, resultPath);
+    } catch (e) {
+      reject(e);
+    }
     resolve(true);
   });
