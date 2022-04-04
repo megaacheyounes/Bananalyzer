@@ -10,7 +10,7 @@ import path from 'path';
 import { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 // import adblockerPlugin from 'puppeteer-extra-plugin-adblocker';
-import stealthPlugin from 'puppeteer-extra-plugin-stealth';
+// import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from '../consts';
 import { APK } from '../models/apk';
@@ -31,7 +31,8 @@ let browser: undefined | Browser;
 // puppeteer.use(adblockerPlugin({ blockTrackers: true }));
 
 // trying to hide that we are using a headless browser
-puppeteer.use(stealthPlugin());
+//fixme: causes errors when building .exe
+// puppeteer.use(stealthPlugin());
 // download from https://apk.support/download-app
 export const getDownloadLink1 = (page: Page, packageName: string) =>
   new Promise<StoreInfo>(async (resolve, reject) => {

@@ -1,7 +1,7 @@
 {
   "name": "bananalyzer",
   "version": "1.0.0",
-  "description": "A tool to downloads APKs from Google Playstore and lists the GMS and HMS kits that each APK includes and other metadata",
+  "description": "A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata",
   "author": "Younes Megaache",
   "homepage": "https://github.com/megaacheyounes/bananalyzer",
   "main": "./dist/index.js",
@@ -15,13 +15,14 @@
     "start:package": "cross-env NODE_ENV=debug ts-node index.ts package -k -r -d --name",
     "start:apk": "cross-env NODE_ENV=debug ts-node index.ts apk -k -r -d --path",
     "devider1sdsdaas": " __________________ build (pkg) __________________ ",
-    "build": "npm run copy-files && npm run clean &&  npm run build:js && npm run build:exe",
-    "build2": "npm run clean &&  npm run build:esm && npm run build:exe",
+    "build": "npm run clean && npm run copy-files &&  npm run build:js && npm run build:exe",
+    "build2": "npm run clean &&  npm run build:esm && npm run build:exe2",
     "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"AppCheck.jar\" build",
     "clean": "rimraf dist esm build",
     "build:esm": "tsc --target ESNext --module ES6 --outDir esm",
     "build:js": "ncc build index.ts -o dist",
-    "build:exe": "pkg -t node16-win-x64 --out-path build -C GZip --public  esm/index.js ",
+    "build:exe": "pkg -t node16-win-x64 -C GZip -o build/bananalyzer.exe --public  dist/index.js ",
+    "build:exe2": "pkg -t node16-win-x64 --out-path build -C GZip --public  esm/index.js ",
     "distro": "npm run clean && npm run build:esm && yarn distro:ncc && yarn distro:pkg",
     "distro:ncc": "ncc build dist/build/main.js -o dist/ncc",
     "distro:pkg": "pkg -t node10-macos-x64,node10-win-x64 dist/ncc/index.js -o dist/bin/ncc-pkg-demo",
@@ -62,14 +63,7 @@
     "yauzl": "^2.7.0"
   },
   "pkg": {
-    "scripts": [
-      "node_modules/puppeteer/lib/*.js",
-      "node_modules/puppeteer-extra-plugin-stealth/**/*.js"
-    ],
-    "options": [
-      "experimental-modules",
-      "experimental-json-modules"
-    ]
+    "assets": "node_modules/puppeteer-extra-plugin-stealth/**/*.*"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",

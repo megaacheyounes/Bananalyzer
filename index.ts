@@ -8,9 +8,6 @@
  */
 
 'use strict';
-// hide all nodejs warnings
-// process.removeAllListeners('warning');
-
 import fs from 'fs';
 import { APP_CHECK_JAR, APP_DATA_FOLDER, DOWNLOAD_FOLDER, EXPORT_DIR, IS_PROD, SRC_DIR } from './src/consts';
 import { currentPlatform, pause } from './src/core/utils';
@@ -74,6 +71,11 @@ debug(
   ', BatchSize = ' + batchSize,
   ', KeepAPKs = ' + keepApks
 );
+
+if (IS_PROD && !flags.debug) {
+  // hide all nodejs warnings
+  process.removeAllListeners('warning');
+}
 
 const main = async () => {
   switch (cmd) {

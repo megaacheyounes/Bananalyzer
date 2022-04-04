@@ -65,19 +65,6 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 3. Run `npm install`
 4. Run `ts-node index.ts`
 
-## Result
--   Package name
--   Version name
--   APK creation date
--   Google Play update date (if apk downloaded by this tool)
--   GMS SDKs (kits) 
--   HMS kits
--   Huawei App Id (AppGallery Id)
--   AndroidMarket metadata
--   Huawei Metadatas
--   Google Metadatas
--   Permissions (Google/Huawei)
-
 ## Notes
 
 1.  Do not open the Excel file generated, while Bananalyzer is still running
