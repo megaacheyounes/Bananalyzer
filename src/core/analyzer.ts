@@ -82,7 +82,7 @@ const mapSdkNames = (arr: string[]) => {
   if (!arr) return res;
   const keys = Object.keys(GMS_HEADER_MAP);
   arr.forEach((sdk: string) => {
-    res.push(keys.includes(sdk) ? `${sdk} (${GMS_HEADER_MAP[sdk]})` : sdk);
+    res.push(keys.includes(sdk) ? `${GMS_HEADER_MAP[sdk]} (${sdk})` : sdk);
   });
   return res;
 };
