@@ -5,22 +5,6 @@
  * 💀💀💀 DANGER 💀💀💀
  * Reading this code can cause headaches, and may reduce your IQ level or give you a permanent brain damage
  *
-1.  create a txt file and write the package names into it, one package name per line, see `example/example_social.txt`
-2.  open a terminal (cmd)
-3.  navigate to the folder that contains this sofware, exmaple: `cd C://banana_analyzer`
-4.  run the command `banana_analyzer.exe`
-5.  the program will open a file picker, choose the txt file that you created in step 1 and click `Open`
-6.  the program will start working, analyzing 3 apks at a time.
-7.  when finished, the results can be found in an excel file, that has the same as name as the txt file (example: `example_social.xlsx`)
- */
-
-/*
-  Arguments (outdated)
-    1.  `--enable-logs`: print debug logs, useful to debug this program, or if you want to submit an issue (caution: you may hurt your eyes )
-    2.  `--keep-apks`: by default, the program will delete the apks that are downloaded to save space. if this flag is specified, the program will keep the apks which can be found in a folder named `downloads` (useful if you have a personal data center )
-    3.  `--use-existing`: by default the program will always download latest apk from playstore. if you happend to analyze an apk, then decide that you have to re-analyze it without re-downloading it, then use this flag. (by using this flag, banana_analyzer will **NOT** check if a newer version is available)
-    4.  `--batch-(num)`: to improve efficiancy, this program handles apks in batches, the default batch size is 3. means it downloads 3 APKs in parallel, analyze them, write the results into the excel sheet, then moves to the next 3 APKs. usage example: `--batch-1`, `--batch-5` (using a large batch size may break the program, your PC or the whole universe)
-
  */
 
 'use strict';
@@ -28,24 +12,8 @@
 // process.removeAllListeners('warning');
 
 import fs from 'fs';
-import path from 'path';
-
-import { analyzeAPKs, cleanDataFolder } from './src/core/analyzer';
-import {
-  APP_CHECK_JAR,
-  APP_DATA_FOLDER,
-  DOWNLOAD_FOLDER,
-  EXPORT_DIR,
-  IS_PROD,
-  SRC_DIR,
-  DEFAULT_BATCH_SIZE,
-} from './src/consts';
-import { closeBrowser, downloadAPK, downoadChromiumIfMissing } from './src/core/downloader';
-import { saveResult } from './src/core/ExcelHelper';
-import { AnalyzedApk } from './src/models/analyzedApk';
-import { APK } from './src/models/apk';
-import { pickFile } from './src/core/psHelper';
-import { currentPlatform, delay, pause, printLogs } from './src/core/utils';
+import { APP_CHECK_JAR, APP_DATA_FOLDER, DOWNLOAD_FOLDER, EXPORT_DIR, IS_PROD, SRC_DIR } from './src/consts';
+import { currentPlatform, pause } from './src/core/utils';
 
 import cliHelper from './src/cliHelper';
 import { type } from 'os';

@@ -5,6 +5,7 @@ import xlsx from 'xlsx';
 
 import { AnalyzedApk } from '../models/analyzedApk';
 import { ExcelRow } from '../models/excelRow';
+import { IS_PROD } from '../consts';
 
 const debug = debugModule('excleHelper');
 
@@ -14,7 +15,7 @@ const HEADER_APK_CREATION_DATE = 'APK creation date';
 const HEADER_GOOGLE_PLAY_UPDATE_DATE = 'Google Play update date';
 const HEADER_GMS_KITS = 'GMS kits';
 const HEADER_HMS_KITS = 'HMS kits';
-const HEADER_HUAWEI_APP_ID = 'Hawei App Id';
+const HEADER_HUAWEI_APP_ID = 'Huawei App Id';
 const HEADER_ANDROID_MARKET_METADATA = 'AndroidMarket metadata';
 const HEADER_HUAWEI_METADATAS = 'Huawei Metadatas';
 const HEADER_GOOGLE_METADATAS = 'Google Metadatas';
@@ -73,14 +74,13 @@ export const saveResult = async (apps: AnalyzedApk[], resultPath: string) =>
   });
 /**
  * this script write data into an excel file
- * //@param {array} headers list of headers, or cell values for the first row, example ['columnA','columnB','columnC']
  * @param {array} data array of data to write into excel, inner object keys must match the values of @param headers,
  *  example: data = [
  * { columnA: 1, columnB: 2, columnC: 3 },
  * { columnA: 4, columnB: 5, columnC: 6 },
  * { columnA: 7, columnB: 8, columnC: 9 }
  * ]
- * @param {array} filename excel filename
+ * @param {array} resultPath excel path
  * @return {Promise}
  */
 const writeExcel = async (data: ExcelRow[], resultPath: string) =>
@@ -149,8 +149,8 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
       { wch: 100 }, // permissions
     ];
 
-    if (wscols.length != HEADERS.length) {
-      throw Error('Missing column width');
+    if (!IS_PROD && wscols.length != HEADERS.length) {
+      throw Error(`Missing column width, headers=${HEADERS.length} wscols=${wscols.length}`);
     }
     worksheet['!cols'] = wscols;
     // worksheet = excel.utils.book(worksheet, data, { headers });

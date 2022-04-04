@@ -1,5 +1,5 @@
 import debugModule from 'debug';
-import { delay, pause } from '../core/utils';
+import { delay } from '../core/utils';
 import { pickFile } from '../core/psHelper';
 import { commitSuicide, MyFlags } from '../cliHelper';
 import fs from 'fs';
@@ -100,14 +100,13 @@ export class PickFileCommand extends PackageCommand {
 
       console.log(`✓ Batch #${batchNum} of ${batchCount} finished`);
     }
+    const failedCount = failedToDownload.length + failedToAnalyze.length;
 
-    const successCount = packageNames.length - failedToDownload.length - failedToAnalyze.length;
+    const successCount = packageNames.length - failedCount;
     const showAll = successCount == 0 && failedToDownload.length > 2;
 
     console.log(
-      `Analyzed ${successCount} of ${packageNames.length} apps  (${failedToDownload.length} failed${
-        showAll ? ' (ALL) ' : ''
-      })`
+      `Analyzed ${successCount} of ${packageNames.length} apps  (${failedCount} failed${showAll ? ' (ALL) ' : ''})`
     );
 
     if (failedToDownload.length > 0) console.log('APKs not downloaded ==> ', failedToDownload);

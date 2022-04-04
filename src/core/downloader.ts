@@ -323,8 +323,12 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
       console.log(
         `→ Downloading ${packageName} → version= ${versionName}, download size = ${apkSize ? apkSize : '? Mb'} `
       );
-
-      await downloadFileGot(downloadLink, filePath);
+      try {
+        await downloadFileGot(downloadLink, filePath);
+      } catch (e) {
+        if (!!page) await page.close();
+        return reject(e);
+      }
       console.log('✓ APK file is ready → ' + packageName);
       resolve({ packageName, filePath, uploadDate });
       debug('Downlading APK file started ==>> ' + packageName);

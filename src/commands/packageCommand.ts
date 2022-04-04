@@ -56,13 +56,19 @@ export default class PackageCommand extends Command {
   }
 
   async downloadOneAPK(packageName: string): Promise<APK | null> {
-    try {
-      return downloadAPK(packageName, this.flags.reuse);
-    } catch (e) {
-      debug(e);
-      console.log('⤫ failed to download apk → ', packageName, ': The requested app is not found or invalid');
-      return null;
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        resolve(await downloadAPK(packageName, this.flags.reuse));
+      } catch (e) {
+        debug(e);
+        var error = 'The requested app is not found or invalid';
+        if (`${e}`.indexOf('ETIMEDOUT') != -1) {
+          error = 'Internet connection is either unavailable or restricted';
+        }
+        console.log(`⤫ failed to download apk → ${packageName}: ${error} `);
+        reject(e);
+      }
+    });
   }
 
   async clean(): Promise<boolean> {

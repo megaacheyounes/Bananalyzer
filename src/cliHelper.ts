@@ -14,6 +14,18 @@ export type MyFlags = {
 };
 
 const flags: any = {
+  path: {
+    type: 'string',
+    alias: 'p',
+    default: '',
+    desc: "Apk full path, required when using command 'apk'",
+  },
+  name: {
+    type: 'string',
+    alias: 'n',
+    default: '',
+    desc: "App package name, required when using Command 'package'",
+  },
   debug: {
     type: 'boolean',
     default: false,
@@ -28,7 +40,7 @@ const flags: any = {
   },
   reuse: {
     type: 'boolean',
-    alias: 's',
+    alias: 'r',
     default: false,
     desc: 'Re-use existing APKs that are found in download folder',
   },
@@ -36,17 +48,7 @@ const flags: any = {
     type: 'number',
     alias: 'b',
     default: DEFAULT_BATCH_SIZE,
-    desc: 'batch size',
-  },
-  path: {
-    type: 'string',
-    alias: 'p',
-    desc: "APK full path, required when using command 'APK'",
-  },
-  name: {
-    type: 'string',
-    alias: 'n',
-    desc: "APK package name, required when using Command 'package'",
+    desc: "Batch size, optional when using command 'file'",
   },
 };
 
@@ -57,20 +59,17 @@ export const CMD_HELP = 'help';
 export const CMD_VERSION = 'version';
 
 const commands = {
-  help: {
-    desc: 'Print help info',
-  },
   file: {
-    alias: 'f',
-    desc: 'choose a file that contains list of package names, to download and analyze their APKs',
-  },
-  apk: {
-    alias: 'a',
-    desc: 'specify an APK path to analyze it',
+    desc: 'Download and analyze a list of apps by providing a file that contains their package names',
   },
   package: {
-    alias: 'p',
-    desc: 'specify a pacakge name to download its apk and analyze it',
+    desc: 'Download and analyze an app by providing its package name',
+  },
+  apk: {
+    desc: 'Analyze an Apk by providing its file path',
+  },
+  help: {
+    desc: 'Print help information',
   },
 };
 
@@ -101,6 +100,5 @@ export const commitSuicide = (msg: string): boolean => {
     cliHelper.pkg.homepage,
     ' and include the logs)'
   );
-  pause();
   return false;
 };

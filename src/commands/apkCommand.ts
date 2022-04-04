@@ -8,6 +8,7 @@ const debug = debugModule('ApkCommand');
 export default class ApkCommand extends Command {
   async exec(): Promise<boolean> {
     const apkPath = this.flags.path;
+    this.flags.keep = true;
 
     if (!apkPath) {
       console.log(

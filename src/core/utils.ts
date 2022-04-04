@@ -165,7 +165,12 @@ export const downloadFileGot = (downloadLink: string, downloadPath: string) =>
   new Promise(async (resolve, reject) => {
     const pipeline = promisify(stream.pipeline);
 
-    await pipeline(got.stream(downloadLink), fs.createWriteStream(downloadPath));
+    try {
+      await pipeline(got.stream(downloadLink), fs.createWriteStream(downloadPath));
+    } catch (e) {
+      debug(e);
+      return reject(e);
+    }
     resolve(true);
   });
 
