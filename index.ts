@@ -16,7 +16,6 @@ import { APP_CHECK_JAR, APP_DATA_FOLDER, DOWNLOAD_FOLDER, EXPORT_DIR, IS_PROD, S
 import { currentPlatform, pause } from './src/core/utils';
 
 import cliHelper from './src/cliHelper';
-import { type } from 'os';
 import { CMD_APK, CMD_FILE, CMD_HELP, CMD_PACKAGE, CMD_VERSION, commitSuicide, MyFlags } from './src/cliHelper';
 import debugModule from 'debug';
 import { PickFileCommand } from './src/commands/pickFileCommand';
@@ -27,10 +26,12 @@ const debug = debugModule('index');
 
 if (currentPlatform() == 'win32') {
   commitSuicide('(ಠ_ಠ) Seriously? 32bit windows machine!? sorry this program is designed for 64 bit machines!');
+  process.exit(2);
   //program will stop here
 }
 if (!fs.existsSync(APP_CHECK_JAR)) {
   commitSuicide("(ಠ_ಠ) some parts of me are missing! I coudn't find AppCheck.jar");
+  process.exit(2);
   //program will stop here
 }
 
