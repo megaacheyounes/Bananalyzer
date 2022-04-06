@@ -1,3 +1,10 @@
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/megaacheyounes/bananalyzer)
+![GitHub Release Date](https://img.shields.io/github/release-date/megaacheyounes/bananalyzer)
+![Platform win64](https://img.shields.io/badge/platform-Win64-red)
+![GitHub all releases](https://img.shields.io/github/downloads/megaacheyounes/bananalyzer/total)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/megaacheyounes/bananalyzer/issues)
+
+
 ## Bananalyzer
 
 A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata
@@ -41,7 +48,7 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 
 video: https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4
 
-## download
+## download 
 latest release: https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.1
 
 ## Instructions
