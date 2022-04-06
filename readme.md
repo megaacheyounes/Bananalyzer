@@ -30,7 +30,7 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 ## Demo 
 <img src="/screenshot/bananalyzer_demo.gif" width="800" height="474"/>
 
-video: https://github.com/megaacheyounes/Bananalyzer/blob/master/bananalyzer_demo.mp4
+video: https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4
 
 ## Instructions
 
