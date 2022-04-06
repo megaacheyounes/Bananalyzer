@@ -4,7 +4,7 @@ A simple tool for windows 10, that downloads APKs from Google playstore, analyze
 
 ## How does it work?
 
-This is a simple nodejs script that has been packaged into an executable (exe) for ease of use. it uses chromium to download APKs from playstore using two sources (websites), then it uses a Java tool called "AppCheck" that looks inside the APK and determines what Google and Huawei SDKs are integrated, then it parses the AndroidManifest.xml file to get some metadata, finaly the tool exports the results into an excel file
+This is a simple nodejs script that has been packaged into an executable (exe) for ease of use. it uses chromium to download APKs from playstore using two sources (websites), then it uses a Java tool called "AppCheck" that looks inside the APK and determines what Google and Huawei SDKs are integrated, then it parses the AndroidManifest.xml file to get some metadata, finaly the tool exports the results into an excel file (scroll down to see a demo)
 
 ## Usage
 ```
@@ -26,6 +26,9 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
   -r, --reuse  Re-use existing APKs that are found in download folder, Default: false
   -b, --batch  Batch size, optional when using command 'file', Default: 3
 ```
+
+## Demo
+https://github.com/megaacheyounes/Bananalyzer/blob/master/bananalyzer_demo.mp4
 
 ## Instructions
 
