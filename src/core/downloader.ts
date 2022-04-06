@@ -70,7 +70,7 @@ export const getDownloadLink1 = (page: Page, packageName: string) =>
       };
 
       // we got apk info and download link
-      const apkSizeEl = await page.$('.dvContents a span');
+      const apkSizeEl = await page.$('.dvContents a .dersize');
       storeInfo.apkSize = await page.evaluate((el) => (el ? el.textContent : ''), apkSizeEl);
 
       const versionRegex = /\"VersionName\": \"(.*)\"/;
