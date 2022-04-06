@@ -32,11 +32,14 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 
 video: https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4
 
+## download
+latest release: https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.1
+
 ## Instructions
 
 ##### Downloading and analyzing a list of apps
 
-1.  Download latest release (https://github.com/megaacheyounes/bananalyzer/releases/tag/v1.0.0) and extract it
+1.  Download latest release and extract it
 2.  create a txt file and write the package names into it, one package name per line, see `example_apps.txt`
 3.  open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
 4.  navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`    
@@ -47,21 +50,19 @@ video: https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bana
 
 ##### Downloading and analyzing one app
 
-1.  Download latest release (https://github.com/megaacheyounes/bananalyzer/releases/tag/v1.0.0) and extract it
-2.  open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
-3.  navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`    
-4.  run the command `bananalyzer.exe package --name 'com.package.name' -k -r`     
-5.  Bananalyzer will start downloading then analyzing the app 
-6.  when finished, the results can be found in an excel file, that has the same name as the package name (example: `com.package.name.xlsx`)
+1.  open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
+2.  navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`    
+3.  run the command `bananalyzer.exe package --name 'com.package.name' -k -r`     
+4.  Bananalyzer will start downloading then analyzing the app 
+5.  when finished, the results can be found in an excel file, that has the same name as the package name (example: `com.package.name.xlsx`)
 
 ##### Analyze an apk
 
-1.  Download latest release (https://github.com/megaacheyounes/bananalyzer/releases/tag/v1.0.0) and extract it
-2.  open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
-3.  navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`    
-4.  run the command `bananalyzer.exe apk --path 'C://apks/apk_name.apk'`     
-5.  Bananalyzer will start analyzing the apk 
-6.  when finished, the results can be found in an excel file, that has the same name as the apk file (example: `apk_name.xlsx`)
+1.  open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
+2.  navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`    
+3.  run the command `bananalyzer.exe apk --path 'C://apks/apk_name.apk'`     
+4.  Bananalyzer will start analyzing the apk 
+5.  when finished, the results can be found in an excel file, that has the same name as the apk file (example: `apk_name.xlsx`)
 
 ## Run locally
 
