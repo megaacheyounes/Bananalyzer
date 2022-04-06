@@ -27,8 +27,10 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
   -b, --batch  Batch size, optional when using command 'file', Default: 3
 ```
 
-## Demo
-https://github.com/megaacheyounes/Bananalyzer/blob/master/bananalyzer_demo.mp4
+## Demo 
+<img src="/screenshot/bananalyzer_demo.gif" width="800" height="474"/>
+
+video: https://github.com/megaacheyounes/Bananalyzer/blob/master/bananalyzer_demo.mp4
 
 ## Instructions
 
