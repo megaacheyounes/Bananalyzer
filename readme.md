@@ -2,6 +2,15 @@
 
 A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata
 
+## Contents
+- [How does it work?](#how-does-it-work)
+- [Usage](#usage)
+- [Demo](#demo)
+- [Download](#download)
+- [Instructions](#instructions)
+- [Notes](#notes)
+
+
 ## How does it work?
 
 This is a simple nodejs script that has been packaged into an executable (exe) for ease of use. it uses chromium to download APKs from playstore using two sources (websites), then it uses a Java tool called "AppCheck" that looks inside the APK and determines what Google and Huawei SDKs are integrated, then it parses the AndroidManifest.xml file to get some metadata, finaly the tool exports the results into an excel file (scroll down to see a demo)
