@@ -43,3 +43,6 @@ export const MAX_PACKAGE_NAMES = 200;
 export const DEFAULT_BATCH_SIZE = 3;
 
 export const UNKNOWN_INFO = '⚠';
+
+export const GOOGLE_MESSAGING_EVENT = 'com.google.firebase.MESSAGING_EVENT';
+export const HUAWEI_MESSAGING_EVENT = 'com.huawei.push.action.MESSAGING_EVENT';

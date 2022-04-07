@@ -8,13 +8,21 @@ import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
 
-import { APP_CHECK_JAR, APP_DATA_FOLDER, GMS_OUTPUT, HMS_OUTPUT, UNKNOWN_INFO } from '../consts';
+import {
+  APP_CHECK_JAR,
+  APP_DATA_FOLDER,
+  GMS_OUTPUT,
+  HMS_OUTPUT,
+  UNKNOWN_INFO,
+  GOOGLE_MESSAGING_EVENT,
+} from '../consts';
 import { AnalyzedApk } from '../models/analyzedApk';
 import { APK } from '../models/apk';
 import { Kits } from '../models/kits';
-import { Manifest, UsesPermission } from '../models/manifest';
+import { Activity, Manifest, Service, UsesPermission, IntentFilter3, Action3 } from '../models/manifest';
 import { moveFile } from './mv';
 import { getApkInfo } from './utils';
+import { HUAWEI_MESSAGING_EVENT } from '../consts';
 
 const JavaCallerModule = require('java-caller');
 
@@ -110,6 +118,8 @@ export const cleanDataFolder = async () => {
   });
 };
 
+//to fins messaging services
+const MESSAGING_EVENT = 'MESSAGING_EVENT';
 /**
  *
  * @param {array} apks: list of downloaded apps/apk to analyze, example = [
@@ -214,12 +224,23 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
       const apkName = path.basename(apk.filePath);
       let manifestData: Manifest;
       let packageName: string = UNKNOWN_INFO;
-      let androidMarketMetaData = UNKNOWN_INFO;
       let huaweiAppId = UNKNOWN_INFO;
       let versionName = UNKNOWN_INFO;
-      let permissions: string[] = [UNKNOWN_INFO];
+      let googlePermissions: string[] = [UNKNOWN_INFO];
+      let huaweiPermissions: string[] = [UNKNOWN_INFO];
+
       let googleMetadatas: string[] = [UNKNOWN_INFO];
       let huaweiMetadatas: string[] = [UNKNOWN_INFO];
+
+      let googleActivities: string[] = [UNKNOWN_INFO];
+      let huaweiActivities: string[] = [UNKNOWN_INFO];
+
+      let googleServices: string[] = [UNKNOWN_INFO];
+      let huaweiServices: string[] = [UNKNOWN_INFO];
+
+      let googleMessagingServices: string[] = [UNKNOWN_INFO];
+      let huaweiMessagingServices: string[] = [UNKNOWN_INFO];
+
       try {
         manifestData = await getApkInfo(apk.filePath);
 
@@ -239,25 +260,50 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
           huaweiAppId = '';
         }
 
-        const androidMarketObj = metaData.find((v) => !!v.name && v.name.toLowerCase().indexOf('androidmarket') != -1);
-        androidMarketMetaData = androidMarketObj ? JSON.stringify(androidMarketObj) : '';
+        const getMetaData = (company: string) =>
+          metaData.filter((m) => !!m.name && m.name.indexOf(company) != -1).map((m) => `${m.name}=${m.value}`);
 
-        huaweiMetadatas = metaData
-          .filter((m) => !!m.name && m.name.indexOf('huawei') != -1)
-          .map((m) => `${m.name}=${m.value}`);
+        huaweiMetadatas = getMetaData('huawei');
+        googleMetadatas = getMetaData('google');
 
-        googleMetadatas = metaData
-          .filter((m) => !!m.name && m.name.indexOf('google') != -1)
-          .map((m) => `${m.name}=${m.value}`);
-
-        try {
-          permissions = manifestData.usesPermissions
+        const getPermissions = (company: string) =>
+          manifestData.usesPermissions
             .map((obj: UsesPermission | any) => obj.name || obj[''])
             .filter((p: string) => !!p && p.length > 0)
-            .filter((p: string) => p.toLowerCase().indexOf('huawei') != -1 || p.toLowerCase().indexOf('google') != -1);
-        } catch (e) {
-          debug(e);
-        }
+            .filter((p: string) => p.toLowerCase().indexOf(company) != -1);
+
+        googlePermissions = getPermissions('google');
+        huaweiPermissions = getPermissions('huawei');
+
+        const getActivities = (prefix: string) =>
+          manifestData.application.activities
+            .map((a: Activity) => a.name)
+            .filter((a: string) => !!a && a.indexOf(prefix) != -1);
+
+        googleActivities = getActivities('com.google');
+        huaweiActivities = getActivities('com.huawei');
+
+        const getServices = (prefix: string) =>
+          manifestData.application.services
+            .map((a: Service) => a.name)
+            .filter((a: string) => !!a && a.indexOf(prefix) != -1);
+
+        googleServices = getServices('com.google');
+        huaweiServices = getServices('com.huawei');
+
+        const getMessagingService = (actionName: string) =>
+          manifestData.application.services
+            .filter(
+              (s: Service) =>
+                s.intentFilters
+                  .map((i: IntentFilter3) => i.actions.map((action: Action3) => action.name))
+                  .join(',')
+                  .indexOf(actionName) != -1
+            )
+            .map((s: Service) => s.name);
+
+        googleMessagingServices = getMessagingService(GOOGLE_MESSAGING_EVENT);
+        huaweiMessagingServices = getMessagingService(HUAWEI_MESSAGING_EVENT);
       } catch (e: any) {
         debug('analyzer:failed to parse apk ', apkName);
         // hmmms is an XAPK? a split APK?
@@ -280,13 +326,19 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
         versionName,
         uploadDate: apk.uploadDate || '',
         apkCreationTime,
+        huaweiAppId,
         GMS: mapSdkNames(allGms[apkName]),
         HMS: allHms[apkName] || [],
-        huaweiAppId,
-        androidMarketMetaData,
-        huaweiMetadatas,
         googleMetadatas,
-        permissions,
+        huaweiMetadatas,
+        googlePermissions,
+        huaweiPermissions,
+        googleActivities,
+        huaweiActivities,
+        googleServices,
+        huaweiServices,
+        googleMessagingServices,
+        huaweiMessagingServices,
       });
     }
     resolve(results);

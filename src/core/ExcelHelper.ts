@@ -16,39 +16,70 @@ const HEADER_GOOGLE_PLAY_UPDATE_DATE = 'Google Play update date';
 const HEADER_GMS_KITS = 'GMS kits';
 const HEADER_HMS_KITS = 'HMS kits';
 const HEADER_HUAWEI_APP_ID = 'Huawei App Id';
-const HEADER_ANDROID_MARKET_METADATA = 'AndroidMarket metadata';
+
 const HEADER_HUAWEI_METADATAS = 'Huawei Metadatas';
 const HEADER_GOOGLE_METADATAS = 'Google Metadatas';
-const HEADER_PERMISSIONS = 'Permissions (Google/Huawei)';
+
+const HEADER_GOOGLE_PERMISSIONS = 'Google Permissions';
+const HEADER_HUAWEI_PERMISSIONS = 'Huawei Permissions';
+
+const HEADER_GOOGLE_ACTIVITIES = 'Google activities';
+const HEADER_HUAWEI_ACTIVITIES = 'Huawei activities';
+
+const HEADER_GOOGLE_SERVICES = 'Google Servicies';
+const HEADER_HUAWEI_SERVICES = 'Huawei Servicies';
+
+const HEADER_GOOGLE_MESSAGING_SERVICES = 'Google Messaging Services';
+const HEADER_HUAWEI_MESSAGING_SERVICES = 'Huawei Messaging Services';
 
 // 3- write to excel file
 export const HEADERS = [
   HEADER_PACKAGE_NAME,
   HEADER_VERSION_NAME,
-  HEADER_APK_CREATION_DATE,
   HEADER_GOOGLE_PLAY_UPDATE_DATE,
+  HEADER_APK_CREATION_DATE,
+  HEADER_HUAWEI_APP_ID,
+
   HEADER_GMS_KITS,
   HEADER_HMS_KITS,
-  HEADER_HUAWEI_APP_ID,
-  HEADER_ANDROID_MARKET_METADATA,
-  HEADER_HUAWEI_METADATAS,
   HEADER_GOOGLE_METADATAS,
-  HEADER_PERMISSIONS,
+  HEADER_HUAWEI_METADATAS,
+  HEADER_GOOGLE_PERMISSIONS,
+  HEADER_HUAWEI_PERMISSIONS,
+  HEADER_GOOGLE_ACTIVITIES,
+  HEADER_HUAWEI_ACTIVITIES,
+  HEADER_GOOGLE_SERVICES,
+  HEADER_HUAWEI_SERVICES,
+  HEADER_GOOGLE_MESSAGING_SERVICES,
+  HEADER_HUAWEI_MESSAGING_SERVICES,
 ];
+
 export const getRowFromApp = (app: AnalyzedApk): ExcelRow => {
   const appAsRow: ExcelRow = {};
-
+  const asString = (arr: string[]) => (arr || []).join(',\n');
   appAsRow[HEADER_PACKAGE_NAME] = app.packageName;
   appAsRow[HEADER_VERSION_NAME] = app.versionName;
   appAsRow[HEADER_APK_CREATION_DATE] = app.apkCreationTime;
   appAsRow[HEADER_GOOGLE_PLAY_UPDATE_DATE] = app.uploadDate;
+  appAsRow[HEADER_HUAWEI_APP_ID] = app.huaweiAppId;
+
   appAsRow[HEADER_GMS_KITS] = (app['GMS'] || []).join(' | ');
   appAsRow[HEADER_HMS_KITS] = (app['HMS'] || []).join(' | ');
-  appAsRow[HEADER_HUAWEI_APP_ID] = app.huaweiAppId;
-  appAsRow[HEADER_ANDROID_MARKET_METADATA] = app.androidMarketMetaData;
-  appAsRow[HEADER_HUAWEI_METADATAS] = (app.huaweiMetadatas || []).join(',\n');
-  appAsRow[HEADER_GOOGLE_METADATAS] = (app.googleMetadatas || []).join(',\n');
-  appAsRow[HEADER_PERMISSIONS] = (app.permissions || []).join(',\n');
+
+  appAsRow[HEADER_GOOGLE_METADATAS] = asString(app.googleMetadatas);
+  appAsRow[HEADER_HUAWEI_METADATAS] = asString(app.huaweiMetadatas);
+
+  appAsRow[HEADER_GOOGLE_PERMISSIONS] = asString(app.googlePermissions);
+  appAsRow[HEADER_HUAWEI_PERMISSIONS] = asString(app.huaweiPermissions);
+
+  appAsRow[HEADER_GOOGLE_ACTIVITIES] = asString(app.googleActivities);
+  appAsRow[HEADER_HUAWEI_ACTIVITIES] = asString(app.huaweiActivities);
+
+  appAsRow[HEADER_GOOGLE_SERVICES] = asString(app.googleServices);
+  appAsRow[HEADER_HUAWEI_SERVICES] = asString(app.huaweiServices);
+
+  appAsRow[HEADER_GOOGLE_MESSAGING_SERVICES] = asString(app.googleMessagingServices);
+  appAsRow[HEADER_HUAWEI_MESSAGING_SERVICES] = asString(app.huaweiMessagingServices);
 
   return appAsRow;
 };
@@ -138,15 +169,27 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
     const wscols = [
       { wch: 30 }, // package name (30 characters wide)
       { wch: 20 }, // version
-      { wch: 25 }, // 'APK creation dat
       { wch: 25 }, // 'Google Play update date'
+      { wch: 25 }, // 'APK creation dat
+      { wch: 20 }, // hauwei app id
+
       { wch: 40 }, // gms kits
       { wch: 40 }, // hms kits
-      { wch: 20 }, // app id
-      { wch: 40 }, // market metadata
+
+      { wch: 50 }, // google Metadatas
       { wch: 50 }, // huawei Metadatas
-      { wch: 60 }, // google Metadatas
-      { wch: 100 }, // permissions
+
+      { wch: 50 }, // google permissions
+      { wch: 50 }, // hauwei permissions
+
+      { wch: 50 }, // google activities
+      { wch: 50 }, // hauwei activities
+
+      { wch: 50 }, // google services
+      { wch: 50 }, // hauwei services
+
+      { wch: 50 }, // google messaging services
+      { wch: 50 }, // hauwei messaging services
     ];
 
     if (!IS_PROD && wscols.length != HEADERS.length) {

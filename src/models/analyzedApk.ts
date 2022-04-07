@@ -1,13 +1,19 @@
 export interface AnalyzedApk {
   packageName: string;
-  HMS: string[];
-  GMS: string[];
   versionName: string;
   uploadDate: string;
   apkCreationTime: string;
   huaweiAppId: string;
-  androidMarketMetaData: string;
-  huaweiMetadatas: string[];
+  GMS: string[];
+  HMS: string[];
   googleMetadatas: string[];
-  permissions: string[];
+  huaweiMetadatas: string[];
+  googlePermissions: string[];
+  huaweiPermissions: string[];
+  googleActivities: string[];
+  huaweiActivities: string[];
+  googleServices: string[];
+  huaweiServices: string[];
+  googleMessagingServices: string[];
+  huaweiMessagingServices: string[];
 }
