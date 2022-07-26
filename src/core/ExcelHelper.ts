@@ -59,8 +59,8 @@ export const getRowFromApp = (app: AnalyzedApk): ExcelRow => {
   const asString = (arr: string[]) => (arr || []).join(',\n');
   appAsRow[HEADER_PACKAGE_NAME] = app.packageName;
   appAsRow[HEADER_VERSION_NAME] = app.versionName;
-  appAsRow[HEADER_APK_CREATION_DATE] = app.apkCreationTime;
   appAsRow[HEADER_GOOGLE_PLAY_UPDATE_DATE] = app.uploadDate;
+  appAsRow[HEADER_APK_CREATION_DATE] = app.apkCreationTime;
   appAsRow[HEADER_HUAWEI_APP_ID] = app.huaweiAppId;
 
   appAsRow[HEADER_GMS_KITS] = (app['GMS'] || []).join(' | ');

@@ -17,10 +17,16 @@ const app: AnalyzedApk = {
   uploadDate,
   apkCreationTime: '',
   huaweiAppId: '',
-  androidMarketMetaData: '',
   huaweiMetadatas: [],
   googleMetadatas: [],
-  permissions: [],
+  huaweiPermissions: [],
+  googlePermissions: [],
+  huaweiActivities: [],
+  googleActivities: [],
+  googleMessagingServices: [],
+  huaweiMessagingServices: [],
+  huaweiServices: [],
+  googleServices: [],
 };
 const testTempFolder = path.join(__dirname, 'temp');
 const excelPath = path.join(testTempFolder, 'excel.xlsx');
@@ -37,8 +43,8 @@ describe('excel helper', () => {
     expect(row).toBeTruthy();
     expect(Object.keys(row)).toEqual(HEADERS);
     expect(row[HEADERS[0]]).toEqual(packageName);
-    expect(row[HEADERS[3]]).toEqual(uploadDate);
-    expect(row[HEADERS[4]]).toMatch(/maps.*location/);
+    expect(row[HEADERS[2]]).toEqual(uploadDate);
+    expect(row[HEADERS[5]]).toMatch(/maps.*location/);
   });
 
   it('should write excel file', async () => {

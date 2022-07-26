@@ -35,13 +35,19 @@ describe('Analyzer', () => {
       'versionName',
       'uploadDate',
       'apkCreationTime',
+      'huaweiAppId',
       'GMS',
       'HMS',
-      'huaweiAppId',
-      'androidMarketMetaData',
-      'huaweiMetadatas',
       'googleMetadatas',
-      'permissions',
+      'huaweiMetadatas',
+      'googlePermissions',
+      'huaweiPermissions',
+      'googleActivities',
+      'huaweiActivities',
+      'googleServices',
+      'huaweiServices',
+      'googleMessagingServices',
+      'huaweiMessagingServices',
     ];
 
     expect(Object.keys(result[0])).toEqual(expectedKeys);
@@ -50,11 +56,12 @@ describe('Analyzer', () => {
     for (var i of Array(2).keys()) expect(result[i].uploadDate).toEqual(apks[i].uploadDate);
 
     expect(result[0].GMS).toHaveLength(0);
-    expect(result[0].permissions).toHaveLength(0);
+    expect(result[0].googlePermissions).toHaveLength(0);
+    expect(result[0].huaweiPermissions).toHaveLength(0);
 
     expect(result[1].GMS).toHaveLength(6);
 
-    expect(result[1].permissions).toHaveLength(2);
-    expect(result[1].permissions).toContain('com.google.android.c2dm.permission.RECEIVE');
+    expect(result[1].googlePermissions).toHaveLength(2);
+    expect(result[1].googlePermissions).toContain('com.google.android.c2dm.permission.RECEIVE');
   });
 });
