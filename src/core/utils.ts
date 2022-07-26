@@ -1,8 +1,8 @@
 'use strict';
 
-import fs, { copyFileSync, existsSync, readFileSync, rmSync } from 'node:fs';
-import stream from 'node:stream';
-import { promisify } from 'node:util';
+import fs, { copyFileSync, existsSync, readFileSync, rmSync } from 'fs';
+import stream from 'stream';
+import { promisify } from 'util';
 
 import debugModule from 'debug';
 import os from 'os';

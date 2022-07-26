@@ -50,16 +50,16 @@ export const getDownloadLink1 = (page: Page, packageName: string) =>
       debug('clicked submit');
 
       // wait for download link or error, can take up to 60 seconds
-      await page.waitForSelector('#downloader_area b , #downloader_area .dvContents', { timeout: 60 * 1000 });
+      await page.waitForSelector('.linkarea_contents', { timeout: 60 * 1000 });
 
       // await page.waitForSelector(".dvContents", { timeout: 60 * 1000 })
       debug('page finished fetching apk info');
 
       // first check if thereis an error
-      const text = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
+      const maybeError = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
 
-      if (text.toLowerCase().indexOf('not found or invalid') != -1) {
-        debug('got error: ' + text);
+      if (maybeError.toLowerCase().indexOf('not found or invalid') != -1) {
+        debug('got error: ' + maybeError);
         // we have an error
         return reject(Error('the requested app is not found or invalid'));
       }
@@ -69,13 +69,17 @@ export const getDownloadLink1 = (page: Page, packageName: string) =>
         source: ApkSource.APK_SUPPORT,
       };
 
+      const allLinksEl = await page.$('.bdlinks:nth-child(1) a');
+      const firstLinkHref = await page.evaluate((el) => el.href, allLinksEl);
+      storeInfo.downloadLink = firstLinkHref;
+
       // we got apk info and download link
-      const apkSizeEl = await page.$('.dvContents a .dersize');
+      const apkSizeEl = await page.$('.bdlinks a span:nth-child(3)');
       storeInfo.apkSize = await page.evaluate((el) => (el ? el.textContent : ''), apkSizeEl);
 
       const versionRegex = /\"VersionName\": \"(.*)\"/;
       // get app version name
-      const apkInfoJson = await page.$eval('#downloader_area ul', (el: any) => el.innerText);
+      const apkInfoJson = await page.$eval('.jinfo', (el: any) => el.innerText);
 
       const versionNameMatchRes = apkInfoJson.match(versionRegex);
 
@@ -89,9 +93,9 @@ export const getDownloadLink1 = (page: Page, packageName: string) =>
       debug('version from website is ', storeInfo.versionName);
 
       // let hrefs = await page.$('.down_b_area .browser a')
-      storeInfo.downloadLink = await page.$eval('.dvContents a', (el: any) => {
-        return el.href;
-      });
+      // storeInfo.downloadLink = await page.$eval('.dvContents a', (el: any) => {
+      //   return el.href;
+      // });
 
       resolve(storeInfo);
     } catch (e) {
@@ -289,14 +293,14 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
         debug(e1);
         debug('failed to get download link from source1');
         // try again from source 2 (3 attempts)
-        try {
-          downloadData = await getDownloadLink2(page, packageName);
-          debug('got download link from source 2');
-        } catch (e2) {
-          debug(e2);
-          reject(Error('failed to get download link'));
-          return; // do not execute the rest of the code
-        }
+        // try {
+        //   downloadData = await getDownloadLink2(page, packageName);
+        //   debug('got download link from source 2');
+        // } catch (e2) {
+        //   debug(e2);
+        reject(Error('failed to get download link'));
+        return; // do not execute the rest of the code
+        //   }
       }
 
       if (downloadData == null || downloadData.downloadLink == null || downloadData.downloadLink.length == 0) {
