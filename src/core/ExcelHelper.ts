@@ -121,7 +121,7 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
     // read from a XLS file
 
     let sheetName = exportFileName.replace('.xlsx', '');
-
+    if (sheetName.length > 30) sheetName = sheetName.substring(0, 30);
     // {readFile,utils,writeFile}
     // read from a XLS file
     let workbook;
