@@ -49,7 +49,7 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 video: https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4
 
 ## download 
-latest release: https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.1
+latest release: https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.2
 
 ## Instructions
 
