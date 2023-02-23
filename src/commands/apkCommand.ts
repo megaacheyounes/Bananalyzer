@@ -12,7 +12,7 @@ export default class ApkCommand extends Command {
 
     if (!apkPath) {
       console.log(
-        'You must spicify an APK\'s path using --path, Example: ` banalyzer apk --path "C:\\apks\\apk_name.apk" `'
+        'You must spicify an APK\'s path using --path, Example: ` bananalyzer apk --path "C:\\apks\\apk_name.apk" `'
       );
       this.clean();
       return false;

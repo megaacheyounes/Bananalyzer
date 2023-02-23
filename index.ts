@@ -13,11 +13,21 @@ import { APP_CHECK_JAR, APP_DATA_FOLDER, DOWNLOAD_FOLDER, EXPORT_DIR, IS_PROD, S
 import { currentPlatform, pause } from './src/core/utils';
 
 import cliHelper from './src/cliHelper';
-import { CMD_APK, CMD_FILE, CMD_HELP, CMD_PACKAGE, CMD_VERSION, commitSuicide, MyFlags } from './src/cliHelper';
+import {
+  CMD_APK,
+  CMD_FILE,
+  CMD_HELP,
+  CMD_PACKAGE,
+  CMD_VERSION,
+  commitSuicide,
+  MyFlags,
+  CMD_APK_FILE,
+} from './src/cliHelper';
 import debugModule from 'debug';
 import { PickFileCommand } from './src/commands/pickFileCommand';
 import PackageCommand from './src/commands/packageCommand';
 import ApkCommand from './src/commands/apkCommand';
+import { PickFileApkCommand } from './src/commands/pickFileApk';
 
 const debug = debugModule('index');
 
@@ -82,6 +92,12 @@ const main = async () => {
     case CMD_FILE: {
       //dowlnoad and analyze list of apps
       await new PickFileCommand(flags).exec();
+      pause();
+      break;
+    }
+    case CMD_APK_FILE: {
+      //dowlnoad and analyze list of apps
+      await new PickFileApkCommand(flags).exec();
       pause();
       break;
     }

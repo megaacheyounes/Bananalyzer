@@ -117,9 +117,7 @@ export const saveResult = async (apps: AnalyzedApk[], resultPath: string) =>
 const writeExcel = async (data: ExcelRow[], resultPath: string) =>
   new Promise<boolean>(async (resolve, reject) => {
     const exportFileName = path.basename(resultPath);
-
     // read from a XLS file
-
     let sheetName = exportFileName.replace('.xlsx', '');
     if (sheetName.length > 30) sheetName = sheetName.substring(0, 30);
     // {readFile,utils,writeFile}

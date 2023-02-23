@@ -13,6 +13,8 @@
     "start": "cross-env NODE_ENV=debug ts-node index.ts -k -r -d",
     "start:package": "cross-env NODE_ENV=debug ts-node index.ts package -k -d --name",
     "start:apk": "cross-env NODE_ENV=debug ts-node index.ts apk -k -d --path",
+    "apkfile": "cross-env NODE_ENV=debug ts-node index.ts apkfile -k -r -d",
+    "help": "cross-env NODE_ENV=debug ts-node index.ts help",
     "devider1sdsdaas": " __________________ build (pkg) __________________ ",
     "build": "npm run clean && npm run copy-files &&  npm run build:js && npm run build:exe",
     "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"AppCheck.jar\" build",
