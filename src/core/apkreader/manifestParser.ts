@@ -5,10 +5,6 @@ import debugModule from 'debug';
 
 import BinaryXmlParser from './binaryxml';
 
-// const { default: BinaryXmlParser } = require('./binaryxml');
-
-// const BinaryXmlParser = require('./binaryxml');
-
 // const NS_ANDROID = 'http://schemas.android.com/apk/res/android'
 const INTENT_MAIN = 'android.intent.action.MAIN';
 const CATEGORY_LAUNCHER = 'android.intent.category.LAUNCHER';

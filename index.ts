@@ -7,6 +7,8 @@
  *
  */
 
+//todo: update all packages
+
 'use strict';
 import fs from 'fs';
 import { APP_CHECK_JAR, APP_DATA_FOLDER, DOWNLOAD_FOLDER, EXPORT_DIR, IS_PROD, SRC_DIR } from './src/consts';

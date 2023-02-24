@@ -4,24 +4,19 @@
 import debugModule from 'debug';
 import internal from 'stream';
 import * as Zip from 'yauzl';
+import { ANDROID_MANIFEST } from '../../consts';
 
 import { Manifest } from '../../models/manifest';
 import ManifestParser from './manifestParser';
 
-const MANIFEST = 'AndroidManifest.xml';
-
 // it has been updated to include application meta data
 
-// todo: use this method to get sdks versions
-// const readContent = (path) => {
-//   return usingFile(path, (content) => content);
-// };
 const debug = debugModule('apkreader');
 
 export const readManifest = (apk: string, options = { debug: false }) =>
   new Promise<Manifest>(async (resolve, reject) => {
     try {
-      const content = await usingFile(apk, MANIFEST);
+      const content = await usingFile(apk, ANDROID_MANIFEST);
       debug('got manifest content');
       resolve(new ManifestParser(content, options).parse());
     } catch (e) {

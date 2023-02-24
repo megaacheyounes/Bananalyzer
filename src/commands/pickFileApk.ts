@@ -1,6 +1,6 @@
 import debugModule from 'debug';
 import { delay } from '../core/utils';
-import { pickFile } from '../core/psHelper';
+import { pickFile } from '../core/filePicker';
 import { commitSuicide, MyFlags } from '../cliHelper';
 import fs from 'fs';
 import { MAX_PACKAGE_NAMES } from '../consts';

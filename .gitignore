@@ -12,3 +12,4 @@ dist/
 esm/
 .log/
 temp/
+decompile/

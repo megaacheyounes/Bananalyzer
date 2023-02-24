@@ -6,12 +6,19 @@ export const SRC_DIR = __dirname;
 
 export var EXPORT_DIR = process.cwd();
 
+//files
+export const ANDROID_MANIFEST = 'AndroidManifest.xml';
+
 //app check
 export const APP_DATA_XSJ = 'appdataxsj';
-export const APP_CHECK_JAR = 'AppCheck.jar';
+export const APP_CHECK_JAR = 'lib/AppCheck.jar';
 export const APP_DATA_FOLDER = path.join(EXPORT_DIR, APP_DATA_XSJ);
 export const GMS_OUTPUT = path.join(APP_DATA_FOLDER, 'output_gms.txt');
 export const HMS_OUTPUT = path.join(APP_DATA_FOLDER, 'output_hms.txt');
+
+//apktool
+export const APKTOOL_JAR = 'lib/apktool.jar';
+export const DECOMPILE_FOLDER = path.join(EXPORT_DIR, 'decompile');
 
 //chrome
 export const CHROMIUM_REVISION = 970485;

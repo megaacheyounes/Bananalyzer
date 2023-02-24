@@ -220,6 +220,7 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
     const allGms: Kits = await getKits(gmsEntries, headers);
 
     const results: AnalyzedApk[] = [];
+
     for (const apk of apks) {
       const apkName = path.basename(apk.filePath);
       let manifestData: Manifest;

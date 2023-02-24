@@ -9,6 +9,7 @@
   "types": "./dist/index.d.ts",
   "displayName": "Banana Analyzer",
   "scripts": {
+    "dev": "cross-env NODE_ENV=debug ts-node dev.ts",
     "preinstall": "npx npm-force-resolutions",
     "start": "cross-env NODE_ENV=debug ts-node index.ts -k -r -d",
     "start:package": "cross-env NODE_ENV=debug ts-node index.ts package -k -d --name",
@@ -26,7 +27,9 @@
     "test": "jest",
     "test:analyzer": "jest tests/analyzer.test.ts",
     "test:downloader": "jest tests/downloader.test.ts",
-    "test:excelHelper": "jest tests/excelHelper.test.ts"
+    "test:excelHelper": "jest tests/excelHelper.test.ts",
+    "test:decompile": "jest tests/decompile.test",
+    "test:tracking": "jest analyzeTrackingSdk.test.ts"
   },
   "bin": "index.ts",
   "keywords": [
@@ -39,19 +42,23 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "@types/semver": "^7.3.13",
     "cli-meow-help": "^2.0.2",
     "debug": "^4.3.4",
     "decompress-zip": "^0.3.3",
     "download-chromium": "^2.2.1",
     "fs": "0.0.1-security",
+    "glob": "^8.1.0",
     "java-caller": "^2.4.0",
     "meow": "^9.0.0",
+    "micromatch": "^4.0.5",
     "ncp": "^2.0.0",
     "path": "^0.12.7",
     "puppeteer": "^13.5.2",
     "puppeteer-extra": "^3.2.3",
     "puppeteer-extra-plugin-adblocker": "^2.12.0",
     "puppeteer-extra-plugin-stealth": "^2.9.0",
+    "semver": "^7.3.8",
     "xlsx": "^0.18.5",
     "yauzl": "^2.10.0"
   },
@@ -60,6 +67,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
+    "@types/glob": "^8.1.0",
     "@types/jest": "^27.4.1",
     "@types/mkdirp": "^1.0.2",
     "@types/mocha": "^9.1.1",
