@@ -4,9 +4,6 @@ import fs from 'fs';
 import path from 'path';
 import { APK } from '../../models/apk';
 
-//todo: remove debug code
-debugModule.enable('*');
-
 const debug = debugModule('apkreader');
 const JavaCallerModule = require('java-caller');
 

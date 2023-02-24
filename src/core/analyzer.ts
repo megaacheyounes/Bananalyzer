@@ -19,7 +19,7 @@ import {
 import { AnalyzedApk } from '../models/analyzedApk';
 import { APK } from '../models/apk';
 import { Kits } from '../models/kits';
-import { Activity, Manifest, Service, UsesPermission, IntentFilter3, Action3 } from '../models/manifest';
+import { Activity, AndroidManifest, Service, UsesPermission, IntentFilter3, Action3 } from '../models/manifest';
 import { moveFile } from './mv';
 import { getApkInfo } from './utils';
 import { HUAWEI_MESSAGING_EVENT } from '../consts';
@@ -220,10 +220,10 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
     const allGms: Kits = await getKits(gmsEntries, headers);
 
     const results: AnalyzedApk[] = [];
-
+    //
     for (const apk of apks) {
       const apkName = path.basename(apk.filePath);
-      let manifestData: Manifest;
+      let manifestData: AndroidManifest;
       let packageName: string = UNKNOWN_INFO;
       let huaweiAppId = UNKNOWN_INFO;
       let versionName = UNKNOWN_INFO;
@@ -251,7 +251,7 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
         versionName = manifestData ? manifestData.versionName : 'NOT FOUND';
 
         debug('manifest of ' + apk.filePath + ' is ' + typeof manifestData);
-        const metaData = manifestData['application']['metaDatas'];
+        const metaData = manifestData['application']['metaData'];
 
         const appIdObj = metaData.find((v) => v.name == 'com.huawei.hms.client.appid');
 

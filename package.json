@@ -29,7 +29,8 @@
     "test:downloader": "jest tests/downloader.test.ts",
     "test:excelHelper": "jest tests/excelHelper.test.ts",
     "test:decompile": "jest tests/decompile.test",
-    "test:tracking": "jest analyzeTrackingSdk.test.ts"
+    "test:tracking": "jest tests/analyzeTrackingSdk.test.ts",
+    "test:xml2json": "jest tests/xml2json.test.ts"
   },
   "bin": "index.ts",
   "keywords": [
@@ -43,6 +44,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/semver": "^7.3.13",
+    "@types/xml2js": "^0.4.11",
     "cli-meow-help": "^2.0.2",
     "debug": "^4.3.4",
     "decompress-zip": "^0.3.3",
@@ -60,6 +62,7 @@
     "puppeteer-extra-plugin-stealth": "^2.9.0",
     "semver": "^7.3.8",
     "xlsx": "^0.18.5",
+    "xml2js": "^0.4.23",
     "yauzl": "^2.10.0"
   },
   "pkg": {

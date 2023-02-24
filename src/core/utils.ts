@@ -11,7 +11,7 @@ import path from 'path';
 import { readManifest } from './apkreader/apkreader';
 // import DecompressZip from 'decompress-zip';
 import { APP_DATA_FOLDER, ERR_LOG_FILE, LOG_FOLDER, OUT_LOG_FILE, TEMP_FOLDER } from '../consts';
-import { Manifest } from '../models/manifest';
+import { AndroidManifest } from '../models/manifest';
 
 const DecompressZip = require('decompress-zip');
 
@@ -74,7 +74,7 @@ export const delay = (millis: number) =>
  *
  */
 export const getApkInfo = (apkPath: string, lookForRootApkIfFailed = true) =>
-  new Promise<Manifest>(async (resolve, reject) => {
+  new Promise<AndroidManifest>(async (resolve, reject) => {
     // local fork (lol) of adbkit-apkreader with support to read meta data
     // const ApkReader = require('./adbkit-apkreader');
 

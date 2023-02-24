@@ -6,7 +6,7 @@ import internal from 'stream';
 import * as Zip from 'yauzl';
 import { ANDROID_MANIFEST } from '../../consts';
 
-import { Manifest } from '../../models/manifest';
+import { AndroidManifest } from '../../models/manifest';
 import ManifestParser from './manifestParser';
 
 // it has been updated to include application meta data
@@ -14,7 +14,7 @@ import ManifestParser from './manifestParser';
 const debug = debugModule('apkreader');
 
 export const readManifest = (apk: string, options = { debug: false }) =>
-  new Promise<Manifest>(async (resolve, reject) => {
+  new Promise<AndroidManifest>(async (resolve, reject) => {
     try {
       const content = await usingFile(apk, ANDROID_MANIFEST);
       debug('got manifest content');

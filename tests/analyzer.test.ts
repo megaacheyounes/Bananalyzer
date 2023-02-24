@@ -8,10 +8,10 @@ import debugModule from 'debug';
 debugModule.enable('*');
 
 //normal apk
-const twitterApk = path.join(__dirname, 'apks', 'com.twitter.android.lite.apk');
+const twitterApk = path.join(__dirname, 'samples', 'com.twitter.android.lite.apk');
 
 //split apk
-const uberApk = path.join(__dirname, 'apks', 'com.ubercab.uberlite.apk');
+const uberApk = path.join(__dirname, 'samples', 'com.ubercab.uberlite.apk');
 
 export const testApks: APK[] = [
   {

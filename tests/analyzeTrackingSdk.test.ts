@@ -12,7 +12,7 @@ import debugModule from 'debug';
 debugModule.enable('*');
 
 //normal apk
-const sampleDecompiledApk = path.join(__dirname, 'decompile.sample.apk');
+const sampleDecompiledApk = path.join(__dirname, 'samples', 'decompile.sample.apk');
 
 describe('Decompiler', () => {
   it('should decompile apk', async () => {
