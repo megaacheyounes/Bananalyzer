@@ -138,9 +138,6 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
         reject(e);
       }
     }
-    // append new content
-
-    // save file
 
     // get the first sheet
     sheetName = workbook.SheetNames[0];

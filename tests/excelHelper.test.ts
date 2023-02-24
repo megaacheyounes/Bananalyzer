@@ -35,9 +35,11 @@ describe('excel helper', () => {
   beforeAll(() => {
     if (!existsSync(testTempFolder)) mkdirSync(testTempFolder);
   });
+
   afterAll(() => {
     rmSync(testTempFolder, { recursive: true });
   });
+
   it('should transform data', async () => {
     const row: ExcelRow = await getRowFromApp(app);
     expect(row).toBeTruthy();
