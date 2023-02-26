@@ -97,7 +97,7 @@ export interface GeneratedType7 {
 
 export interface Application {
   $: GeneratedType8;
-  'meta-data': Daum2[];
+  'meta-data': Metadata[];
   activity: Activity[];
   service: Service[];
   receiver: Receiver[];
@@ -121,7 +121,7 @@ export interface GeneratedType8 {
   'android:usesCleartextTraffic': string;
 }
 
-export interface Daum2 {
+export interface Metadata {
   $: GeneratedType9;
 }
 
