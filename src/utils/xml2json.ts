@@ -18,9 +18,9 @@ export interface ManifestRoot {
 
 export interface Manifest {
   $: ManifestAttrs;
-  'uses-permission': UsesPermission[];
-  queries: Query[];
-  'uses-feature': UsesFeature[];
+  'uses-permission'?: UsesPermission[];
+  queries?: Query[];
+  'uses-feature'?: UsesFeature[];
   application: Application[];
 }
 
@@ -48,7 +48,7 @@ export interface Query {
 }
 
 export interface Intent {
-  action: Action[];
+  action?: Action[];
   data?: Daum[];
   category?: Category[];
 }
@@ -99,10 +99,11 @@ export interface Application {
   $: GeneratedType8;
   'meta-data': Metadata[];
   activity: Activity[];
-  service: Service[];
-  receiver: Receiver[];
-  provider: Provider[];
-  'uses-library': UsesLibrary[];
+  service?: Service[];
+  receiver?: Receiver[];
+  provider?: Provider[];
+  'uses-library'?: UsesLibrary[];
+  'activity-alias'?: Alias[];
 }
 
 export interface GeneratedType8 {
@@ -152,12 +153,14 @@ export interface GeneratedType10 {
   'android:noHistory'?: string;
   'android:enabled'?: string;
   'android:process'?: string;
+  'android:priority'?: string;
+  'android:icon'?: string;
 }
 
 export interface IntentFilter {
   data?: Daum3[];
-  action: Action2[];
-  category: Category2[];
+  action?: Action2[];
+  category?: Category2[];
 }
 
 export interface Daum3 {
@@ -200,6 +203,18 @@ export interface GeneratedType14 {
   'android:foregroundServiceType'?: string;
   'android:directBootAware'?: string;
   'android:visibleToInstantApps'?: string;
+}
+
+export interface Alias {
+  $: GeneratedType16;
+  'intent-filter': IntentFilter[];
+}
+
+export interface GeneratedType16 {
+  'android:name': string;
+  'android:targetActivity': string;
+  'android:permission': string;
+  'android:process': string;
 }
 
 export interface IntentFilter2 {

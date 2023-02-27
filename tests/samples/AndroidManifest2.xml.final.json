@@ -1,0 +1,384 @@
+{
+    "versionCode": "0",
+    "versionName": "0",
+    "package": "com.android.server.telecom",
+    "usesPermissions": [
+        {
+            "name": "android.permission.BLUETOOTH"
+        },
+        {
+            "name": "android.permission.BLUETOOTH_ADMIN"
+        },
+        {
+            "name": "android.permission.CALL_PRIVILEGED"
+        },
+        {
+            "name": "android.permission.MANAGE_USERS"
+        },
+        {
+            "name": "android.permission.INTERACT_ACROSS_USERS"
+        },
+        {
+            "name": "android.permission.INTERACT_ACROSS_USERS_FULL"
+        },
+        {
+            "name": "android.permission.MODIFY_AUDIO_SETTINGS"
+        },
+        {
+            "name": "android.permission.READ_CALL_LOG"
+        },
+        {
+            "name": "android.permission.STOP_APP_SWITCHES"
+        },
+        {
+            "name": "android.permission.VIBRATE"
+        },
+        {
+            "name": "android.permission.WRITE_CALL_LOG"
+        },
+        {
+            "name": "android.permission.BIND_CONNECTION_SERVICE"
+        },
+        {
+            "name": "android.permission.BIND_INCALL_SERVICE"
+        },
+        {
+            "name": "android.permission.MODIFY_PHONE_STATE"
+        },
+        {
+            "name": "android.permission.BROADCAST_CALLLOG_INFO"
+        }
+    ],
+    "queries": [],
+    "usesFeatures": [],
+    "application": {
+        "label": "@string/telecommAppLabel",
+        "icon": "@mipmap/ic_launcher_phone",
+        "allowBackup": false,
+        "supportsRtl": true,
+        "activities": [
+            {
+                "name": "CallActivity",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "tel"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "sip"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "voicemail"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL"
+                            }
+                        ],
+                        "category": [],
+                        "data": [
+                            {},
+                            {},
+                            {}
+                        ]
+                    }
+                ],
+                "theme": "@style/Theme.Telecomm.Transparent",
+                "process": ":ui",
+                "excludeFromRecents": true
+            },
+            {
+                "name": ".RespondViaSmsSettings$Settings",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "category": [],
+                        "data": []
+                    }
+                ],
+                "theme": "@style/Theme.Telecom.DialerSettings",
+                "label": "@string/respond_via_sms_setting_title",
+                "configChanges": "orientation|screenSize|keyboardHidden",
+                "process": ":ui"
+            },
+            {
+                "name": ".ErrorDialogActivity",
+                "launchMode": "singleInstance",
+                "theme": "@style/Theme.Telecomm.Transparent",
+                "configChanges": "orientation|screenSize|keyboardHidden",
+                "process": ":ui",
+                "excludeFromRecents": true
+            }
+        ],
+        "launcherActivities": [],
+        "activityAliases": [
+            {
+                "name": "PrivilegedCallActivity",
+                "permission": "android.permission.CALL_PRIVILEGED",
+                "process": ":ui",
+                "targetActivity": "CallActivity",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL_PRIVILEGED"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "tel"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL_PRIVILEGED"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "sip"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL_PRIVILEGED"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "voicemail"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL_PRIVILEGED"
+                            }
+                        ],
+                        "category": [],
+                        "data": [
+                            {},
+                            {},
+                            {}
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "EmergencyCallActivity",
+                "permission": "android.permission.CALL_PRIVILEGED",
+                "process": ":ui",
+                "targetActivity": "CallActivity",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL_EMERGENCY"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "tel"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL_EMERGENCY"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "sip"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL_EMERGENCY"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "scheme": "voicemail"
+                            }
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.CALL_EMERGENCY"
+                            }
+                        ],
+                        "category": [],
+                        "data": [
+                            {},
+                            {},
+                            {}
+                        ]
+                    }
+                ]
+            }
+        ],
+        "services": [
+            {
+                "name": "BluetoothPhoneService",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.bluetooth.IBluetoothHeadsetPhone"
+                            }
+                        ],
+                        "category": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            },
+            {
+                "name": ".TelecomService",
+                "intentFilters": [
+                    {
+                        "action": [],
+                        "category": [],
+                        "data": []
+                    }
+                ],
+                "metaData": []
+            }
+        ],
+        "receivers": [
+            {
+                "name": "TelecomBroadcastReceiver",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "com.android.server.telecom.ACTION_CALL_BACK_FROM_NOTIFICATION"
+                            },
+                            {
+                                "name": "com.android.server.telecom.ACTION_CALL_BACK_FROM_NOTIFICATION"
+                            },
+                            {
+                                "name": "com.android.server.telecom.ACTION_SEND_SMS_FROM_NOTIFICATION"
+                            }
+                        ],
+                        "category": [],
+                        "data": []
+                    }
+                ],
+                "exported": false
+            },
+            {
+                "name": "PhoneAccountBroadcastReceiver",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.PACKAGE_FULLY_REMOVED"
+                            }
+                        ],
+                        "category": [],
+                        "data": [
+                            {
+                                "scheme": "package"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": ".CallReceiver",
+                "exported": true,
+                "permission": "android.permission.MODIFY_PHONE_STATE"
+            }
+        ],
+        "providers": [],
+        "usesLibraries": [],
+        "metaData": []
+    }
+}

@@ -1,3 +1,4 @@
+import { isLauncherActivity } from './manifestUtils';
 import { parse } from 'path';
 import { parseBooleans } from 'xml2js/lib/processors';
 import {
@@ -33,9 +34,10 @@ import {
   IntentFilter as XmlIntentFilter,
   Metadata as XmlMetadata,
   Package as XmlPackage,
+  Alias as XmlActAlias,
 } from './xml2json';
 
-const transformToManifestType = (parsedManifest: ManifestRoot): AndroidManifest => {
+export const transformToManifest = (parsedManifest: ManifestRoot): AndroidManifest => {
   return {
     versionCode: versionCode(parsedManifest),
     versionName: versionName(parsedManifest),
@@ -59,8 +61,6 @@ const transformToManifestType = (parsedManifest: ManifestRoot): AndroidManifest 
     application: application(parsedManifest),
   };
 };
-
-const supportsGlTexture = (parsedManifest: ManifestRoot) => {};
 
 const versionCode = (parsedManifest: ManifestRoot) => {
   //todo:
@@ -88,7 +88,7 @@ const platformBuildVersionName = (xml: ManifestRoot): string => {
 };
 const usesPermissions = (xml: ManifestRoot): UsesPermission[] => {
   const result: UsesPermission[] = [];
-  xml.manifest['uses-permission'].forEach((permission) => {
+  xml.manifest['uses-permission']?.forEach((permission) => {
     result.push({
       name: permission.$['android:name'],
       maxSdkVersion: permission.$['android:maxSdkVersion'],
@@ -116,7 +116,7 @@ const usesConfiguration = (xml: ManifestRoot): any => {
 };
 const usesFeatures = (xml: ManifestRoot): UsesFeature[] => {
   const result: UsesFeature[] = [];
-  xml.manifest['uses-feature'].forEach((feature) => {
+  xml.manifest['uses-feature']?.forEach((feature) => {
     result.push({
       name: feature.$['android:name'],
       required: feature.$['android:required'] == 'true',
@@ -135,9 +135,9 @@ const supportsGlTextures = (xml: ManifestRoot): any[] => {
 };
 const queries = (xml: ManifestRoot): Query[] => {
   const result: Query[] = [];
-  xml.manifest.queries.forEach((query) => {
+  xml.manifest.queries?.forEach((query) => {
     const intent: Intent[] = query.intent.map((xmlQuery) => {
-      const action: Action[] | undefined = xmlQuery.action.map((xmlQueryAction) => ({
+      const action: Action[] | undefined = xmlQuery.action?.map((xmlQueryAction) => ({
         name: xmlQueryAction.$['android:name'],
       }));
 
@@ -182,12 +182,13 @@ const application = (xml: ManifestRoot): Application => {
     networkSecurityConfig: app.$['android:networkSecurityConfig'],
     roundIcon: undefined,
     appComponentFactory: app.$['android:appComponentFactory'],
+
     requestLegacyExternalStorage: parseBool(app.$['android:requestLegacyExternalStorage']),
-    activities: activities(app),
+    //returns activities,launcherActivities
+    ...activities(app),
 
     //todo: implement
     activityAliases: activityAliases(app) as any,
-    launcherActivities: launcherActivities(app),
 
     services: services(app),
     receivers: receiver(app),
@@ -199,21 +200,26 @@ const application = (xml: ManifestRoot): Application => {
   return application;
 };
 
-const launcherActivities = (app: XmlApplication): Activity[] => {
+const activityAliases = (app: XmlApplication): Activity[] | undefined => {
   const result: Activity[] = [];
 
-  app.activity;
+  app['activity-alias']?.forEach((xmlAct: XmlActAlias) => {
+    result.push({
+      name: xmlAct.$['android:name'],
+      permission: xmlAct.$['android:permission'],
+      process: xmlAct.$['android:process'],
+      targetActivity: xmlAct.$['android:targetActivity'],
+      intentFilters: intentFilter(xmlAct['intent-filter']),
+    });
+  });
 
   return result;
-};
-const activityAliases = (app: XmlApplication): Activity | undefined => {
-  return undefined;
 };
 
 const services = (app: XmlApplication): Service[] => {
   const result: Service[] = [];
 
-  app.service.forEach((xmlService: XmlService) => {
+  app.service?.forEach((xmlService: XmlService) => {
     result.push({
       name: xmlService.$['android:name'],
       exported: parseBool(xmlService.$['android:exported']),
@@ -236,7 +242,7 @@ const metaData = (xmlMetadata: XmlMetadata[] | undefined): MetaData[] => {
       value: xmlMetaData.$['android:value'],
       resource: xmlMetaData.$['android:value'],
       //todo:
-      screenOrientation: '',
+      screenOrientation: undefined,
     };
   });
   return result;
@@ -245,7 +251,7 @@ const metaData = (xmlMetadata: XmlMetadata[] | undefined): MetaData[] => {
 const receiver = (app: XmlApplication): Receiver[] => {
   const result: Receiver[] = [];
 
-  app.receiver.forEach((xmlReceiver: XmlReceiver) => {
+  app.receiver?.forEach((xmlReceiver: XmlReceiver) => {
     result.push({
       name: xmlReceiver.$['android:name'],
       intentFilters: intentFilter(xmlReceiver['intent-filter'] as any),
@@ -263,7 +269,7 @@ const receiver = (app: XmlApplication): Receiver[] => {
 const usesLibrary = (app: XmlApplication): UsesLibrary[] => {
   const result: UsesLibrary[] = [];
 
-  app['uses-library'].forEach((xmlLib: XmlUsesLibrary) => {
+  app['uses-library']?.forEach((xmlLib: XmlUsesLibrary) => {
     return { name: xmlLib.$['android:name'], required: parseBool(xmlLib.$['android:required']) };
   });
 
@@ -273,20 +279,25 @@ const usesLibrary = (app: XmlApplication): UsesLibrary[] => {
 const provider = (app: XmlApplication): Provider[] => {
   const result: Provider[] = [];
 
-  app.provider.forEach((xmlProvider: XmlProvider) => {});
+  app.provider?.forEach((xmlProvider: XmlProvider) => {});
 
   return result;
 };
 
-const activities = (app: XmlApplication): Activity[] => {
-  const result: Activity[] = [];
+const activities = (
+  app: XmlApplication
+): {
+  activities: Activity[];
+  launcherActivities: Activity[];
+} => {
+  const activities: Activity[] = [];
+  const launcherActivities: Activity[] = [];
 
-  app.activity.map((act) => {
+  app.activity.forEach((act) => {
     //todo:
     const metaData: MetaData[] | undefined = undefined;
-
     //todo: add missing field
-    result.push({
+    const activity = {
       name: act.$['android:name'],
       exported: parseBool(act.$['android:exported']),
       screenOrientation: act.$['android:screenOrientation'],
@@ -300,28 +311,35 @@ const activities = (app: XmlApplication): Activity[] => {
       hardwareAccelerated: parseBool(act.$['android:hardwareAccelerated']),
       process: act.$['android:process'],
       excludeFromRecents: parseBool(act.$['android:excludeFromRecents']),
-      permission: '',
-    });
+      permission: undefined,
+    };
+    activities.push(activity);
+    if (isLauncherActivity(activity)) {
+      launcherActivities.push(activity);
+    }
   });
 
-  return result;
+  return { activities, launcherActivities };
 };
 
 const intentFilter = (xmlIntentFilter: XmlIntentFilter[] | undefined): IntentFilter[] | undefined =>
   xmlIntentFilter?.map((intent) => {
-    const action: Action[] = intent.action.map((xmlAction) => ({
-      name: xmlAction.$['android:name'],
-    }));
+    const action: Action[] =
+      intent.action?.map((xmlAction) => ({
+        name: xmlAction.$['android:name'],
+      })) || [];
 
-    const category: Category[] = intent.category.map((xmlCategory) => ({
-      name: xmlCategory.$['android:name'],
-    }));
+    const category: Category[] =
+      intent.category?.map((xmlCategory) => ({
+        name: xmlCategory.$['android:name'],
+      })) || [];
 
-    const data: IntentFilterData[] | undefined = intent.data?.map((xmlIntentData) => ({
-      host: xmlIntentData.$['android:host'],
-      scheme: xmlIntentData.$['android:scheme'],
-      pathPattern: xmlIntentData.$['android:pathPattern'],
-    }));
+    const data: IntentFilterData[] | undefined =
+      intent.data?.map((xmlIntentData) => ({
+        host: xmlIntentData.$['android:host'],
+        scheme: xmlIntentData.$['android:scheme'],
+        pathPattern: xmlIntentData.$['android:pathPattern'],
+      })) || [];
 
     return {
       action,

@@ -30,7 +30,8 @@
     "test:excelHelper": "jest tests/excelHelper.test.ts",
     "test:decompile": "jest tests/decompile.test",
     "test:tracking": "jest tests/analyzeTrackingSdk.test.ts",
-    "test:xml2json": "jest tests/xml2json.test.ts"
+    "test:xml2json": "jest tests/xml2json.test.ts",
+    "test:transformManifest": "jest tests/transformManifest.test.ts"
   },
   "bin": "index.ts",
   "keywords": [

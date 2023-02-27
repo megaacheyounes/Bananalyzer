@@ -19,7 +19,7 @@ import {
 import { AnalyzedApk } from '../models/analyzedApk';
 import { APK } from '../models/apk';
 import { Kits } from '../models/kits';
-import { Activity, AndroidManifest, Service, UsesPermission } from '../models/manifest';
+import { Action, Activity, AndroidManifest, IntentFilter, Service, UsesPermission } from '../models/manifest';
 import { moveFile } from './mv';
 import { getApkInfo } from './utils';
 import { HUAWEI_MESSAGING_EVENT } from '../consts';
@@ -296,8 +296,8 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean) =>
           manifestData.application.services
             .filter(
               (s: Service) =>
-                s.intentFilters
-                  .map((i: IntentFilter3) => i.actions.map((action: Action3) => action.name))
+                s
+                  .intentFilters!.map((i: IntentFilter) => i.action!.map((action: Action) => action.name))
                   .join(',')
                   .indexOf(actionName) != -1
             )

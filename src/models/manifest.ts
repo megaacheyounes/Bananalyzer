@@ -128,6 +128,7 @@ export interface Activity {
   process?: string;
   excludeFromRecents?: boolean;
   permission?: string;
+  targetActivity?: string;
 }
 
 export interface Service {
