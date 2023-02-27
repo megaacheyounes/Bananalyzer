@@ -1,12 +1,13 @@
 export interface AndroidManifest {
-  versionCode: number;
+  versionCode: string;
   versionName: string;
-  compileSdkVersion: number;
+  compileSdkVersion: string;
   compileSdkVersionCodename: string;
   package: string;
-  platformBuildVersionCode: number;
-  platformBuildVersionName: number;
+  platformBuildVersionCode: string;
+  platformBuildVersionName: string;
   usesPermissions: UsesPermission[];
+  //todo: add types
   permissions: any[];
   permissionTrees: any[];
   permissionGroups: any[];
@@ -34,7 +35,7 @@ export interface Application {
   appComponentFactory: string;
   requestLegacyExternalStorage?: boolean;
   activities: Activity[];
-  activityAliases: any[];
+  activityAliases?: any[];
   launcherActivities: Activity[];
   services: Service[];
   receivers: Receiver[];
@@ -131,29 +132,29 @@ export interface Activity {
 
 export interface Service {
   name: string;
-  exported: boolean;
-  intentFilters: IntentFilter[];
-  metaData: MetaData[];
-  permission: string;
+  exported?: boolean;
+  intentFilters?: IntentFilter[];
+  metaData?: MetaData[];
+  permission?: string;
   enabled?: boolean;
 }
 
 export interface Receiver {
   name: string;
-  intentFilters: IntentFilter[];
-  metaData: any[];
+  intentFilters?: IntentFilter[];
+  metaData?: any[];
   exported?: boolean;
-  permission: string;
+  permission?: string;
   enabled?: boolean;
 }
 
 export interface Provider {
   name: string;
   exported: boolean;
-  authorities: string;
-  grantUriPermissions: any[];
-  metaData: MetaData[];
-  pathPermissions: any[];
+  authorities?: string;
+  grantUriPermissions?: any[];
+  metaData?: MetaData[];
+  pathPermissions?: any[];
   initOrder?: number;
 }
 
