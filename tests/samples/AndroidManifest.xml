@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:compileSdkVersion="32" android:compileSdkVersionCodename="12" package="com.viu.phone" platformBuildVersionCode="32" platformBuildVersionName="12">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.REGISTER"/>
+    <uses-permission android:name="com.amazonaws.androidtest.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+        <package android:name="com.pccw.eyeapp.appmanager"/>
+        <package android:name="com.viu.phone"/>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE"/>
+        </intent>
+        <intent>
+            <action android:name="android.media.action.VIDEO_CAPTURE"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data android:scheme="https"/>
+        </intent>
+        <package android:name="com.facebook.katana"/>
+        <package android:name="com.android.vending"/>
+        <package android:name="com.amazon.venezia"/>
+        <package android:name="com.sec.android.app.samsungapps"/>
+        <package android:name="com.huawei.appmarket"/>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService"/>
+        </intent>
+    </queries>
+    <uses-permission android:maxSdkVersion="22" android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
+    <uses-feature android:name="android.hardware.screen.landscape" android:required="false"/>
+    <uses-feature android:name="android.hardware.wifi" android:required="false"/>
+    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"/>
+    <application android:allowBackup="false" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:fullBackupContent="@xml/appsflyer_backup_rules" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:largeHeap="true" android:name="com.viu.phone.ui.application.GlobalApplication" android:networkSecurityConfig="@xml/network_security_config" android:requestLegacyExternalStorage="true" android:resizeableActivity="true" android:supportsRtl="true" android:theme="@style/AppPhoneTheme" android:usesCleartextTraffic="true">
+        <meta-data android:name="android.max_aspect" android:value="2.4"/>
+        <meta-data android:name="android.min_aspect" android:value="1.0"/>
+        <meta-data android:name="android.allow_multiple_resumed_activities" android:value="true"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:name="com.viu.phone.ui.activity.WelcomeActivity" android:screenOrientation="sensorPortrait" android:theme="@style/LauncherTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.viu.ott.phone"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.GuideActivity" android:screenOrientation="sensorPortrait" android:theme="@style/GuideTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize" android:exported="true" android:name="com.viu.phone.ui.activity.entrance.JumpActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="viu.com" android:scheme="ott"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.viu.ott"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/.*/.*/vod/.*" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/.*/.*/vod/.*" android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/.*/.*/category/.*" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/.*/.*/category/.*" android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/.*/.*/premium/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/.*/.*/premium" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/.*/.*/premium/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/.*/.*/premium" android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/hk/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/hk/zh-hk/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/hk/en-us/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/sg/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/sg/zh_cn/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/sg/en-us/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/th" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/th/th-th/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/th/en-us/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/ph/" android:scheme="https"/>
+                <data android:host="*.viu.com" android:pathPattern="/ott/ph/en-us/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/hk/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/hk/zh-hk/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/hk/en-us/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/sg/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/sg/zh_cn/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/sg/en-us/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/th" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/th/th-th/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/th/en-us/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/ph/" android:scheme="https"/>
+                <data android:host="*.ottuat.com" android:pathPattern="/ott/ph/en-us/" android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <data android:host="clevertap" android:scheme="viu"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:launchMode="singleTask" android:name="com.viu.phone.ui.activity.HomeActivity" android:screenOrientation="sensorPortrait" android:theme="@style/HomeTheme" android:windowSoftInputMode="adjustPan"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.HomeShowAllActivity" android:screenOrientation="sensorPortrait" android:theme="@style/WithCastBtnTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.UserCenterDetailActivity" android:screenOrientation="sensorPortrait" android:theme="@style/WithCastBtnTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.CategoryActivity" android:screenOrientation="sensorPortrait" android:theme="@style/WithCastBtnTheme"/>
+        <service android:exported="false" android:name="com.ott.tv.lib.service.TimerService">
+            <intent-filter>
+                <action android:name="com.viu.phone.service.TimerService"/>
+            </intent-filter>
+        </service>
+        <activity android:configChanges="keyboard|keyboardHidden|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.ott.tv.lib.activity.ShareActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.HeadIconActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.UserInfoActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.SearchActivity" android:screenOrientation="sensorPortrait" android:theme="@style/WithCastBtnTheme" android:windowSoftInputMode="stateVisible"/>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.SearchTagActivity" android:screenOrientation="sensorPortrait" android:theme="@style/AppTheme2" android:windowSoftInputMode="stateVisible"/>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.ott.tv.lib.activity.OffLinePlayActivity" android:screenOrientation="sensorLandscape" android:theme="@style/Theme.AppCompat.NoActionBar.FullScreen"/>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.ott.tv.lib.activity.TrailerActivity" android:screenOrientation="sensorLandscape" android:theme="@style/Theme.AppCompat.NoActionBar.FullScreen"/>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.DemandActivity" android:theme="@style/CommonAppCompatNoActionBarTheme" android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.FocusActivity" android:theme="@style/CommonAppCompatNoActionBarTheme" android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.DownloadListActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme">
+            <intent-filter>
+                <action android:name="com.viu.ott.phone.downloadlist"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.TagActivity" android:screenOrientation="sensorPortrait" android:theme="@style/WithCastBtnTheme"/>
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:exported="false" android:name="com.google.android.gms.ads.AdActivity" android:theme="@style/CommonTranslucentTheme"/>
+        <receiver android:exported="true" android:name="com.ott.tv.lib.receiver.ReferrerReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:enabled="true" android:exported="false" android:name="com.google.android.gms.analytics.AnalyticsReceiver">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:enabled="true" android:exported="false" android:name="com.pccw.media.data.tracking.receiver.InstallReferrerReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+        <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.analytics.AnalyticsService"/>
+        <receiver android:enabled="true" android:exported="true" android:name="com.google.android.gms.analytics.CampaignTrackingReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+        <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.analytics.AnalyticsJobService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.VipTransferActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme"/>
+        <service android:name="com.ott.tv.lib.service.NotificationService"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.VipCenterActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonAppCompatNoActionBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.entrance.EntranceSingTelActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme">
+            <intent-filter>
+                <action android:name="com.viu.ott.singtel"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.ott.tv.lib.activity.ProductIdChangeActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:name="com.viu.phone.ui.activity.entrance.DeepLinkActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="viu.deeplink" android:scheme="ott"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.viu.deeplink"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:name="com.viu.phone.ui.activity.entrance.EntranceUpdateDeepLinkActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="viu.com" android:scheme="viuupgrade"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:name="com.viu.phone.ui.activity.entrance.EntranceRedemptionCodeActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="viu.com" android:scheme="viuredeem"/>
+            </intent-filter>
+        </activity>
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+        <meta-data android:name="com.facebook.sdk.ApplicationName" android:value="@string/app_name"/>
+        <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled" android:value="true"/>
+        <meta-data android:name="com.facebook.sdk.AutoInitEnabled" android:value="true"/>
+        <meta-data android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled" android:value="true"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize" android:label="@string/app_name" android:name="com.facebook.FacebookActivity" android:theme="@style/com_facebook_activity_theme"/>
+        <activity android:exported="true" android:name="com.facebook.CustomTabActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="@string/fb_login_protocol_scheme"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="cct.com.viu.phone" android:scheme="fbconnect"/>
+            </intent-filter>
+        </activity>
+        <provider android:authorities="com.viu.phone.NativeAppCallContentProvider201503141415" android:exported="true" android:name="com.facebook.FacebookContentProvider"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.RedeemTransferActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.RedeemWebActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:label="@string/app_name" android:launchMode="singleInstance" android:name="com.ott.tv.lib.function.bigscreen.ExpandedControlsActivity" android:screenOrientation="sensorPortrait" android:theme="@style/Theme.CastVideosDark"/>
+        <activity android:configChanges="keyboard|keyboardHidden|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.ott.tv.lib.function.parentallock.NewParentalLockVODActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme" android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:configChanges="keyboard|keyboardHidden|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.ott.tv.lib.function.parentallock.NewParentalLockNotifyUnLockActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme" android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:configChanges="keyboard|keyboardHidden|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.ott.tv.lib.function.parentallock.ParentalLockPswSetActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme" android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:configChanges="keyboard|keyboardHidden|locale|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.ott.tv.lib.function.parentallock.ParentalLockPswCheckActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme" android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.ViuBundleTransferActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.CompleteRegistrationActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:name="com.viu.phone.ui.activity.entrance.EntranceThirdPartyLoginActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="viu.com" android:scheme="viulogin"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.HomePublishActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTask" android:name="com.viu.phone.ui.activity.FAQActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTask" android:name="com.viu.phone.ui.activity.TvLoginActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme" android:windowSoftInputMode="adjustPan"/>
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="false" android:hardwareAccelerated="true" android:name="com.adcolony.sdk.AdColonyInterstitialActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:hardwareAccelerated="true" android:name="com.adcolony.sdk.AdColonyAdViewActivity"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTask" android:name="com.viu.phone.ui.activity.web.PushAdWebActivity" android:screenOrientation="sensor" android:theme="@style/CommonBlackNoTitleBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.SupportActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.DownloadActivity" android:screenOrientation="sensorPortrait" android:theme="@style/WithCastBtnTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.GlobeDeferredActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme"/>
+        <provider android:authorities="com.viu.phone.fileprovider" android:exported="false" android:grantUriPermissions="true" android:name="androidx.core.content.FileProvider">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider"/>
+        </provider>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.TvOnBoardingWelcomeActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.TvOnBoardingActivatedActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.QRCodeActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent" android:windowSoftInputMode="adjustPan"/>
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_notification"/>
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/colorAccent"/>
+        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="Message"/>
+        <service android:exported="true" android:name="com.ott.tv.lib.notification.firebase.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME" android:value="com.ott.tv.lib.function.bigscreen.CastOptionsProvider"/>
+        <activity android:configChanges="keyboard|keyboardHidden|layoutDirection|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.TestVideoActivity" android:screenOrientation="sensorPortrait" android:theme="@style/AppTheme2"/>
+        <meta-data android:name="BITMOVIN_PLAYER_LICENSE_KEY" android:value="@string/BITMOVIN_PLAYER_LICENSE_KEY"/>
+        <activity android:configChanges="keyboardHidden" android:launchMode="singleTop" android:name="com.clevertap.android.sdk.InAppNotificationActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.web.StarHubWebActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.TvUpSellActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.web.WebLoginActivity" android:screenOrientation="sensorPortrait" android:theme="@style/HomeTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.web.VuclipOfferActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <meta-data android:name="CLEVERTAP_INAPP_EXCLUDE" android:value="JumpActivity,GuideActivity,WelcomeActivity,             UserCenterDetailActivity,LoginActivity,ShareActivity,HeadIconActivity,             UserInfoActivity,OffLinePlayActivity,TrailerActivity,DownloadListActivity,             AdActivity,VipTransferActivity,VipIntroductionActivity,             VipCenterActivity,EntranceSingTelActivity,ProductIdChangeActivity,DeepLinkActivity,             EntranceUpdateDeepLinkActivity,EntranceRedemptionCodeActivity,FacebookActivity,             RedeemTransferActivity,RedeemWebActivity,ExpandedControlsActivity,ParentalLockVodActivity,             ParentalLockNotifyUnLockActivity,ParentalLockPswSetActivity,ParentalLockPswCheckActivity,             ViuBundleTransferActivity,CompleteRegistrationActivity,EntranceThirdPartyLoginActivity,             HomePublishActivity,FAQActivity,TvLoginActivity,AdColonyInterstitialActivity,AdColonyAdViewActivity,             PushAdWebActivity,SupportActivity,GlobeDeferredActivity,InMobiAdActivity,             TvOnBoardingWelcomeActivity,TvOnBoardingActivatedActivity,QRCodeActivity,AppleIDLoginActivity,             StarHubWebActivity,TvUpSellActivity,WebLoginActivity,SubscriptionActivity"/>
+        <service android:exported="false" android:name="com.clevertap.android.sdk.pushnotification.CTNotificationIntentService">
+            <intent-filter>
+                <action android:name="com.clevertap.PUSH_EVENT"/>
+            </intent-filter>
+        </service>
+        <meta-data android:name="CLEVERTAP_NOTIFICATION_ICON" android:value="viu_logo_notification"/>
+        <activity android:name="com.clevertap.android.sdk.CTInboxActivity" android:theme="@style/Inbox"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.zendesk.ContactUsActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonAppCompatNoActionBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:label="@string/support_activity_title" android:name="zendesk.support.guide.HelpCenterActivity" android:theme="@style/HelpCenter" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="orientation|screenSize" android:label="@string/zs_view_article_loading_title" android:name="zendesk.support.guide.ViewArticleActivity" android:theme="@style/HelpCenter"/>
+        <activity android:label="@string/request_list_activity_title" android:name="zendesk.support.requestlist.RequestListActivity" android:theme="@style/HelpCenter"/>
+        <activity android:name="zendesk.support.request.RequestActivity" android:theme="@style/HelpCenter" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize" android:exported="true" android:name="com.viu.phone.ui.activity.entrance.EntranceVuclipDeepLinkActivity" android:theme="@style/CommonTranslucentNoTitleBarTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="com.vuclip.viu" android:scheme="source"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|smallestScreenSize" android:launchMode="singleTop" android:name="com.viu.phone.ui.activity.vip.SubscriptionActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme" android:windowSoftInputMode="adjustResize"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.ott.tv.lib.activity.LogListActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.ott.tv.lib.activity.LogActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.web.PdpaWebActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.web.DoOpenWebActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.DelAccountRequestActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:name="com.viu.phone.ui.activity.DelAccountRequestDoneActivity" android:screenOrientation="sensorPortrait" android:theme="@style/CommonBlackNoTitleBarTheme"/>
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-2201121905090701~2377138056"/>
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <meta-data android:name="gcm_project_number" android:value="897741227834_"/>
+        <meta-data android:name="aws_application_arn" android:value="arn:aws:sns:ap-southeast-1:424857070697:app/GCM/OTT_FCM_Push"/>
+        <receiver android:exported="true" android:name="com.appsflyer.MultipleInstallBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+        <service android:name="com.ott.tv.lib.service.DownloadNotificationService"/>
+        <receiver android:exported="true" android:name="com.ott.tv.lib.receiver.DownloadNotificationReceiver">
+            <intent-filter>
+                <action android:name="continue"/>
+                <action android:name="pause"/>
+            </intent-filter>
+        </receiver>
+        <meta-data android:name="CLEVERTAP_ACCOUNT_ID" android:value="WRK-R99-Z85Z"/>
+        <meta-data android:name="CLEVERTAP_TOKEN" android:value="cc2-320"/>
+        <meta-data android:name="CLEVERTAP_USE_GOOGLE_AD_ID" android:value="1"/>
+        <meta-data android:name="CLEVERTAP_REGION" android:value="sg1"/>
+        <service android:name="com.ott.tv.lib.bitmovin.MyBitmovinDownloadService"/>
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="false" android:name="com.facebook.ads.AudienceNetworkActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <provider android:authorities="com.viu.phone.AudienceNetworkContentProvider" android:exported="false" android:name="com.facebook.ads.AudienceNetworkContentProvider"/>
+        <receiver android:exported="false" android:name="zendesk.support.DeepLinkingBroadcastReceiver">
+            <intent-filter>
+                <action android:name="zendesk.support"/>
+            </intent-filter>
+        </receiver>
+        <provider android:authorities="com.viu.phone.zendesk.support.SupportSdkStartupProvider" android:enabled="true" android:exported="false" android:name="zendesk.support.SupportSdkStartupProvider"/>
+        <provider android:authorities="com.viu.phone.zendesk.support.GuideSdkStartupProvider" android:enabled="true" android:exported="false" android:name="zendesk.support.guide.GuideSdkStartupProvider"/>
+        <activity android:name="zendesk.messaging.MessagingActivity" android:windowSoftInputMode="adjustResize"/>
+        <activity android:clearTaskOnLaunch="true" android:name="com.journeyapps.barcodescanner.CaptureActivity" android:screenOrientation="sensorPortrait" android:stateNotNeeded="true" android:theme="@style/zxing_CaptureTheme" android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:clearTaskOnLaunch="true" android:name="com.journeyapps.barcodescanner.LandCaptureActivity" android:screenOrientation="sensorLandscape" android:stateNotNeeded="true" android:theme="@style/zxing_CaptureTheme" android:windowSoftInputMode="stateAlwaysHidden"/>
+        <service android:name="com.bitmovin.player.offline.service.BitmovinDownloadService"/>
+        <service android:exported="true" android:name="com.google.android.exoplayer2.scheduler.PlatformScheduler$PlatformSchedulerService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <receiver android:exported="false" android:name="com.google.android.gms.cast.framework.media.MediaIntentReceiver"/>
+        <service android:exported="false" android:foregroundServiceType="mediaPlayback" android:name="com.google.android.gms.cast.framework.media.MediaNotificationService"/>
+        <service android:exported="false" android:name="com.google.android.gms.cast.framework.ReconnectionService"/>
+        <activity android:name="com.facebook.CustomTabMainActivity"/>
+        <activity android:configChanges="keyboardHidden" android:name="com.clevertap.android.sdk.inbox.CTInboxActivity" android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"/>
+        <receiver android:enabled="true" android:exported="false" android:name="com.clevertap.android.sdk.pushnotification.CTPushNotificationReceiver"/>
+        <service android:exported="false" android:name="com.clevertap.android.sdk.pushnotification.amp.CTBackgroundIntentService" android:permission="android.permission.BIND_JOB_SERVICE">
+            <intent-filter>
+                <action android:name="com.clevertap.BG_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:exported="false" android:name="com.clevertap.android.sdk.pushnotification.amp.CTBackgroundJobService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <provider android:authorities="com.viu.phone.FacebookInitProvider" android:exported="false" android:name="com.facebook.internal.FacebookInitProvider"/>
+        <receiver android:exported="false" android:name="com.facebook.CurrentAccessTokenExpirationBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.facebook.sdk.ACTION_CURRENT_ACCESS_TOKEN_CHANGED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:exported="false" android:name="com.facebook.AuthenticationTokenManager$CurrentAuthenticationTokenChangedBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.facebook.sdk.ACTION_CURRENT_AUTHENTICATION_TOKEN_CHANGED"/>
+            </intent-filter>
+        </receiver>
+        <provider android:authorities="com.viu.phone.com.squareup.picasso" android:exported="false" android:name="com.squareup.picasso.PicassoProvider"/>
+        <service android:directBootAware="true" android:exported="false" android:name="com.google.firebase.components.ComponentDiscoveryService">
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.crashlytics.CrashlyticsRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.perf.FirebasePerfRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.remoteconfig.RemoteConfigRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.abt.component.AbtRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+        </service>
+        <activity android:exported="false" android:label="" android:name="pub.devrel.easypermissions.AppSettingsDialogHolderActivity" android:theme="@style/EasyPermissions.Transparent"/>
+        <provider android:authorities="com.viu.phone.firebaseperfprovider" android:exported="false" android:initOrder="101" android:name="com.google.firebase.perf.provider.FirebasePerfProvider"/>
+        <activity android:excludeFromRecents="true" android:exported="false" android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <service android:exported="true" android:name="com.google.android.gms.auth.api.signin.RevocationBoundService" android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" android:visibleToInstantApps="true"/>
+        <uses-library android:name="androidx.window.extensions" android:required="false"/>
+        <uses-library android:name="androidx.window.sidecar" android:required="false"/>
+        <receiver android:exported="true" android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+            </intent-filter>
+        </receiver>
+        <service android:directBootAware="true" android:exported="false" android:name="com.google.firebase.messaging.FirebaseMessagingService">
+            <intent-filter android:priority="-500">
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.tagmanager.TagManagerService"/>
+        <activity android:exported="true" android:name="com.google.android.gms.tagmanager.TagManagerPreviewActivity" android:noHistory="true">
+            <intent-filter>
+                <data android:scheme="tagmanager.c.com.viu.phone"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
+        <receiver android:enabled="true" android:exported="false" android:name="com.google.android.gms.measurement.AppMeasurementReceiver"/>
+        <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.measurement.AppMeasurementService"/>
+        <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.measurement.AppMeasurementJobService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service android:exported="false" android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery">
+            <meta-data android:name="backend:com.google.android.datatransport.cct.CctBackendFactory" android:value="cct"/>
+        </service>
+        <service android:exported="false" android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <receiver android:exported="false" android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"/>
+        <provider android:authorities="com.viu.phone.firebaseinitprovider" android:directBootAware="true" android:exported="false" android:initOrder="100" android:name="com.google.firebase.provider.FirebaseInitProvider"/>
+        <activity android:exported="false" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <provider android:authorities="com.viu.phone.mobileadsinitprovider" android:exported="false" android:initOrder="100" android:name="com.google.android.gms.ads.MobileAdsInitProvider"/>
+        <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.ads.AdService"/>
+        <provider android:authorities="com.viu.phone.belvedere2.attachments" android:exported="false" android:grantUriPermissions="true" android:name="zendesk.belvedere.BelvedereFileProvider" android:readPermission="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/belvedere_attachment_storage_v2"/>
+        </provider>
+        <provider android:authorities="com.viu.phone.androidx-startup" android:exported="false" android:name="androidx.startup.InitializationProvider">
+            <meta-data android:name="androidx.work.WorkManagerInitializer" android:value="androidx.startup"/>
+        </provider>
+        <service android:directBootAware="false" android:enabled="@bool/enable_system_alarm_service_default" android:exported="false" android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"/>
+        <service android:directBootAware="false" android:enabled="@bool/enable_system_job_service_default" android:exported="true" android:name="androidx.work.impl.background.systemjob.SystemJobService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service android:directBootAware="false" android:enabled="@bool/enable_system_foreground_service_default" android:exported="false" android:name="androidx.work.impl.foreground.SystemForegroundService"/>
+        <receiver android:directBootAware="false" android:enabled="true" android:exported="false" android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"/>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_OKAY"/>
+                <action android:name="android.intent.action.BATTERY_LOW"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy">
+            <intent-filter>
+                <action android:name="android.intent.action.DEVICE_STORAGE_LOW"/>
+                <action android:name="android.intent.action.DEVICE_STORAGE_OK"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="@bool/enable_system_alarm_service_default" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver">
+            <intent-filter>
+                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="true" android:exported="true" android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver" android:permission="android.permission.DUMP">
+            <intent-filter>
+                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS"/>
+            </intent-filter>
+        </receiver>
+        <service android:directBootAware="true" android:exported="false" android:name="androidx.room.MultiInstanceInvalidationService"/>
+        <activity android:enabled="false" android:exported="false" android:launchMode="singleInstance" android:name="com.google.android.play.core.missingsplits.PlayCoreMissingSplitsActivity" android:process=":playcore_missing_splits_activity" android:stateNotNeeded="true"/>
+        <activity android:enabled="false" android:exported="false" android:name="com.google.android.play.core.common.PlayCoreDialogWrapperActivity" android:stateNotNeeded="true" android:theme="@style/Theme.PlayCore.Transparent"/>
+        <service android:enabled="false" android:exported="true" android:name="com.google.android.play.core.assetpacks.AssetPackExtractionService">
+            <meta-data android:name="com.google.android.play.core.assetpacks.versionCode" android:value="11000"/>
+        </service>
+        <service android:enabled="false" android:exported="false" android:name="com.google.android.play.core.assetpacks.ExtractionForegroundService"/>
+        <meta-data android:name="com.google.android.play.billingclient.version" android:value="4.0.0"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize" android:exported="false" android:name="com.android.billingclient.api.ProxyBillingActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+    </application>
+</manifest>

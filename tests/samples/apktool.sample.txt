@@ -1,0 +1,3 @@
+to generate sample for decompiled app, open terminal and navigate to test folder, then run:
+ 
+ java -jar ../lib.apktool.jar d -o decompile.sample.apk sample.apk 
