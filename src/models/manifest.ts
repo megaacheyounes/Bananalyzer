@@ -1,12 +1,13 @@
 export interface AndroidManifest {
-  versionCode: number;
+  versionCode: string;
   versionName: string;
-  compileSdkVersion: number;
+  compileSdkVersion: string;
   compileSdkVersionCodename: string;
   package: string;
-  platformBuildVersionCode: number;
-  platformBuildVersionName: number;
+  platformBuildVersionCode: string;
+  platformBuildVersionName: string;
   usesPermissions: UsesPermission[];
+  //todo: add types
   permissions: any[];
   permissionTrees: any[];
   permissionGroups: any[];

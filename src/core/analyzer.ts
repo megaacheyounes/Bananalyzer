@@ -19,7 +19,7 @@ import {
 import { AnalyzedApk } from '../models/analyzedApk';
 import { APK } from '../models/apk';
 import { Kits } from '../models/kits';
-import { Activity, AndroidManifest, Service, UsesPermission, IntentFilter3, Action3 } from '../models/manifest';
+import { Activity, AndroidManifest, Service, UsesPermission } from '../models/manifest';
 import { moveFile } from './mv';
 import { getApkInfo } from './utils';
 import { HUAWEI_MESSAGING_EVENT } from '../consts';

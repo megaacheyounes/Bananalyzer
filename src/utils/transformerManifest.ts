@@ -38,26 +38,29 @@ import {
 const transformToManifestType = (parsedManifest: ManifestRoot): AndroidManifest => {
   return {
     versionCode: versionCode(parsedManifest),
-    //   versionName: string,
-    //   compileSdkVersion: number,
-    //   compileSdkVersionCodename: string,
-    //   package: string,
-    //   platformBuildVersionCode: number,
-    //   platformBuildVersionName: number,
-    //   usesPermissions: UsesPermission[],
-    //   permissions: any[],
-    //   permissionTrees: any[],
-    //   permissionGroups: any[],
-    //   instrumentation?: any,
-    //   usesSdk: UsesSdk,
-    //   usesConfiguration?: any,
-    //   usesFeatures: UsesFeature[],
-    //   supportsScreens?: any,
-    //   compatibleScreens: any[],
-    //   supportsGlTextures: any[],
-    //   application: Application,
+    versionName: versionName(parsedManifest),
+    compileSdkVersion: compileSdkVersion(parsedManifest),
+    compileSdkVersionCodename: compileSdkVersionCodename(parsedManifest),
+    package: pakage(parsedManifest),
+    platformBuildVersionCode: platformBuildVersionCode(parsedManifest),
+    platformBuildVersionName: platformBuildVersionName(parsedManifest),
+    usesPermissions: usesPermissions(parsedManifest),
+    permissions: permissions(parsedManifest),
+    permissionTrees: permissionTrees(parsedManifest),
+    permissionGroups: permissionGroups(parsedManifest),
+    instrumentation: instrumentation(parsedManifest),
+    usesSdk: usesSdk(parsedManifest),
+    queries: queries(parsedManifest),
+    usesConfiguration: usesConfiguration(parsedManifest),
+    usesFeatures: usesFeatures(parsedManifest),
+    supportsScreens: supportsScreens(parsedManifest),
+    compatibleScreens: compatibleScreens(parsedManifest),
+    supportsGlTextures: supportsGlTextures(parsedManifest),
+    application: application(parsedManifest),
   };
 };
+
+const supportsGlTexture = (parsedManifest: ManifestRoot) => {};
 
 const versionCode = (parsedManifest: ManifestRoot) => {
   //todo:
@@ -270,7 +273,7 @@ const usesLibrary = (app: XmlApplication): UsesLibrary[] => {
 const provider = (app: XmlApplication): Provider[] => {
   const result: Provider[] = [];
 
-  app['uses-library'].forEach((xmlLib: XmlUsesLibrary) => {});
+  app.provider.forEach((xmlProvider: XmlProvider) => {});
 
   return result;
 };
