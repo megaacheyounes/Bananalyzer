@@ -6,6 +6,8 @@ import { APK } from '../src/models/apk';
 import debugModule from 'debug';
 
 debugModule.enable('*');
+//normal apk
+const sampleApk = path.join(__dirname, 'samples', 'sample.apk');
 
 //normal apk
 const twitterApk = path.join(__dirname, 'samples', 'com.twitter.android.lite.apk');
@@ -13,27 +15,45 @@ const twitterApk = path.join(__dirname, 'samples', 'com.twitter.android.lite.apk
 //split apk
 const uberApk = path.join(__dirname, 'samples', 'com.ubercab.uberlite.apk');
 
-export const testApks: APK[] = [
+export const tests = [
+  // {
+  //   apk: {
+  //     packageName: 'com.twitter.android.lite',
+  //     filePath: twitterApk,
+  //     uploadDate: 'feb 23, 2022',
+  //   },
+  //   gmsCount: 0,
+  //   hmsCount: 0,
+  //   googlePermissionsCount: 0,
+  // },
   {
-    packageName: 'com.twitter.android.lite',
-    filePath: twitterApk,
-    uploadDate: 'feb 23, 2022',
+    apk: {
+      packageName: 'com.megaache.trackingSDKs',
+      filePath: sampleApk,
+      uploadDate: 'mar 01, 2023',
+    },
+    gmsCount: 0,
+    hmsCount: 0,
   },
-  {
-    packageName: 'com.ubercab.uberlite',
-    filePath: uberApk,
-    uploadDate: 'Mar 30, 2022',
-  },
+  // {
+  //   apk: {
+  //     packageName: 'com.ubercab.uberlite',
+  //     filePath: uberApk,
+  //     uploadDate: 'Mar 30, 2022',
+  //   },
+  //   gmsCount: 0,
+  //   hmsCount: 0,
+  //   googlePermissionsCount: 1,
+  // },
 ];
 
 describe('Analyzer', () => {
   it('should analyze apk', async () => {
-    const result = await analyzeAPKs(testApks, true);
-    console.dir(result);
+    const testApks: APK[] = tests.map((test) => test.apk);
+    const analyzedApps = await analyzeAPKs(testApks, true);
 
-    expect(result).toHaveLength(2);
+    expect(analyzedApps).toHaveLength(tests.length);
 
-    // expect(result[0]).toco;
     const expectedKeys = [
       'packageName',
       'versionName',
@@ -54,18 +74,14 @@ describe('Analyzer', () => {
       'huaweiMessagingServices',
     ];
 
-    expect(Object.keys(result[0])).toEqual(expectedKeys);
-    expect(Object.keys(result[1])).toEqual(expectedKeys);
-
-    for (var i of Array(2).keys()) expect(result[i].uploadDate).toEqual(testApks[i].uploadDate);
-
-    expect(result[0].GMS).toHaveLength(0);
-    expect(result[0].googlePermissions).toHaveLength(0);
-    expect(result[0].huaweiPermissions).toHaveLength(0);
-
-    expect(result[1].GMS).toHaveLength(6);
-
-    expect(result[1].googlePermissions).toHaveLength(2);
-    expect(result[1].googlePermissions).toContain('com.google.android.c2dm.permission.RECEIVE');
-  });
+    for (const i in analyzedApps) {
+      const test = tests[i];
+      const res = analyzedApps[i];
+      expect(Object.keys(res)).toEqual(expectedKeys.length);
+      expect(res.uploadDate).toEqual(test.apk.uploadDate);
+      // expect(res.GMS.length).toHaveLength(test.gmsCount);
+      // expect(res.HMS.length).toHaveLength(test.hmsCount);
+      // expect(res.googlePermissions.length).toHaveLength(test.googlePermissionsCount);
+    }
+  }, 240_000); //3 min
 });

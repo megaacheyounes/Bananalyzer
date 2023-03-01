@@ -3,6 +3,7 @@
 
 import debugModule from 'debug';
 import internal from 'stream';
+import { deprecate } from 'util';
 import * as Zip from 'yauzl';
 import { ANDROID_MANIFEST } from '../../consts';
 
@@ -13,6 +14,13 @@ import ManifestParser from './manifestParser';
 
 const debug = debugModule('apkreader');
 
+/**
+ *
+ * @param apk
+ * @param options
+ * @returns
+ * @deprecated
+ */
 export const readManifest = (apk: string, options = { debug: false }) =>
   new Promise<AndroidManifest>(async (resolve, reject) => {
     try {

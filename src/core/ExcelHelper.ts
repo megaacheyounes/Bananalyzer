@@ -3,7 +3,7 @@ import debugModule from 'debug';
 import path from 'path';
 import xlsx from 'xlsx';
 
-import { AnalyzedApk } from '../models/analyzedApk';
+import { AnalyzedApk } from '../models/analyzedApp';
 import { ExcelRow } from '../models/excelRow';
 import { IS_PROD } from '../consts';
 

@@ -32,12 +32,12 @@ describe('Decompiler', () => {
 
     expect(result.isSuccessful).toEqual(true);
 
-    expect(result.resultPath).toBeTruthy();
-    expect(fs.existsSync(result.resultPath!)).toEqual(true);
+    expect(result.manifestPath).toBeTruthy();
+    expect(fs.existsSync(result.decompileFolderPath!)).toEqual(true);
 
-    const manifestFile = path.join(result.resultPath!, ANDROID_MANIFEST);
+    const manifestFile = path.join(result.decompileFolderPath!, ANDROID_MANIFEST);
 
-    const smaliFolder = path.join(result.resultPath!, 'smali');
+    const smaliFolder = path.join(result.decompileFolderPath!, 'smali');
 
     expect(fs.existsSync(manifestFile)).toEqual(true);
     expect(fs.existsSync(smaliFolder)).toEqual(true);

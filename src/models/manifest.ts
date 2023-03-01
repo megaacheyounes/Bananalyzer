@@ -6,19 +6,19 @@ export interface AndroidManifest {
   package: string;
   platformBuildVersionCode: string;
   platformBuildVersionName: string;
-  usesPermissions: UsesPermission[];
+  usesPermissions?: UsesPermission[];
   //todo: add types
   permissions: any[];
-  permissionTrees: any[];
-  permissionGroups: any[];
+  permissionTrees?: any[];
+  permissionGroups?: any[];
   instrumentation?: any;
-  usesSdk: UsesSdk;
+  usesSdk?: UsesSdk;
   usesConfiguration?: any;
-  usesFeatures: UsesFeature[];
-  queries: Query[];
+  usesFeatures?: UsesFeature[];
+  queries?: Query[];
   supportsScreens?: any;
-  compatibleScreens: any[];
-  supportsGlTextures: any[];
+  compatibleScreens?: any[];
+  supportsGlTextures?: any[];
   application: Application;
 }
 
@@ -37,11 +37,11 @@ export interface Application {
   activities: Activity[];
   activityAliases?: any[];
   launcherActivities: Activity[];
-  services: Service[];
-  receivers: Receiver[];
-  providers: Provider[];
-  usesLibraries: UsesLibrary[];
-  metaData: MetaData[];
+  services?: Service[];
+  receivers?: Receiver[];
+  providers?: Provider[];
+  usesLibraries?: UsesLibrary[];
+  metaData?: MetaData[];
 }
 
 export interface Query {

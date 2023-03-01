@@ -2,7 +2,7 @@ import path from 'path';
 import { MyFlags, commitSuicide } from '../cliHelper';
 import { cleanDataFolder, analyzeAPKs } from '../core/analyzer';
 import { APK } from '../models/apk';
-import { AnalyzedApk } from '../models/analyzedApk';
+import { AnalyzedApk } from '../models/analyzedApp';
 import { saveResult } from '../core/ExcelHelper';
 import { EXPORT_DIR } from '../consts';
 import debugModule from 'debug';

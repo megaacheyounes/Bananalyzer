@@ -1,0 +1,213 @@
+{
+    "versionCode": "0",
+    "versionName": "0",
+    "compileSdkVersion": "30",
+    "compileSdkVersionCodename": "11",
+    "package": "com.twitter.android.lite",
+    "platformBuildVersionCode": "30",
+    "platformBuildVersionName": "11",
+    "usesPermissions": [
+        {
+            "name": "android.permission.INTERNET"
+        }
+    ],
+    "queries": [
+        {
+            "intent": [
+                {
+                    "action": [
+                        {
+                            "name": "android.intent.action.VIEW"
+                        }
+                    ],
+                    "category": [
+                        {
+                            "name": "android.intent.category.BROWSABLE"
+                        }
+                    ],
+                    "data": [
+                        {
+                            "scheme": "https"
+                        }
+                    ]
+                }
+            ],
+            "package": []
+        }
+    ],
+    "usesFeatures": [],
+    "application": {
+        "theme": "@android:style/Theme.Translucent.NoTitleBar",
+        "label": "@string/appName",
+        "icon": "@mipmap/ic_launcher",
+        "name": "com.twitter.android.lite.Application",
+        "allowBackup": true,
+        "supportsRtl": true,
+        "appComponentFactory": "androidx.core.app.CoreComponentFactory",
+        "activities": [
+            {
+                "name": "com.twitter.android.lite.LauncherActivity",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.SEND"
+                            },
+                            {
+                                "name": "android.intent.action.SEND_MULTIPLE"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {},
+                            {},
+                            {},
+                            {},
+                            {},
+                            {}
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.LAUNCHER"
+                            }
+                        ],
+                        "data": []
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.VIEW"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            },
+                            {
+                                "name": "android.intent.category.BROWSABLE"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "host": "@string/hostName",
+                                "scheme": "https"
+                            }
+                        ]
+                    }
+                ],
+                "label": "@string/launcherName"
+            },
+            {
+                "name": "com.google.androidbrowserhelper.trusted.FocusActivity"
+            },
+            {
+                "name": "com.google.androidbrowserhelper.trusted.WebViewFallbackActivity",
+                "configChanges": "orientation|screenSize"
+            }
+        ],
+        "launcherActivities": [
+            {
+                "name": "com.twitter.android.lite.LauncherActivity",
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.SEND"
+                            },
+                            {
+                                "name": "android.intent.action.SEND_MULTIPLE"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": [
+                            {},
+                            {},
+                            {},
+                            {},
+                            {},
+                            {}
+                        ]
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.MAIN"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.LAUNCHER"
+                            }
+                        ],
+                        "data": []
+                    },
+                    {
+                        "action": [
+                            {
+                                "name": "android.intent.action.VIEW"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            },
+                            {
+                                "name": "android.intent.category.BROWSABLE"
+                            }
+                        ],
+                        "data": [
+                            {
+                                "host": "@string/hostName",
+                                "scheme": "https"
+                            }
+                        ]
+                    }
+                ],
+                "label": "@string/launcherName"
+            }
+        ],
+        "activityAliases": [],
+        "services": [
+            {
+                "name": "com.twitter.android.lite.DelegationService",
+                "exported": false,
+                "intentFilters": [
+                    {
+                        "action": [
+                            {
+                                "name": "android.support.customtabs.trusted.TRUSTED_WEB_ACTIVITY_SERVICE"
+                            }
+                        ],
+                        "category": [
+                            {
+                                "name": "android.intent.category.DEFAULT"
+                            }
+                        ],
+                        "data": []
+                    }
+                ],
+                "metaData": [],
+                "enabled": false
+            }
+        ],
+        "receivers": [],
+        "providers": [],
+        "usesLibraries": [],
+        "metaData": []
+    }
+}
