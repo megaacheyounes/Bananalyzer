@@ -47,13 +47,13 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
       if (!!decRes.error) {
         continue;
       }
-      console.log('decRes', decRes);
+      debug('decRes', decRes);
       const SDKs = await analyzeKits(apk);
-      console.log('sdks', SDKs);
+      debug('sdks', SDKs);
       const manifestResult = await analyzeManifest(decRes.manifestPath!);
-      console.log('manifestResult', manifestResult);
+      debug('manifestResult', manifestResult);
       const apkFileResult = analyzeApk(apk);
-      console.log('apkfileresult', apkFileResult);
+      debug('apkfileresult', apkFileResult);
 
       results.push({
         ...SDKs,
@@ -68,7 +68,7 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
 /*** parse manifest */
 const getCompanyMetadata = (manifestData: AndroidManifest, company: string) =>
   manifestData.application.metaData
-    ?.filter((m) => !!m.name && m.name.indexOf(company) != -1)
+    ?.filter((m) => !!m.name && m.name.toLowerCase().indexOf(company) != -1)
     .map((m) => `${m.name}=${m.value}`) || [];
 
 const getPermissions = (manifestData: AndroidManifest, company: string) =>

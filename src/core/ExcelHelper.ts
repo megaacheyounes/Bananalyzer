@@ -189,6 +189,7 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
 
       { wch: 50 }, // google messaging services
       { wch: 50 }, // hauwei messaging services
+      { wch: 50 }, // other
     ];
 
     if (!IS_PROD && wscols.length != HEADERS.length) {

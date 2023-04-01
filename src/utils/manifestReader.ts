@@ -35,7 +35,9 @@ import {
 } from './manifestParser';
 
 import fs from 'fs';
+import debugModule from 'debug';
 
+const debug = debugModule('manifestReader');
 export const INTENT_MAIN = 'android.intent.action.MAIN';
 export const CATEGORY_LAUNCHER = 'android.intent.category.LAUNCHER';
 
@@ -43,6 +45,7 @@ export const getAndroidManifestData = async (manifestPath: string): Promise<Andr
   const xmlContent = fs.readFileSync(manifestPath, 'utf-8');
 
   const xml = await parseManifest(xmlContent);
+  debug('xml parsing result', xml.manifest.application);
   return transformToManifest(xml);
 };
 
@@ -247,13 +250,13 @@ const metaData = (xmlMetadata: XmlMetadata[] | undefined): MetaData[] => {
   const result: MetaData[] = [];
 
   xmlMetadata?.forEach((xmlMetaData: XmlMetadata) => {
-    return {
+    result.push({
       name: xmlMetaData.$['android:name'],
       value: xmlMetaData.$['android:value'],
       resource: xmlMetaData.$['android:value'],
       //todo:
       screenOrientation: undefined,
-    };
+    });
   });
   return result;
 };

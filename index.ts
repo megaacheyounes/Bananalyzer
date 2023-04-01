@@ -58,7 +58,7 @@ const cmd = cliHelper.input[0];
 const flags = cliHelper.flags as MyFlags;
 
 const useExisting = flags.reuse; // if true, will use existing apk in ./download, if false, will force download apks
-const keepApks = flags.keep; // if set, the program will not delete the downloaded apks, apks can be found ./downloads folder
+let keepApks = flags.keep; // if set, the program will not delete the downloaded apks, apks can be found ./downloads folder
 const enableLogs = flags.debug; // debug logs
 let batchSize: number = +(flags.batch as any); // download and anlyze X apps at the same time, default value is 3
 
@@ -75,14 +75,6 @@ debug('SRC_DIR=', SRC_DIR);
 debug('EXPORT_DIR=', EXPORT_DIR);
 debug('APP_DATA_FOLDER =', APP_DATA_FOLDER);
 debug('APP_DATA_FOLDER =', DOWNLOAD_FOLDER);
-
-// set batch size
-debug(
-  'DebugLogs =' + enableLogs,
-  ' UseExisting =' + useExisting,
-  ', BatchSize = ' + batchSize,
-  ', KeepAPKs = ' + keepApks
-);
 
 if (IS_PROD && !flags.debug) {
   // hide all nodejs warnings
@@ -110,6 +102,7 @@ const main = async () => {
       break;
     }
     case CMD_APK: {
+      flags.keep = true;
       //analyze apk
       await new ApkCommand(flags).exec();
       pause();
@@ -128,5 +121,11 @@ const main = async () => {
     }
   }
 };
+debug(
+  'DebugLogs =' + enableLogs,
+  ' UseExisting =' + useExisting,
+  ', BatchSize = ' + batchSize,
+  ', KeepAPKs = ' + keepApks
+);
 
 main();

@@ -62,6 +62,7 @@ describe('Analyzer', () => {
       expect(res.uploadDate).toEqual(test.apk.uploadDate);
       expect(res.GMS.length).toHaveLength(test.gmsCount);
       expect(res.HMS.length).toHaveLength(test.hmsCount);
+      expect(res.googleMetadata.length).toBeGreaterThan(1);
       // expect(res.googlePermissions.length).toHaveLength(test.googlePermissionsCount);
     }
   }, 240_000); //3 min

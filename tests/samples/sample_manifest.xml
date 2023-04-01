@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:compileSdkVersion="33" android:compileSdkVersionCodename="13" package="com.megaache.trackingsdks" platformBuildVersionCode="33" platformBuildVersionName="13">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data android:scheme="https"/>
+        </intent>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService"/>
+        </intent>
+        <package android:name="com.huawei.hwid"/>
+        <package android:name="com.huawei.hms"/>
+        <package android:name="com.huawei.hwid.tv"/>
+        <package android:name="com.huawei.homevision.launcher"/>
+        <package android:name="com.hihonor.homevision.launcher"/>
+        <package android:name="com.huawei.systemmanager"/>
+        <package android:name="com.hihonor.systemmanager"/>
+        <package android:name="com.huawei.appmarket"/>
+        <intent>
+            <action android:name="com.huawei.hms.core.aidlservice"/>
+        </intent>
+        <intent>
+            <action android:name="com.huawei.hms.core"/>
+        </intent>
+    </queries>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <permission android:name="com.megaache.trackingsdks.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" android:protectionLevel="signature"/>
+    <uses-permission android:name="com.megaache.trackingsdks.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"/>
+    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"/>
+    <uses-permission android:name="com.huawei.permission.sec.MDM.v2"/>
+    <uses-permission android:name="com.hihonor.permission.sec.MDM.v2"/>
+    <uses-permission android:name="com.huawei.permission.sec.ACCESS_UDID"/>
+    <uses-permission android:name="com.hihonor.permission.sec.ACCESS_UDID"/>
+    <uses-permission android:name="com.huawei.permission.app.DOWNLOAD"/>
+    <uses-permission android:name="com.hihonor.permission.MANAGE_FOLD_SCREEN"/>
+    <uses-permission android:name="com.hihonor.permission.MANAGE_FOLD_SCREEN_PRIVILEGED"/>
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+    <application android:allowBackup="true" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:extractNativeLibs="false" android:fullBackupContent="@xml/appsflyer_backup_rules" android:icon="@mipmap/icon" android:label="@string/app_name" android:roundIcon="@mipmap/icon" android:supportsRtl="true" android:theme="@style/Theme.TrackingSDKs">
+        <activity android:exported="true" android:label="@string/app_name" android:name="com.megaache.trackingsdks.MainActivity" android:theme="@style/Theme.TrackingSDKs.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:exported="false" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:exported="false" android:name="com.google.android.gms.ads.AdActivity" android:theme="@android:style/Theme.Translucent"/>
+        <provider android:authorities="com.megaache.trackingsdks.mobileadsinitprovider" android:exported="false" android:initOrder="100" android:name="com.google.android.gms.ads.MobileAdsInitProvider"/>
+        <service android:enabled="true" android:exported="false" android:name="com.google.android.gms.ads.AdService"/>
+        <activity android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:exported="false" android:name="com.google.android.gms.ads.OutOfContextTestingActivity"/>
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+        <uses-library android:name="androidx.window.extensions" android:required="false"/>
+        <uses-library android:name="androidx.window.sidecar" android:required="false"/>
+        <provider android:authorities="com.megaache.trackingsdks.androidx-startup" android:exported="false" android:name="androidx.startup.InitializationProvider">
+            <meta-data android:name="androidx.emoji2.text.EmojiCompatInitializer" android:value="androidx.startup"/>
+            <meta-data android:name="androidx.work.WorkManagerInitializer" android:value="androidx.startup"/>
+            <meta-data android:name="androidx.lifecycle.ProcessLifecycleInitializer" android:value="androidx.startup"/>
+        </provider>
+        <meta-data android:name="com.huawei.hms.client.service.name:location" android:value="location:6.9.0.300"/>
+        <meta-data android:name="com.huawei.hms.min_api_level:location:location" android:value="1"/>
+        <meta-data android:name="com.huawei.hms.client.bi.setting" android:value="true"/>
+        <meta-data android:name="com.huawei.hms.min_api_level:com.huawei.hms:location:location" android:value="1"/>
+        <service android:directBootAware="false" android:enabled="@bool/enable_system_alarm_service_default" android:exported="false" android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"/>
+        <service android:directBootAware="false" android:enabled="@bool/enable_system_job_service_default" android:exported="true" android:name="androidx.work.impl.background.systemjob.SystemJobService" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service android:directBootAware="false" android:enabled="@bool/enable_system_foreground_service_default" android:exported="false" android:name="androidx.work.impl.foreground.SystemForegroundService"/>
+        <receiver android:directBootAware="false" android:enabled="true" android:exported="false" android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"/>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_OKAY"/>
+                <action android:name="android.intent.action.BATTERY_LOW"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy">
+            <intent-filter>
+                <action android:name="android.intent.action.DEVICE_STORAGE_LOW"/>
+                <action android:name="android.intent.action.DEVICE_STORAGE_OK"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="false" android:exported="false" android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="@bool/enable_system_alarm_service_default" android:exported="false" android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver">
+            <intent-filter>
+                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:directBootAware="false" android:enabled="true" android:exported="true" android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver" android:permission="android.permission.DUMP">
+            <intent-filter>
+                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS"/>
+            </intent-filter>
+        </receiver>
+        <meta-data android:name="hw_ads_sdk_type" android:value="4"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-prime" android:value="ads-prime:3.4.61.302"/>
+        <activity android:configChanges="fontScale|uiMode" android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.hms.hwid.internal.ui.activity.HwIdSignInHubActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.hms.account.internal.ui.activity.AccountSignInHubActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:hwid" android:value="hwid:6.9.0.301"/>
+        <meta-data android:name="com.huawei.hms.min_api_level:hwid:hwid" android:value="1"/>
+        <meta-data android:name="com.huawei.hms.min_api_level:hwid:account" android:value="13"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-identifier" android:value="ads-identifier:3.4.56.300"/>
+        <meta-data android:name="com.huawei.hms.min_api_level:pps-phone:adsbrainkit" android:value="1"/>
+        <receiver android:exported="true" android:name="com.kochava.tracker.legacyreferrer.LegacyReferrerReceiver" android:priority="999">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+        <service android:directBootAware="true" android:exported="false" android:name="androidx.room.MultiInstanceInvalidationService"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-lite-prime" android:value="ads-lite-prime:13.4.61.302"/>
+        <meta-data android:name="networkkit_dynamic_load" android:value="disable"/>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:label="" android:name="com.huawei.opendevice.open.OAIDSettingActivity" android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="com.megaache.trackingsdks" android:scheme="hwppsprivacy"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.WithActionBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.WithActionBar"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:label="" android:name="com.huawei.opendevice.open.SimplePrivacyActivity" android:theme="@android:style/Theme.DeviceDefault">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.WithActionBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.WithActionBar"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:label="" android:name="com.huawei.opendevice.open.PrivacyActivity" android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="com.megaache.trackingsdks" android:scheme="hwppsprivacydetail"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.WithActionBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.WithActionBar"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="true" android:label="" android:name="com.huawei.opendevice.open.WhyThisAdStatementActivity" android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="com.megaache.trackingsdks" android:scheme="hwppsprivacyadinfo"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.WithActionBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.WithActionBar"/>
+        </activity>
+        <meta-data android:name="hw.theme_type" android:value="273"/>
+        <meta-data android:name="permission.reason.android.permission-group.CALENDAR" android:resource="@string/hiad_calender_description_new"/>
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <provider android:authorities="com.megaache.trackingsdks.pps.innerapiprovider" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.provider.InnerApiProvider"/>
+        <service android:exported="false" android:name="com.huawei.android.hms.ppskit.PpsCoreService">
+            <intent-filter>
+                <action android:name="com.huawei.android.hms.ppskit.PPS_API_SERVICE"/>
+            </intent-filter>
+        </service>
+        <activity android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.InstallActivity" android:theme="@android:style/Theme.Light.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Light.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Light.NoTitleBar"/>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.HMSSDKInstallActivity" android:theme="@android:style/Theme.Light.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Light.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Light.NoTitleBar"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:label=" " android:name="com.huawei.openalliance.ad.ppskit.activity.PPSActivity">
+            <intent-filter>
+                <action android:name="com.huawei.hms.pps.action.PPS_DETAIL"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic"/>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:label=" " android:name="com.huawei.openalliance.ad.ppskit.activity.InnerPPSActivity">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic"/>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:label=" " android:name="com.huawei.openalliance.ad.ppskit.activity.InnerPPSArActivity">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic"/>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.PPSRewardActivity" android:screenOrientation="behind" android:theme="@style/HiAdThemeNoActionBarFullScreen">
+            <intent-filter>
+                <action android:name="com.huawei.hms.pps.action.PPS_REWARD"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.NoActionBar.Fullscreen"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.NoActionBar.Fullscreen"/>
+            <meta-data android:name="android.notch_support" android:value="false"/>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.InnerPPSRewardActivity" android:theme="@style/HiAdThemeNoActionBarFullScreen">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.NoActionBar.Fullscreen"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.NoActionBar.Fullscreen"/>
+            <meta-data android:name="android.notch_support" android:value="false"/>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.InnerPPSInterstitialAdActivity" android:screenOrientation="sensor" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar.Fullscreen"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar.Fullscreen"/>
+            <meta-data android:name="android.notch_support" android:value="false"/>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.InterstitialAdActivity" android:screenOrientation="sensor" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="com.huawei.hms.pps.action.PPS_INTERSTITIAL"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar.Fullscreen"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar.Fullscreen"/>
+            <meta-data android:name="android.notch_support" android:value="false"/>
+        </activity>
+        <activity android:configChanges="orientation|screenSize" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.AgProtocolActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.PPSArActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="com.huawei.hms.pps.action.PPS_AR"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.NoActionBar.Fullscreen"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.NoTitleBar.Fullscreen"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.SplashFeedbackActivity" android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="com.huawei.hms.pps.action.PPS_SPLASH_FEEDBACK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.WithActionBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.WithActionBar"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:label="" android:name="com.huawei.openalliance.ad.ppskit.activity.AdComplainActivity" android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="com.huawei.hms.pps.action.PPS_NATIVE_COMPLAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.WithActionBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.WithActionBar"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.PPSFullScreenNotifyActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <activity android:configChanges="fontScale|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.openalliance.ad.ppskit.activity.ComplianceActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <meta-data android:name="com.huawei.hms.client.service.name:base" android:value="base:6.9.0.301"/>
+        <meta-data android:name="com.huawei.hms.min_api_level:base:hmscore" android:value="1"/>
+        <meta-data android:name="availableLoaded" android:value="yes"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-banner" android:value="ads-banner:13.4.61.302"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-template" android:value="ads-template:13.4.61.302"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-native" android:value="ads-native:13.4.61.302"/>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.openalliance.ad.activity.FeedbackActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-interstitial" android:value="ads-interstitial:13.4.61.302"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-reward" android:value="ads-reward:13.4.61.302"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-lang" android:value="ads-lang:13.4.61.302"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-splash" android:value="ads-splash:13.4.61.302"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-instream" android:value="ads-instream:13.4.61.302"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-jsbridge" android:value="ads-jsbridge:3.4.61.302"/>
+        <provider android:authorities="com.megaache.trackingsdks.AGCInitializeProvider" android:exported="false" android:name="com.huawei.agconnect.core.provider.AGConnectInitializeProvider"/>
+        <service android:exported="false" android:name="com.huawei.agconnect.core.ServiceDiscovery"/>
+        <activity android:configChanges="fontScale|layoutDirection|locale|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:excludeFromRecents="true" android:exported="false" android:hardwareAccelerated="true" android:name="com.huawei.hms.activity.BridgeActivity" android:screenOrientation="behind" android:theme="@style/Base_Translucent">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent"/>
+        </activity>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:exported="false" android:name="com.huawei.hms.activity.EnableServiceActivity"/>
+        <meta-data android:name="com.huawei.hms.client.service.name:ads-base" android:value="ads-base:13.4.61.302"/>
+        <activity android:exported="true" android:name="com.huawei.openalliance.ad.activity.PPSLauncherActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="com.megaache.trackingsdks" android:scheme="hwpps"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <activity android:exported="false" android:name="com.huawei.openalliance.ad.activity.PPSBridgeActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <activity android:exported="false" android:name="com.huawei.openalliance.ad.activity.PPSNotificationActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <activity android:configChanges="orientation|screenSize" android:exported="false" android:name="com.huawei.openalliance.ad.activity.AgProtocolActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <meta-data android:name="com.huawei.hms.min_api_level:pps-phone:adsuiengine" android:value="1"/>
+        <activity android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.openalliance.ad.activity.TemplateStubActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.huawei.hms.pps.action.PPS_STUB"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <activity android:configChanges="fontScale|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode" android:excludeFromRecents="true" android:exported="false" android:name="com.huawei.openalliance.ad.activity.ComplianceActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <meta-data android:name="hwc-theme" android:value="androidhwext:style/Theme.Emui.Translucent.NoTitleBar"/>
+            <meta-data android:name="hnc-theme" android:value="androidhnext:style/Theme.Magic.Translucent.NoTitleBar"/>
+        </activity>
+        <provider android:authorities="com.megaache.trackingsdks.pps.ecprovider" android:exported="true" android:name="com.huawei.openalliance.ad.provider.PPSECProvider"/>
+        <meta-data android:name="componentverify_ag_cbg_root" android:value="@string/ag_sdk_cbg_root"/>
+    </application>
+</manifest>
