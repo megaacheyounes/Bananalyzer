@@ -10,7 +10,7 @@
   "displayName": "Banana Analyzer",
   "scripts": {
     "dev": "cross-env NODE_ENV=debug ts-node dev.ts",
-    "preinstall": "npx npm-force-resolutions",
+    "preinstall": "([ ! -f package-lock.json ] && npm install --package-lock-only --ignore-scripts --no-audit); npx npm-force-resolutions",
     "start": "cross-env NODE_ENV=debug ts-node index.ts -k -r -d",
     "start:package": "cross-env NODE_ENV=debug ts-node index.ts package -k -d --name",
     "start:apk": "cross-env NODE_ENV=debug ts-node index.ts apk -k -d --path",
