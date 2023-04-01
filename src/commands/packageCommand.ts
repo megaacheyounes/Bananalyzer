@@ -6,14 +6,6 @@ import debugModule from 'debug';
 const debug = debugModule('PackageCommand');
 
 export default class PackageCommand extends Command {
-  async downloadChromium() {
-    try {
-      await downoadChromiumIfMissing();
-    } catch (e) {
-      debug(e);
-    }
-  }
-
   async exec(): Promise<boolean> {
     const packageName = this.flags.name;
     debug('packagename= ' + packageName);
@@ -27,8 +19,6 @@ export default class PackageCommand extends Command {
 
     const resultFileName: string = packageName;
     const resultPath = this.getResultFilePath(resultFileName);
-
-    this.downloadChromium();
 
     let result: APK | null;
 

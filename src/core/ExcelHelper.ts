@@ -3,7 +3,7 @@ import debugModule from 'debug';
 import path from 'path';
 import xlsx from 'xlsx';
 
-import { AnalyzedApk } from '../models/analyzedApp';
+import { AnalyzedApk, AnalyzedApp } from '../models/analyzedApp';
 import { ExcelRow } from '../models/excelRow';
 import { IS_PROD } from '../consts';
 
@@ -31,6 +31,7 @@ const HEADER_HUAWEI_SERVICES = 'Huawei Servicies';
 
 const HEADER_GOOGLE_MESSAGING_SERVICES = 'Google Messaging Services';
 const HEADER_HUAWEI_MESSAGING_SERVICES = 'Huawei Messaging Services';
+const HEADER_OTHERS = 'Others';
 
 // 3- write to excel file
 export const HEADERS = [
@@ -52,9 +53,10 @@ export const HEADERS = [
   HEADER_HUAWEI_SERVICES,
   HEADER_GOOGLE_MESSAGING_SERVICES,
   HEADER_HUAWEI_MESSAGING_SERVICES,
+  HEADER_OTHERS,
 ];
 
-export const getRowFromApp = (app: AnalyzedApk): ExcelRow => {
+export const getRowFromApp = (app: AnalyzedApp): ExcelRow => {
   const appAsRow: ExcelRow = {};
   const asString = (arr: string[]) => (arr || []).join(',\n');
   appAsRow[HEADER_PACKAGE_NAME] = app.packageName;
@@ -66,8 +68,8 @@ export const getRowFromApp = (app: AnalyzedApk): ExcelRow => {
   appAsRow[HEADER_GMS_KITS] = (app['GMS'] || []).join(' | ');
   appAsRow[HEADER_HMS_KITS] = (app['HMS'] || []).join(' | ');
 
-  appAsRow[HEADER_GOOGLE_METADATAS] = asString(app.googleMetadatas);
-  appAsRow[HEADER_HUAWEI_METADATAS] = asString(app.huaweiMetadatas);
+  appAsRow[HEADER_GOOGLE_METADATAS] = asString(app.googleMetadata);
+  appAsRow[HEADER_HUAWEI_METADATAS] = asString(app.huaweiMetadata);
 
   appAsRow[HEADER_GOOGLE_PERMISSIONS] = asString(app.googlePermissions);
   appAsRow[HEADER_HUAWEI_PERMISSIONS] = asString(app.huaweiPermissions);
@@ -81,10 +83,12 @@ export const getRowFromApp = (app: AnalyzedApk): ExcelRow => {
   appAsRow[HEADER_GOOGLE_MESSAGING_SERVICES] = asString(app.googleMessagingServices);
   appAsRow[HEADER_HUAWEI_MESSAGING_SERVICES] = asString(app.huaweiMessagingServices);
 
+  appAsRow[HEADER_OTHERS] = asString(app.others || []);
+
   return appAsRow;
 };
 
-export const saveResult = async (apps: AnalyzedApk[], resultPath: string) =>
+export const saveResult = async (apps: AnalyzedApp[], resultPath: string) =>
   new Promise<boolean>(async (resolve, reject) => {
     // transform data
     const data: ExcelRow[] = [];

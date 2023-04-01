@@ -1,12 +1,25 @@
 import debugModule from 'debug';
+import Bananalyzer from './src/Bananalyzer';
 import { analyzeAPKs } from './src/core/analyzer';
-import { testApks } from './tests/analyzer.test';
 
 const keepApks = true;
 const useExisting = true;
 debugModule.enable('*');
 
 (async () => {
+  //****************** */
+  // non-cli usage tests
+  const dl = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
+  console.log('dl', dl);
+  const result = await Bananalyzer.analyzeAPKs(
+    [
+      {
+        filePath: './tests/samples/sample.apk',
+      },
+    ],
+    true
+  );
+  console.log('result', result);
   // ******************************
   // todo: test getInnerApk
   // const path = await getInnerApk('D:\\__tasks__\\_analyze\\_toolss\\Bananalyzer\\downloads\\com.ahleen.voice.apk');
@@ -16,8 +29,8 @@ debugModule.enable('*');
   // // await downloadAPK('com.twitter.android.lite');
   // ******************************
   // todo: test analyze apks
-  const d = await analyzeAPKs([testApks[0]], true);
-  console.log(d);
+  // const d = await analyzeAPKs([testApks[0]], true);
+  // console.log(d);
   // ******************************
   // todo: test get apkinfo
   // const d = await getApkInfo('D:\\__tasks__\\_analyze\\_toolss\\Bananalyzer\\downloads\\com.ucare.we.apk');
@@ -86,4 +99,5 @@ debugModule.enable('*');
   // };
   // saveResult(analyzerRes, resultFileName);
   // saveResult(analyzerRes, resultFileName);
+  process.exit(0);
 })();

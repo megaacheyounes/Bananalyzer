@@ -28,14 +28,14 @@ const MESSAGING_EVENT = 'MESSAGING_EVENT';
  * @param {array} apks: list of downloaded apps/apk to analyze, example = [
  * {packageName:"package.name":filePath:"path/to/file.apk", uploadDate:"may 27, 2021"}
  * ]
- * @return {promise} resolved when all apks in packageNamesObj are analyzed
+ * @return {AnalyzedApp[]} resolved when all apks in packageNamesObj are analyzed
  * result example = {
  *    'com.landmarkgroup.splashfashions': {
  *     HMS: [ 'push' ],
  *      GMS: [ 'account', 'push', 'location', 'map', 'analytics', 'ads' ]
  *   }
  */
-export const analyzeAPKs = (apks: APK[], keepApks: boolean): Promise<AnalyzedApp[]> =>
+export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<AnalyzedApp[]> =>
   new Promise<AnalyzedApp[]>(async (resolve, reject) => {
     debug('analyzer:analyzing ', apks);
 
@@ -176,7 +176,7 @@ const analyzeManifest = async (manifestPath: string): Promise<AnalyzedManifest> 
   };
 };
 
-export const analyzeApk = (apk: APK): AnalyzedApk => {
+const analyzeApk = (apk: APK): AnalyzedApk => {
   // get apk last modification  time
   let apkCreationTime = '';
   try {

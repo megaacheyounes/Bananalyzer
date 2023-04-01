@@ -4,36 +4,34 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/megaacheyounes/bananalyzer/total)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/megaacheyounes/bananalyzer/issues)
 
-
 ## Bananalyzer
 
 A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata
 
 ## Contents
-- [How does it work?](#how-does-it-work)
-- [Usage](#usage)
-- [Demo](#demo)
-- [Download](#download)
-- [Instructions](#instructions)
-- [Notes](#notes)
 
+- [Use in code](#use-in-code) - [get apk direct download link](#get-apk-direct-download-link)
+  - [Notes](#notes)
+  - [TODO](#todo)
+  - [License](#license)
 
 ## How does it work?
 
 This is a simple nodejs script that has been packaged into an executable (exe) for ease of use. it uses chromium to download APKs from playstore using two sources (websites), then it uses a Java tool called "AppCheck" that looks inside the APK and determines what Google and Huawei SDKs are integrated, then it parses the AndroidManifest.xml file to get some metadata, finaly the tool exports the results into an excel file (scroll down to see a demo)
 
 ## Usage
+
 ```
   $ bananalyzer <command> [option]
 
-   COMMANDS 
+   COMMANDS
 
   file     Download and analyze a list of apps by providing a file that contains their package names
   package  Download and analyze an app by providing its package name
   apk      Analyze an Apk by providing its file path
   help     Print help information
 
-   OPTIONS 
+   OPTIONS
 
   -p, --path   Apk full path, required when using command 'apk'
   -n, --name   App package name, required when using Command 'package'
@@ -43,42 +41,44 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
   -b, --batch  Batch size, optional when using command 'file', Default: 3
 ```
 
-## Demo 
+## Demo
+
 <img src="/screenshot/bananalyzer_demo.gif" width="800" height="474"/>
 
 video: https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4
 
-## download 
+## download
+
 latest release: https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.2
 
 ## Instructions
 
 ##### Downloading and analyzing a list of apps
 
-1.  Download latest release and extract it
-2.  create a txt file and write the package names into it, one package name per line, see `example_apps.txt`
-3.  open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
-4.  navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`    
-5.  run the command `bananalyzer.exe file -k -r`   
-6.  Bananalyzer will open a file picker, choose the txt file that you created in step 1 and click `Open`   
-7.  Bananalyzer will start working, analyzing 3 apks at a time ( change batch count using --batch or -b). 
-8.  when finished, the results can be found in an excel file, that has the same name as the txt file (example: `example_apps.xlsx`)
+1. Download latest release and extract it
+2. create a txt file and write the package names into it, one package name per line, see `example_apps.txt`
+3. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
+4. navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`
+5. run the command `bananalyzer.exe file -k -r`
+6. Bananalyzer will open a file picker, choose the txt file that you created in step 1 and click `Open`
+7. Bananalyzer will start working, analyzing 3 apks at a time ( change batch count using --batch or -b).
+8. when finished, the results can be found in an excel file, that has the same name as the txt file (example: `example_apps.xlsx`)
 
 ##### Downloading and analyzing one app
 
-1.  open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
-2.  navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`    
-3.  run the command `bananalyzer.exe package --name 'com.package.name' -k -r`     
-4.  Bananalyzer will start downloading then analyzing the app 
-5.  when finished, the results can be found in an excel file, that has the same name as the package name (example: `com.package.name.xlsx`)
+1. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
+2. navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`
+3. run the command `bananalyzer.exe package --name 'com.package.name' -k -r`
+4. Bananalyzer will start downloading then analyzing the app
+5. when finished, the results can be found in an excel file, that has the same name as the package name (example: `com.package.name.xlsx`)
 
 ##### Analyze an apk
 
-1.  open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
-2.  navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`    
-3.  run the command `bananalyzer.exe apk --path 'C://apks/apk_name.apk'`     
-4.  Bananalyzer will start analyzing the apk 
-5.  when finished, the results can be found in an excel file, that has the same name as the apk file (example: `apk_name.xlsx`)
+1. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
+2. navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`
+3. run the command `bananalyzer.exe apk --path 'C://apks/apk_name.apk'`
+4. Bananalyzer will start analyzing the apk
+5. when finished, the results can be found in an excel file, that has the same name as the apk file (example: `apk_name.xlsx`)
 
 ## Run locally
 
@@ -87,20 +87,142 @@ latest release: https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.
 3. Run `npm install`
 4. Run `ts-node index.ts`
 
+# Use in code
+
+install
+
+`npm install banalyzer`
+
+get apk direct download link
+
+```typescript
+import Bananalyzer from './src/Bananalyzer';
+
+await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
+/*
+result 
+{
+  packageName: 'com.aswat.carrefouruae',
+  source: 'apk.support',
+  downloadLink: 'https://cdn.playstoreapi.com/index.php?ecp=6661ba176d3029632f5798bcfcf5d1dc&action=download&type=mapk', 
+  apkSize: '32.61 MB',
+  versionName: '18.0.21',
+  uploadDate: 'Mar 27, 2023'
+}
+*/
+```
+
+analyze an APK
+
+```typescript
+import Bananalyzer from './src/Bananalyzer';
+
+await Bananalyzer.analyzeAPKs(
+  [
+    {
+      filePath: './sample.apk',
+    },
+  ],
+  true
+);
+/*
+  result
+result [
+  {
+    HMS: [ 'account', 'location', 'ads' ],
+    GMS: [],
+    packageName: 'com.megaache.trackingsdks',
+    versionName: '0',
+    huaweiAppId: '',
+    googleMetadata: [],
+    huaweiMetadata: [],
+    googlePermissions: [
+      'com.google.android.gms.permission.AD_ID',
+      'com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE'
+    ],
+    huaweiPermissions: [
+      'com.huawei.permission.sec.MDM.v2',
+      'com.huawei.permission.sec.ACCESS_UDID',
+      'com.huawei.permission.app.DOWNLOAD'
+    ],
+    googleActivities: [
+      'com.google.android.gms.common.api.GoogleApiActivity',
+      'com.google.android.gms.ads.AdActivity',
+      'com.google.android.gms.ads.OutOfContextTestingActivity'
+    ],
+    huaweiActivities: [
+      'com.huawei.hms.hwid.internal.ui.activity.HwIdSignInHubActivity',
+      'com.huawei.hms.account.internal.ui.activity.AccountSignInHubActivity',
+      'com.huawei.opendevice.open.OAIDSettingActivity',
+      'com.huawei.opendevice.open.SimplePrivacyActivity',
+      'com.huawei.opendevice.open.PrivacyActivity',
+      'com.huawei.opendevice.open.WhyThisAdStatementActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.InstallActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.HMSSDKInstallActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.PPSActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSArActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.PPSRewardActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSRewardActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSInterstitialAdActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.InterstitialAdActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.AgProtocolActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.PPSArActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.SplashFeedbackActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.AdComplainActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.PPSFullScreenNotifyActivity',
+      'com.huawei.openalliance.ad.ppskit.activity.ComplianceActivity',
+      'com.huawei.openalliance.ad.activity.FeedbackActivity',
+      'com.huawei.hms.activity.BridgeActivity',
+      'com.huawei.hms.activity.EnableServiceActivity',
+      'com.huawei.openalliance.ad.activity.PPSLauncherActivity',
+      'com.huawei.openalliance.ad.activity.PPSBridgeActivity',
+      'com.huawei.openalliance.ad.activity.PPSNotificationActivity',
+      'com.huawei.openalliance.ad.activity.AgProtocolActivity',
+      'com.huawei.openalliance.ad.activity.TemplateStubActivity',
+      'com.huawei.openalliance.ad.activity.ComplianceActivity'
+    ],
+    googleServices: [ 'com.google.android.gms.ads.AdService' ],
+    huaweiServices: [
+      'com.huawei.android.hms.ppskit.PpsCoreService',
+      'com.huawei.agconnect.core.ServiceDiscovery'
+    ],
+    googleMessagingServices: [
+      'com.google.android.gms.ads.AdService',
+      'androidx.work.impl.background.systemalarm.SystemAlarmService',
+      'androidx.work.impl.background.systemjob.SystemJobService',
+      'androidx.work.impl.foreground.SystemForegroundService',
+      'androidx.room.MultiInstanceInvalidationService',
+      'com.huawei.agconnect.core.ServiceDiscovery'
+    ],
+    huaweiMessagingServices: [
+      'com.google.android.gms.ads.AdService',
+      'androidx.work.impl.background.systemalarm.SystemAlarmService',
+      'androidx.work.impl.background.systemjob.SystemJobService',
+      'androidx.work.impl.foreground.SystemForegroundService',
+      'androidx.room.MultiInstanceInvalidationService',
+      'com.huawei.agconnect.core.ServiceDiscovery'
+    ],
+    uploadDate: '',
+    apkCreationTime: '4/1/2023, 7:49:19 AM'
+  }
+]
+
+  */
+```
+
 ## Notes
 
-1.  Do not open the Excel file generated, while Bananalyzer is still running
-2.  Bananalyzer will fail to download some apps that are avaialble in certain regions only       
-3.  Bananalyzer has unlimited lives, and will commit suicide many times, but it's still being developed and will be made more stable :)  
-
+1. Do not open the Excel file generated, while Bananalyzer is still running
+2. Bananalyzer will fail to download some apps that are avaialble in certain regions only
+3. Bananalyzer has unlimited lives, and will commit suicide many times, but it's still being developed and will be made more stable :)
 
 ## TODO
 
-- [x]   Use a proper logging library for debugging instead of console.log 
-- [x]   Migrate to TypeScript 
-- [x]   Add unit tests
-- [ ]   Improve and add missing documentation
-
+- [x] Use a proper logging library for debugging instead of console.log
+- [x] Migrate to TypeScript
+- [x] Add unit tests
+- [ ] Improve and add missing documentation
 
 ## License
 

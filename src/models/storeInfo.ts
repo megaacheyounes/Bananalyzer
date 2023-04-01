@@ -3,7 +3,7 @@ export enum ApkSource {
   APPS_EVOZI = 'apps.evozi',
 }
 
-export interface StoreInfo {
+export interface ApkDownloadInfo {
   packageName: string;
   downloadLink?: string;
   uploadDate?: string;

@@ -1,11 +1,12 @@
 import path from 'path';
 import { MyFlags, commitSuicide } from '../cliHelper';
-import { cleanDataFolder, analyzeAPKs } from '../core/analyzer';
+import { analyzeAPKs } from '../core/analyzer';
 import { APK } from '../models/apk';
-import { AnalyzedApk } from '../models/analyzedApp';
+import { AnalyzedApk, AnalyzedApp } from '../models/analyzedApp';
 import { saveResult } from '../core/ExcelHelper';
 import { EXPORT_DIR } from '../consts';
 import debugModule from 'debug';
+import { cleanDataFolder } from '../core/analyzer/AnalyzeKits';
 const debug = debugModule('command');
 
 export abstract class Command {
@@ -43,11 +44,11 @@ export abstract class Command {
     // delete previous batch (not original (downloaded) APKs) if exists
     await cleanDataFolder();
 
-    const analyzerRes: AnalyzedApk[] = await analyzeAPKs(apks, this.flags.keep);
+    const analyzerRes: AnalyzedApp[] = await analyzeAPKs(apks, this.flags.keep);
     debug('anlyzer res: ', analyzerRes);
 
     const notAnalyzed: APK[] = apks.filter(
-      (apk: APK) => !analyzerRes.map((app: AnalyzedApk) => app.packageName).includes(apk.packageName || '')
+      (apk: APK) => !analyzerRes.map((app: AnalyzedApp) => app.packageName).includes(apk.packageName || '')
     );
 
     await saveResult(analyzerRes, resultPath).catch((e) => {

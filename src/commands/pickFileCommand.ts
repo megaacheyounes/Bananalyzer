@@ -57,8 +57,6 @@ export class PickFileCommand extends PackageCommand {
     const resultFileName: string = path.basename(packageNamesFile).split('.')[0];
     const resultPath = this.getResultFilePath(resultFileName);
 
-    await this.downloadChromium();
-
     let batchNum = 0;
 
     const batchCount: number = Math.ceil(packageNames.length / this.flags.batch);

@@ -1,3 +1,4 @@
+import { AnalyzedApp } from './../src/models/analyzedApp';
 import path from 'path';
 
 import { analyzeAPKs } from '../src/core/analyzer';
@@ -28,12 +29,12 @@ export const tests = [
   // },
   {
     apk: {
-      packageName: 'com.megaache.trackingSDKs',
+      packageName: 'com.megaache.trackingsdks',
       filePath: sampleApk,
       uploadDate: 'mar 01, 2023',
     },
     gmsCount: 0,
-    hmsCount: 0,
+    hmsCount: 3,
   },
   // {
   //   apk: {
@@ -54,33 +55,13 @@ describe('Analyzer', () => {
 
     expect(analyzedApps).toHaveLength(tests.length);
 
-    const expectedKeys = [
-      'packageName',
-      'versionName',
-      'uploadDate',
-      'apkCreationTime',
-      'huaweiAppId',
-      'GMS',
-      'HMS',
-      'googleMetadatas',
-      'huaweiMetadatas',
-      'googlePermissions',
-      'huaweiPermissions',
-      'googleActivities',
-      'huaweiActivities',
-      'googleServices',
-      'huaweiServices',
-      'googleMessagingServices',
-      'huaweiMessagingServices',
-    ];
-
     for (const i in analyzedApps) {
       const test = tests[i];
       const res = analyzedApps[i];
-      expect(Object.keys(res)).toEqual(expectedKeys.length);
+      expect(res.packageName).toEqual(test.apk.packageName);
       expect(res.uploadDate).toEqual(test.apk.uploadDate);
-      // expect(res.GMS.length).toHaveLength(test.gmsCount);
-      // expect(res.HMS.length).toHaveLength(test.hmsCount);
+      expect(res.GMS.length).toHaveLength(test.gmsCount);
+      expect(res.HMS.length).toHaveLength(test.hmsCount);
       // expect(res.googlePermissions.length).toHaveLength(test.googlePermissionsCount);
     }
   }, 240_000); //3 min

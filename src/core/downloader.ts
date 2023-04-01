@@ -12,7 +12,8 @@ import puppeteer from 'puppeteer-extra';
 
 import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from '../consts';
 import { APK } from '../models/apk';
-import { ApkSource, StoreInfo } from '../models/storeInfo';
+import { ApkSource, ApkDownloadInfo } from '../models/storeInfo';
+import BrowserUtils from '../utils/browserUtils';
 import { delay, downloadFileGot } from './utils';
 
 const debug = debugModule('downloader');
@@ -32,8 +33,8 @@ let browser: undefined | Browser;
 //fixme: causes errors when building .exe
 // puppeteer.use(stealthPlugin());
 // download from https://apk.support/download-app
-export const getDownloadLink1 = (page: Page, packageName: string) =>
-  new Promise<StoreInfo>(async (resolve, reject) => {
+const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolean) =>
+  new Promise<ApkDownloadInfo>(async (resolve, reject) => {
     try {
       debug('getDownloadLink1 => ' + packageName);
       const link = 'https://apk.support/apk-downloader';
@@ -64,33 +65,55 @@ export const getDownloadLink1 = (page: Page, packageName: string) =>
         return reject(Error('the requested app is not found or invalid'));
       }
 
-      const storeInfo: StoreInfo = {
+      const storeInfo: ApkDownloadInfo = {
         packageName,
         source: ApkSource.APK_SUPPORT,
       };
 
-      const allLinksEl = await page.$('.bdlinks:nth-child(1) a');
-      const firstLinkHref = await page.evaluate((el) => el.href, allLinksEl);
-      storeInfo.downloadLink = firstLinkHref;
+      const mergeApkButtonSelector = '#zipapk';
+      const splitApkEl = await page.$(mergeApkButtonSelector);
 
-      // we got apk info and download link
-      const apkSizeEl = await page.$('.bdlinks a span:nth-child(3)');
-      storeInfo.apkSize = await page.evaluate((el) => (el ? el.textContent : ''), apkSizeEl);
+      if (!!splitApkEl && mergeSplitApk) {
+        await page.click(mergeApkButtonSelector);
+        // wait for merged apk download link
+        const apkLinkSelector = '#zip_area > a';
+        await page.waitForSelector(apkLinkSelector, { timeout: 60 * 1000 });
 
-      const versionRegex = /\"VersionName\": \"(.*)\"/;
-      // get app version name
-      const apkInfoJson = await page.$eval('.jinfo', (el: any) => el.innerText);
+        const apkDownloadLink = await BrowserUtils.getHref(page, apkLinkSelector);
 
-      const versionNameMatchRes = apkInfoJson.match(versionRegex);
+        const apkSizeSelector = '#zip_area > a > span:nth-child(3)';
+        const apkDownloadSize = await BrowserUtils.getTextContent(page, apkSizeSelector);
 
-      if (!!versionNameMatchRes && versionNameMatchRes.length > 1) storeInfo.versionName = versionNameMatchRes[1];
+        storeInfo.downloadLink = apkDownloadLink;
+        storeInfo.apkSize = apkDownloadSize;
+      } else {
+        const firstLinkSelector = '#sse > div:nth-child(1) > a';
+        const firstLinkHref = await BrowserUtils.getHref(page, firstLinkSelector);
+        storeInfo.downloadLink = firstLinkHref;
 
-      const uploadDateRegex = /UploadDate\"\: \"(.*)\"/;
+        // we got apk info and download link
+        const firstApkSizeSelector = '#sse > div:nth-child(1) > a > span.der_size';
+        storeInfo.apkSize = await BrowserUtils.getTextContent(page, firstApkSizeSelector);
+      }
 
-      const uploadDateMatchRes = apkInfoJson.match(uploadDateRegex);
-      if (!!uploadDateMatchRes && uploadDateMatchRes.length > 1) storeInfo.uploadDate = uploadDateMatchRes[1];
+      const versionNameSelector = '#downloader_area > div.jinfo > ul > li:nth-child(5)';
+      const versionNameText = await BrowserUtils.getTextContent(page, versionNameSelector);
+      if (!!versionNameText) {
+        const versionRegex = /\"(Version Name|VersionName)\": \"(.*)\"/;
+        const versionNameMatchRes = versionNameText.match(versionRegex);
 
-      debug('version from website is ', storeInfo.versionName);
+        if (!!versionNameMatchRes && versionNameMatchRes.length > 1) storeInfo.versionName = versionNameMatchRes[2];
+        debug('version from website is ', storeInfo.versionName);
+      }
+
+      const uploadDateSelector = '#downloader_area > div.jinfo > ul > li:nth-child(7)';
+      const uploadDateText = await BrowserUtils.getTextContent(page, uploadDateSelector);
+      if (!!uploadDateText) {
+        const uploadDateRegex = /(Updated on|UploadDate)\"\: \"(.*)\"/;
+
+        const uploadDateMatchRes = uploadDateText.match(uploadDateRegex);
+        if (!!uploadDateMatchRes && uploadDateMatchRes.length > 1) storeInfo.uploadDate = uploadDateMatchRes[2];
+      }
 
       // let hrefs = await page.$('.down_b_area .browser a')
       // storeInfo.downloadLink = await page.$eval('.dvContents a', (el: any) => {
@@ -105,8 +128,8 @@ export const getDownloadLink1 = (page: Page, packageName: string) =>
   });
 
 // download from https://apps.evozi.com/apk-downloader/
-export const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
-  new Promise<StoreInfo>(async (resolve, reject) => {
+const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
+  new Promise<ApkDownloadInfo>(async (resolve, reject) => {
     attempt++;
     debug('getDownloadLink2 attempt#' + attempt);
     const link = `https://apps.evozi.com/apk-downloader/?id=${packageName}`;
@@ -181,7 +204,7 @@ export const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =
     }
     // no errors, we are good
 
-    const storeInfo: StoreInfo = {
+    const storeInfo: ApkDownloadInfo = {
       packageName,
       source: ApkSource.APPS_EVOZI,
     };
@@ -221,7 +244,12 @@ export const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =
  * return chromium tab object (page)
  * @param {boolean} openBrowser if true, it will force create new instance of browser (usefull for tesitng)
  */
-export const getChromiumPage = async (openBrowser = false): Promise<Page> => {
+const getChromiumPage = async (openBrowser = false): Promise<Page> => {
+  try {
+    await downoadChromiumIfMissing();
+  } catch (e) {
+    debug(e);
+  }
   if (!browser || openBrowser) {
     browser = await puppeteer.launch({
       executablePath: CHROMIUM_EXEC_PATH, // comment when debugging, to use chromium thats included with pupputeer
@@ -271,7 +299,7 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
     }
 
     const filePath = path.join(DOWNLOAD_FOLDER, packageName + '.apk');
-    let page;
+
     try {
       if (fs.existsSync(filePath)) {
         if (useExisting) console.log(`using existing apk: ${packageName}  → ${filePath}`);
@@ -282,30 +310,13 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
           return;
         }
       }
-      page = await getChromiumPage();
-      console.log('Searching for APK File → ' + packageName, '(can take up to 3 minutes!)');
 
-      let downloadData: StoreInfo;
-      try {
-        // try from source 1 (1 attempt)
-        downloadData = await getDownloadLink1(page, packageName);
-      } catch (e1) {
-        debug(e1);
-        debug('failed to get download link from source1');
-        // try again from source 2 (3 attempts)
-        // try {
-        //   downloadData = await getDownloadLink2(page, packageName);
-        //   debug('got download link from source 2');
-        // } catch (e2) {
-        //   debug(e2);
-        reject(Error('failed to get download link'));
-        return; // do not execute the rest of the code
-        //   }
+      const downloadData = await getDownloadLink(packageName, false);
+
+      if (!downloadData || !downloadData.downloadLink) {
+        throw Error('failed to get download link');
       }
 
-      if (downloadData == null || downloadData.downloadLink == null || downloadData.downloadLink.length == 0) {
-        return reject(Error('failed to get download link'));
-      }
       const { downloadLink, versionName, apkSize, uploadDate, source } = downloadData;
 
       debug(` uplaodDate = ${uploadDate} , source=${source} `);
@@ -329,7 +340,6 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
       try {
         await downloadFileGot(downloadLink, filePath);
       } catch (e) {
-        if (!!page) await page.close();
         return reject(e);
       }
       console.log('✓ APK file is ready → ' + packageName);
@@ -339,12 +349,38 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
       debug(e);
       debug('APK file not found → ' + packageName);
 
-      if (!!page) await page.close();
-
       reject(e);
     }
   });
 
+export const getDownloadLink = async (
+  packageName: string,
+  mergeSplitApk = true
+): Promise<ApkDownloadInfo | undefined> => {
+  const page = await getChromiumPage();
+  console.log('Searching for APK File → ' + packageName, '(can take up to 3 minutes!)');
+
+  let downloadData: ApkDownloadInfo;
+  try {
+    // try from source 1 (1 attempt)
+    downloadData = await getDownloadLink1(page, packageName, mergeSplitApk);
+    if (!!page) await page.close();
+    return downloadData;
+  } catch (e1) {
+    debug(e1);
+    debug('failed to get download link from source1');
+    // try again from source 2 (3 attempts)
+    // try {
+    //   downloadData = await getDownloadLink2(page, packageName);
+    //   debug('got download link from source 2');
+    // } catch (e2) {
+    //   debug(e2);
+    if (!!page) await page.close();
+    throw Error('failed to get download link');
+
+    //   }
+  }
+};
 /**
  * as the name suggestes, this function simply try to get a browser instance
  * when chromium is missing, partially downloaded or corrupted, `puppetter.launch` will throw an exception, and that when the function downloads chromium browser
