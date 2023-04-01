@@ -30,6 +30,8 @@ import { PickFileCommand } from './src/commands/pickFileCommand';
 import PackageCommand from './src/commands/packageCommand';
 import ApkCommand from './src/commands/apkCommand';
 import { PickFileApkCommand } from './src/commands/pickFileApk';
+import Bananalyzer from './src/Bananalyzer';
+export default Bananalyzer;
 
 const debug = debugModule('index');
 

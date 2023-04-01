@@ -1,0 +1,15 @@
+node_modules/
+build/
+downloads/
+downloads_backup/
+appdataxsj/
+*.xlsx
+dev.js
+.local-chromium/
+.log
+m.*.json
+dist/
+esm/
+.log/
+temp/
+decompile/
