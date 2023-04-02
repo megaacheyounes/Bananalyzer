@@ -13,3 +13,4 @@ esm/
 .log/
 temp/
 decompile/
+/dist/*.zip

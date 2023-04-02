@@ -1,0 +1,15 @@
+#include only /build /example /lib
+#
+#
+.local-chromium/
+.vscode/
+appdataxsj/
+decompile/
+dist/
+#example/
+#lib/
+node_modules/
+screenshot/
+src/
+tests/
+/dist/*.zip
