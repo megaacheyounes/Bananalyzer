@@ -27,15 +27,25 @@ export const tests = [
   //   hmsCount: 0,
   //   googlePermissionsCount: 0,
   // },
+  // {
+  //   apk: {
+  //     packageName: 'com.megaache.trackingsdks',
+  //     filePath: sampleApk,
+  //     uploadDate: 'mar 01, 2023',
+  //   },
+  //   gmsCount: 0,
+  //   hmsCount: 3,
+  // },
   {
     apk: {
-      packageName: 'com.megaache.trackingsdks',
-      filePath: sampleApk,
-      uploadDate: 'mar 01, 2023',
+      packageName: 'com.aswat.carrefouruae',
+      filePath: path.join(__dirname, 'samples', 'com.aswat.carrefouruae.apk'),
+      uploadDate: 'April 01, 2023',
     },
-    gmsCount: 0,
-    hmsCount: 3,
+    gmsCount: 6,
+    hmsCount: 0,
   },
+
   // {
   //   apk: {
   //     packageName: 'com.ubercab.uberlite',

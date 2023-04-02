@@ -19,6 +19,7 @@ import { Action, Activity, AndroidManifest, IntentFilter, Service, UsesPermissio
 import { moveFile } from '../mv';
 import { getApkInfo } from '../utils';
 import { HUAWEI_MESSAGING_EVENT } from '../../consts';
+
 const JavaCallerModule = require('java-caller');
 
 const debug = debugModule('analyzeKits');
@@ -98,8 +99,9 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
   fs.writeFileSync(HMS_OUTPUT, '');
   fs.writeFileSync(GMS_OUTPUT, '');
 
+  //todo:
   // eslint-disable-next-line no-unused-vars
-  const { status, stdout, stderr } = await java.run(['-Gtrue -Dfalse -Cfalse']);
+  // const { status, stdout, stderr } = await java.run(['-Gtrue -Dfalse -Cfalse']);
   //    debug("--- status ----")
   //    debug(status)
   //    debug("--- stdout ----")
@@ -107,6 +109,7 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
   //    debug("--- stderr ----")
   //    debug(stderr)
 
+  //todo: use csv parsing library
   // 4- parse bad AppCheck results
   const hmsOutput = fs.readFileSync(HMS_OUTPUT, 'utf-8');
   const gmsOutput = fs.readFileSync(GMS_OUTPUT, 'utf-8');
@@ -114,7 +117,7 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
   const hmsEntries = getEntries(hmsOutput);
   const gmsEntries = getEntries(gmsOutput);
   debug('gms entries', gmsEntries);
-  const HMS: string[] = getServices(hmsEntries, headers) || [];
+  const HMS: string[] = [];
   const GMS: string[] = getServices(gmsEntries, headers) || [];
 
   return {
@@ -123,31 +126,27 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
   };
 };
 
-// console.log("hms entries",hmsEntries)
 //todo: test heavily
 const getServices = (entries: string[][], headers: string[]): string[] => {
   const appEntries = entries.filter((appEntries) => appEntries.length > 0);
-
+  debug('appEntries', entries, appEntries);
+  debug('headers', headers);
   const kits = appEntries[0]
-    .slice(1, appEntries.length - 2)
+    .slice(1)
     .map((val, index) => (val == 'true' ? headers[index + 1] : ''))
     .filter((v) => v && v.length > 0);
-  const apkName = appEntries[0]; //.replace('.apk', '');
-
+  debug('kits', kits);
   return kits;
 };
 
 const getEntries = (data: string) => {
-  const entries: string[][] = [];
-  data.split('\n').map((line: string) => {
-    entries.push(
-      line
-        .split('\t')
-        .map((l) => l.trim())
-        .filter((l) => l.length > 0)
-        .filter((entry) => !headers.includes(entry))
-    );
-  });
+  const entries: string[][] = data.split('\n').map((line: string) =>
+    line
+      .split('\t')
+      .map((l) => l.trim())
+      .filter((l) => l.length > 0)
+      .filter((entry) => !headers.includes(entry))
+  );
   return entries.filter((arr) => arr.length > 0);
 };
 

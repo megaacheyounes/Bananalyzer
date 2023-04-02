@@ -46,6 +46,8 @@
     "@types/semver": "^7.3.13",
     "@types/xml2js": "^0.4.11",
     "cli-meow-help": "^2.0.2",
+    "csv-parse": "^5.3.6",
+    "csv-parser": "^3.0.0",
     "debug": "^4.3.4",
     "decompress-zip": "^0.3.3",
     "download-chromium": "^2.2.1",

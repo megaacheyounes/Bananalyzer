@@ -45,7 +45,6 @@ export const getAndroidManifestData = async (manifestPath: string): Promise<Andr
   const xmlContent = fs.readFileSync(manifestPath, 'utf-8');
 
   const xml = await parseManifest(xmlContent);
-  debug('xml parsing result', xml.manifest.application);
   return transformToManifest(xml);
 };
 

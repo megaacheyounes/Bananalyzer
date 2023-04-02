@@ -32,8 +32,9 @@ export const decompileApk = async (apk: APK, keepSources: boolean): Promise<Deco
       jar: APKTOOL_JAR,
     });
 
+    //todo: uncomment
     // eslint-disable-next-line no-unused-vars
-    const { status, stdout, stderr } = await java.run(['d', '-f', '-o ' + resultPath, apk.filePath]);
+    // const { status, stdout, stderr } = await java.run(['d', '-f', '-o ' + resultPath, apk.filePath]);
 
     // debug('--- status ----');
     // debug(status);

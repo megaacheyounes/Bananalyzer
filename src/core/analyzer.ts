@@ -47,13 +47,13 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
       if (!!decRes.error) {
         continue;
       }
-      debug('decRes', decRes);
+      // debug('decRes', decRes);
       const SDKs = await analyzeKits(apk);
       debug('sdks', SDKs);
       const manifestResult = await analyzeManifest(decRes.manifestPath!);
-      debug('manifestResult', manifestResult);
+      // debug('manifestResult', manifestResult);
       const apkFileResult = analyzeApk(apk);
-      debug('apkfileresult', apkFileResult);
+      // debug('apkfileresult', apkFileResult);
 
       results.push({
         ...SDKs,
