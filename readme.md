@@ -22,23 +22,24 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 ## Usage
 
 ```
-  $ bananalyzer <command> [option]
+$ bananalyzer <command> [option]
 
    COMMANDS
 
-  file     Download and analyze a list of apps by providing a file that contains their package names
   package  Download and analyze an app by providing its package name
   apk      Analyze an Apk by providing its file path
+  list     Download and analyze a list of apps by providing a file that contains their package names
   help     Print help information
 
    OPTIONS
 
   -p, --path   Apk full path, required when using command 'apk'
   -n, --name   App package name, required when using Command 'package'
-  -d, --debug  Print debug logs, Default: false
-  -k, --keep   Keep downloaded APKs (can be found in downloads/ folder), Default: false
-  -r, --reuse  Re-use existing APKs that are found in download folder, Default: false
-  -b, --batch  Batch size, optional when using command 'file', Default: 3
+  -d, --debug  Print debug logs Default: false
+  -k, --keep   Keep downloaded APKs (can be found in downloads/ folder) Default: false
+  -r, --reuse  Re-use existing APKs that are found in download folder Default: false
+  -b, --batch  Batch size, optional when using command 'file' Default: 3
+
 ```
 
 ## Demo

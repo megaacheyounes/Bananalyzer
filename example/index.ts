@@ -1,4 +1,4 @@
-import Bananalyzer from 'bananalyzer';
+import Bananalyzer from '../build/index';
 
 async () => {
   const dl = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');

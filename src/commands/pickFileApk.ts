@@ -66,7 +66,6 @@ export class PickFileApkCommand extends PackageCommand {
       };
 
       await this.analyzeAndSave([apk], resultPath);
-      await delay(500);
     }
 
     if (failedToAnalyze.length > 0) console.log('APKs not analyzed ==> ', failedToAnalyze);

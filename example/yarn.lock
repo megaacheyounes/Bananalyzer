@@ -318,10 +318,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bananalyzer@^1.0.4-rc3:
-  version "1.0.4-rc3"
-  resolved "https://registry.yarnpkg.com/bananalyzer/-/bananalyzer-1.0.4-rc3.tgz#9c310953a6b9f56a1a9bdcc076d4aad3f8e5b34e"
-  integrity sha512-O/yS8kt1LLXre669ppkfgzOhSEEVOU6ry7P5nIlEP85AT/X3TIJXnV3KjpJn5pYBbakIq6Xnt2iNxjXu3UjTCg==
+bananalyzer@^1.0.4-rc4:
+  version "1.0.4-rc4"
+  resolved "https://registry.yarnpkg.com/bananalyzer/-/bananalyzer-1.0.4-rc4.tgz#e7bac4fce5fe60814a1834f7d339ad65de56b1da"
+  integrity sha512-BSWXu3Xk7mSmaAkn9z6pizLEhgcNaSEzHurWZJ9YzxHJlVjbWmo/g0ckaZIzQCeBmWZnzPxKJ5ocycTexmj7kA==
   dependencies:
     "@types/semver" "^7.3.13"
     "@types/xml2js" "^0.4.11"

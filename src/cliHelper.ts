@@ -54,26 +54,25 @@ const flags: any = {
 
 export const CMD_PACKAGE = 'package';
 export const CMD_APK = 'apk';
-export const CMD_FILE = 'file';
-export const CMD_APK_FILE = 'apkfile';
+export const CMD_LIST = 'list';
+export const CMD_APK_LIST = 'apklist';
 export const CMD_HELP = 'help';
 export const CMD_VERSION = 'version';
 
 const commands = {
-  file: {
-    desc: 'Download and analyze a list of apps by providing a file that contains their package names',
-  },
-  apkfile: {
-    desc: 'Analyze a list of apps by providing a file that contains their apk file paths',
-  },
-  package: {
+  [CMD_PACKAGE]: {
     desc: 'Download and analyze an app by providing its package name',
   },
-  apk: {
+  [CMD_APK]: {
     desc: 'Analyze an Apk by providing its file path',
   },
-
-  help: {
+  [CMD_LIST]: {
+    desc: 'Download and analyze a list of apps by providing a file that contains their package names',
+  },
+  [CMD_APK_LIST]: {
+    desc: 'Analyze a list of apps by providing a file that contains their apk file paths',
+  },
+  [CMD_HELP]: {
     desc: 'Print help information',
   },
 };

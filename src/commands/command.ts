@@ -43,6 +43,7 @@ export abstract class Command {
     // 2- analyze the batch
     // delete previous batch (not original (downloaded) APKs) if exists
     await cleanDataFolder();
+    console.log(`→ decompiling and analyzing (this can take up to 10 minutes)`);
 
     const analyzerRes: AnalyzedApp[] = await analyzeAPKs(apks, this.flags.keep);
     debug('anlyzer res: ', analyzerRes);

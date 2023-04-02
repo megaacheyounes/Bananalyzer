@@ -113,7 +113,7 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
 
   const hmsEntries = getEntries(hmsOutput);
   const gmsEntries = getEntries(gmsOutput);
-
+  debug('gms entries', gmsEntries);
   const HMS: string[] = getServices(hmsEntries, headers) || [];
   const GMS: string[] = getServices(gmsEntries, headers) || [];
 

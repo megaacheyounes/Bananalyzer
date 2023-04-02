@@ -97,6 +97,6 @@
     "./src/**/*.tsx",
     "./src/**/*.ts",
     "./test/**/*.ts",
-    "*.ts"
+    "tests/dev.ts"
   ]
 }
