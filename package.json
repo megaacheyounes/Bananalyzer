@@ -8,6 +8,7 @@
   "types": "build/index.d.ts",
   "displayName": "bananalyzer",
   "scripts": {
+    "prepublish": "npm run clean && npm run copy-files && npm run build:esm",
     "dev": "cross-env NODE_ENV=debug ts-node dev.ts",
     "start": "cross-env NODE_ENV=debug ts-node index.ts -k -r -d",
     "start:package": "cross-env NODE_ENV=debug ts-node index.ts package -k -d --name",

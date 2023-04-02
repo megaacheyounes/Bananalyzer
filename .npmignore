@@ -13,3 +13,7 @@ screenshot/
 src/
 tests/
 /dist/*.zip
+dist/dev.d.ts
+dist/dev.js
+dist/instructions.txt
+dist/example_apps.txt
