@@ -5,7 +5,7 @@ import { commitSuicide, MyFlags } from '../cliHelper';
 import fs from 'fs';
 import { MAX_PACKAGE_NAMES } from '../consts';
 import path from 'path';
-import { APK } from '../models/apk';
+import { APK } from '../utils/models/apk';
 import PackageCommand from './packageCommand';
 
 const debug = debugModule('PickFile');

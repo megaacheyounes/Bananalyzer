@@ -1,8 +1,8 @@
-import { AnalyzedApp } from './../src/models/analyzedApp';
+import { AnalyzedApp } from '../src/utils/models/analyzedApp';
 import path from 'path';
 
 import { analyzeAPKs } from '../src/core/analyzer';
-import { APK } from '../src/models/apk';
+import { APK } from '../src/utils/models/apk';
 
 import debugModule from 'debug';
 

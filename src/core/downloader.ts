@@ -11,8 +11,8 @@ import { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 
 import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from '../consts';
-import { APK } from '../models/apk';
-import { ApkSource, ApkDownloadInfo } from '../models/storeInfo';
+import { APK } from '../utils/models/apk';
+import { ApkSource, ApkDownloadInfo } from '../utils/models/storeInfo';
 import BrowserUtils from '../utils/browserUtils';
 import { delay, downloadFileGot } from './utils';
 

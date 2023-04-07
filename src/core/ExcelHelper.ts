@@ -3,8 +3,8 @@ import debugModule from 'debug';
 import path from 'path';
 import xlsx from 'xlsx';
 
-import { AnalyzedApk, AnalyzedApp } from '../models/analyzedApp';
-import { ExcelRow } from '../models/excelRow';
+import { AnalyzedApk, AnalyzedApp } from '../utils/models/analyzedApp';
+import { ExcelRow } from '../utils/models/excelRow';
 import { IS_PROD } from '../consts';
 
 const debug = debugModule('excleHelper');

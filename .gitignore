@@ -13,4 +13,5 @@ esm/
 .log/
 temp/
 decompile/
-/dist/*.zip
+dist/*.zip
+build_cli/

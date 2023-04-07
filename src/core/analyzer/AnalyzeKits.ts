@@ -1,4 +1,4 @@
-import { AnalyzedSDKs } from '../../models/analyzedApp';
+import { AnalyzedSDKs } from '../../utils/models/analyzedApp';
 ('use strict');
 import debugModule from 'debug';
 
@@ -13,9 +13,9 @@ import {
   UNKNOWN_INFO,
   GOOGLE_MESSAGING_EVENT,
 } from '../../consts';
-import { AnalyzedApk } from '../../models/analyzedApp';
-import { APK } from '../../models/apk';
-import { Action, Activity, AndroidManifest, IntentFilter, Service, UsesPermission } from '../../models/manifest';
+import { AnalyzedApk } from '../../utils/models/analyzedApp';
+import { APK } from '../../utils/models/apk';
+import { Action, Activity, AndroidManifest, IntentFilter, Service, UsesPermission } from '../../utils/models/manifest';
 import { moveFile } from '../mv';
 import { getApkInfo } from '../utils';
 import { HUAWEI_MESSAGING_EVENT } from '../../consts';
@@ -98,13 +98,12 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
 
   fs.writeFileSync(HMS_OUTPUT, '');
   fs.writeFileSync(GMS_OUTPUT, '');
-
   //todo:
   // eslint-disable-next-line no-unused-vars
   // const { status, stdout, stderr } = await java.run(['-Gtrue -Dfalse -Cfalse']);
   //    debug("--- status ----")
   //    debug(status)
-  //    debug("--- stdout ----")
+  //    debug("--- stdout ----")S
   //    debug(stdout)
   //    debug("--- stderr ----")
   //    debug(stderr)

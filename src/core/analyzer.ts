@@ -10,9 +10,17 @@ import fs from 'fs';
 import path from 'path';
 
 import { APP_DATA_FOLDER, UNKNOWN_INFO, GOOGLE_MESSAGING_EVENT } from '../consts';
-import { AnalyzedApk, AnalyzedApp, AnalyzedManifest } from '../models/analyzedApp';
-import { APK } from '../models/apk';
-import { Action, Activity, AndroidManifest, IntentFilter, MetaData, Service, UsesPermission } from '../models/manifest';
+import { AnalyzedApk, AnalyzedApp, AnalyzedManifest } from '../utils/models/analyzedApp';
+import { APK } from '../utils/models/apk';
+import {
+  Action,
+  Activity,
+  AndroidManifest,
+  IntentFilter,
+  MetaData,
+  Service,
+  UsesPermission,
+} from '../utils/models/manifest';
 import { getApkInfo } from './utils';
 import { HUAWEI_MESSAGING_EVENT } from '../consts';
 import { analyzeKits } from './analyzer/AnalyzeKits';

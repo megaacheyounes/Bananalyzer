@@ -3,10 +3,10 @@ import { saveResult, getRowFromApp, HEADERS } from '../src/core/ExcelHelper';
 import path from 'path';
 import { existsSync, mkdirSync, rmSync, stat, statSync } from 'fs';
 
-import { ExcelRow } from '../src/models/excelRow';
+import { ExcelRow } from '../src/utils/models/excelRow';
 import { exec } from 'child_process';
 import { delay } from '../src/core/utils';
-import { AnalyzedApp } from '../src/models/analyzedApp';
+import { AnalyzedApp } from '../src/utils/models/analyzedApp';
 
 const uploadDate = 'Mar 31, 2022';
 const packageName = 'com.twitter.android.lite';

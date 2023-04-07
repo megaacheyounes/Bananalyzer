@@ -2,7 +2,7 @@ import { ANDROID_MANIFEST, APKTOOL_JAR, DECOMPILE_FOLDER } from '../../consts';
 import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
-import { APK } from '../../models/apk';
+import { APK } from '../../utils/models/apk';
 
 const debug = debugModule('apkreader');
 const JavaCallerModule = require('java-caller');

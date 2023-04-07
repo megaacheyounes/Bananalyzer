@@ -11,7 +11,7 @@ import path from 'path';
 import { readManifest } from './apkreader/apkreader';
 // import DecompressZip from 'decompress-zip';
 import { APP_DATA_FOLDER, ERR_LOG_FILE, LOG_FOLDER, OUT_LOG_FILE, TEMP_FOLDER } from '../consts';
-import { AndroidManifest } from '../models/manifest';
+import { AndroidManifest } from '../utils/models/manifest';
 
 const DecompressZip = require('decompress-zip');
 

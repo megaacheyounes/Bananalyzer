@@ -1,7 +1,7 @@
 import { Command } from './command';
 import debugModule from 'debug';
 import path from 'path';
-import { APK } from '../models/apk';
+import { APK } from '../utils/models/apk';
 import existsSync from 'node:fs';
 const debug = debugModule('ApkCommand');
 
