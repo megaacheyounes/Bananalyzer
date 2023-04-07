@@ -24,6 +24,6 @@ export type AnalyzedSDKs = {
 };
 
 export type AnalyzedApk = {
-  uploadDate: string;
+  storeUploadDate: string;
   apkCreationTime: string;
 };

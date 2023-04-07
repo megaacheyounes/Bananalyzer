@@ -9,8 +9,9 @@ debugModule.enable('*');
 (async () => {
   //****************** */
   // non-cli usage tests
-  const dl = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
-  console.log('dl', dl);
+  // const dl = await Bananalyzer.getDownloadLink('com.naddad.pricena');
+  // console.log('dl', dl);
+  //todo: revert back, use apk from test folder
   const result = await Bananalyzer.analyzeAPKs(
     [
       {
@@ -21,7 +22,7 @@ debugModule.enable('*');
   );
   console.log('result', result);
   // ******************************
-  // todo: test getInnerApk
+  // todo: test getInnerApk (xapk)
   // const path = await getInnerApk('D:\\__tasks__\\_analyze\\_toolss\\Bananalyzer\\downloads\\com.ahleen.voice.apk');
   // console.log('Paht == ', path);
   // ******************************

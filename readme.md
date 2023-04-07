@@ -218,6 +218,14 @@ result [
 2. Bananalyzer will fail to download some apps that are avaialble in certain regions only
 3. Bananalyzer has unlimited lives, and will commit suicide many times, but it's still being developed and will be made more stable :)
 
+### Develope
+
+1. clone repo
+2. its recommneded to install global packages: `npm install --global tsc typescript ts-node coyfiles rimraf @vercel/ncc `
+3. install modules: `npm install`
+4. run cli
+5. build CLI windows EXE file:
+
 ## TODO
 
 - [x] Use a proper logging library for debugging instead of console.log

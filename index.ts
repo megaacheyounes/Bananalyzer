@@ -1,3 +1,3 @@
-import * as Bananalyzer from './src';
+import Bananalyzer from './src';
 
 export default Bananalyzer;

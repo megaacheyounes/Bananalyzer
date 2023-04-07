@@ -53,6 +53,7 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
     for (const apk of apks) {
       const decRes = await decompileApk(apk, true);
       if (!!decRes.error) {
+        console.log('error while decoding APK: ', decRes.error);
         continue;
       }
       // debug('decRes', decRes);
@@ -62,14 +63,12 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
       // debug('manifestResult', manifestResult);
       const apkFileResult = analyzeApk(apk);
       // debug('apkfileresult', apkFileResult);
-
       results.push({
         ...SDKs,
         ...manifestResult,
         ...apkFileResult,
       });
     }
-
     resolve(results);
   });
 
@@ -90,12 +89,13 @@ const getServices = (manifestData: AndroidManifest, prefix: string) =>
     ?.map((a: Service) => a.name)
     .filter((a: string) => !!a && a.indexOf(prefix) != -1) || [];
 
+//fixme: returns same result for google aand huawei
 const getMessagingService = (manifestData: AndroidManifest, actionName: string) =>
   manifestData.application.services
     ?.filter(
       (s: Service) =>
-        s.intentFilters
-          ?.map((i: IntentFilter) => i.action?.map((action: Action) => action.name))
+        (s.intentFilters || [])
+          ?.map((i: IntentFilter) => i.action?.map((action: Action) => action.name) || '')
           .join(',')
           .indexOf(actionName) != -1
     )
@@ -195,7 +195,7 @@ const analyzeApk = (apk: APK): AnalyzedApk => {
     debug(e);
   }
   return {
-    uploadDate: apk.uploadDate || '',
+    storeUploadDate: apk.uploadDate || '',
     apkCreationTime,
   };
 };

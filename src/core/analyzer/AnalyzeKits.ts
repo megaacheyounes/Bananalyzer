@@ -24,57 +24,6 @@ const JavaCallerModule = require('java-caller');
 
 const debug = debugModule('analyzeKits');
 
-// includes hms sdk names
-const headers = [
-  'AppName',
-  'account',
-  'push',
-  'iap',
-  'location',
-  'map',
-  'analytics',
-  'ads',
-  'game',
-  'drive',
-  'scan',
-  'safetydetect',
-  'nearbyservice',
-  'ml',
-  'awareness',
-  'fido',
-  'health',
-  'identity',
-  'panorama',
-  'site',
-  'dtm',
-  'wallet',
-  'toolkit(G+H)',
-];
-
-// todo: use GMS sdk names
-const GMS_HEADER_MAP: { [kit: string]: string } = {
-  account: 'Sign in',
-  push: 'FCM',
-  // "location": "location",
-  map: 'maps',
-  // "analytics": "analytics",
-  // "ads": "ads",
-  game: 'games',
-  // "drive": "drive",
-  scan: 'Firebase vision',
-  safetydetect: 'safetynet',
-  nearbyservice: 'nearby',
-  // "ml": "ml",
-  // "awareness": "awarness",
-  // "fido": "fido",
-  health: 'fitness',
-  // "identity": "identity",
-  panorama: 'Street View',
-  site: 'places',
-  dtm: 'GTM',
-  wallet: 'pay',
-};
-
 export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
   const apkName = path.basename(apk.filePath);
   //   move apks from /downloads to /appdataxsj
@@ -96,9 +45,10 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
     jar: APP_CHECK_JAR,
   });
 
-  fs.writeFileSync(HMS_OUTPUT, '');
-  fs.writeFileSync(GMS_OUTPUT, '');
-  //todo:
+  //todo: uncomment
+  // fs.writeFileSync(HMS_OUTPUT, '');
+  // fs.writeFileSync(GMS_OUTPUT, '');
+  //todo: uncomment
   // eslint-disable-next-line no-unused-vars
   // const { status, stdout, stderr } = await java.run(['-Gtrue -Dfalse -Cfalse']);
   //    debug("--- status ----")
@@ -111,28 +61,35 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
   //todo: use csv parsing library
   // 4- parse bad AppCheck results
   const hmsOutput = fs.readFileSync(HMS_OUTPUT, 'utf-8');
+  debug('-----------------------------');
   const gmsOutput = fs.readFileSync(GMS_OUTPUT, 'utf-8');
 
   const hmsEntries = getEntries(hmsOutput);
   const gmsEntries = getEntries(gmsOutput);
-  debug('gms entries', gmsEntries);
-  const HMS: string[] = [];
-  const GMS: string[] = getServices(gmsEntries, headers) || [];
+
+  const HMS: string[] = getServices(hmsEntries) || [];
+  const GMS: string[] = getServices(gmsEntries) || [];
 
   return {
     HMS,
-    GMS: mapSdkNames(GMS),
+    GMS,
   };
 };
 
 //todo: test heavily
-const getServices = (entries: string[][], headers: string[]): string[] => {
-  const appEntries = entries.filter((appEntries) => appEntries.length > 0);
-  debug('appEntries', entries, appEntries);
+const getServices = (entries: string[][]): string[] => {
+  const headers: string[] = entries[0];
+  if (!entries || entries.length < 2) {
+    debug('invalid entries', entries);
+    return [];
+  }
+  const serviceEntries = entries[1]; //.filter((appEntries) => appEntries.length > 0);
   debug('headers', headers);
-  const kits = appEntries[0]
-    .slice(1)
-    .map((val, index) => (val == 'true' ? headers[index + 1] : ''))
+  debug('serviceEntries', serviceEntries);
+  if (serviceEntries.length == 0) return [];
+
+  const kits = serviceEntries
+    .map((val, index) => (val == 'true' ? headers[index] : ''))
     .filter((v) => v && v.length > 0);
   debug('kits', kits);
   return kits;
@@ -144,26 +101,8 @@ const getEntries = (data: string) => {
       .split('\t')
       .map((l) => l.trim())
       .filter((l) => l.length > 0)
-      .filter((entry) => !headers.includes(entry))
   );
   return entries.filter((arr) => arr.length > 0);
-};
-
-/**
- * map HMS sdk names to GMS
- *  @param {array} arr: array of hms kits, example:  ['push' , 'map','wallet','location']
- * @return {array} array of hms kits with gms names, example: ['push (FCM)', 'map (maps)','wallet (pay)','location']
- *
- */
-const mapSdkNames = (arr: string[]) => {
-  const res: string[] = [];
-  if (!arr) return res;
-  const keys = Object.keys(GMS_HEADER_MAP);
-  arr.forEach((sdk: string) => {
-    // res.push(keys.includes(sdk) ? `${GMS_HEADER_MAP[sdk]} (${sdk})` : sdk);
-    res.push(keys.includes(sdk) ? GMS_HEADER_MAP[sdk] : sdk);
-  });
-  return res;
 };
 
 /**

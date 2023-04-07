@@ -61,7 +61,7 @@ export const getRowFromApp = (app: AnalyzedApp): ExcelRow => {
   const asString = (arr: string[]) => (arr || []).join(',\n');
   appAsRow[HEADER_PACKAGE_NAME] = app.packageName;
   appAsRow[HEADER_VERSION_NAME] = app.versionName;
-  appAsRow[HEADER_GOOGLE_PLAY_UPDATE_DATE] = app.uploadDate;
+  appAsRow[HEADER_GOOGLE_PLAY_UPDATE_DATE] = app.storeUploadDate;
   appAsRow[HEADER_APK_CREATION_DATE] = app.apkCreationTime;
   appAsRow[HEADER_HUAWEI_APP_ID] = app.huaweiAppId;
 

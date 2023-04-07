@@ -32,18 +32,19 @@ export const decompileApk = async (apk: APK, keepSources: boolean): Promise<Deco
       jar: APKTOOL_JAR,
     });
 
-    //todo: uncomment
-    // eslint-disable-next-line no-unused-vars
-    // const { status, stdout, stderr } = await java.run(['d', '-f', '-o ' + resultPath, apk.filePath]);
+    //todo: only reuse old decompile result when flag is set, and verify if manifest exists
+    if (!fs.existsSync(resultPath)) {
+      // eslint-disable-next-line no-unused-vars
+      const { status, stdout, stderr } = await java.run(['d', '-f', '-o ' + resultPath, apk.filePath]);
 
-    // debug('--- status ----');
-    // debug(status);
-    // debug('--- stdout ----');
-    // debug(stdout);
-    // debug('--- stderr ----');
-    // debug(stderr);
-
-    //todo: detect errors
+      // debug('--- status ----');
+      // debug(status);
+      // debug('--- stdout ----');
+      // debug(stdout);
+      //todo: parse and return errors
+      debug('--- stderr ----');
+      debug(stderr);
+    }
 
     resolve({
       isSuccessful,

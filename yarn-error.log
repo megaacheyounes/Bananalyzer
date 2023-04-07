@@ -1,30 +1,22 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add CSVTOJSON
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js
 
 PATH: 
-  C:\Program Files\ImageMagick-7.1.0-Q8;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Python39\Scripts\;C:\Python39\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin\;C:\ProgramData\chocolatey\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Mr.Jones\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\dotnet\;C:\Users\Mr.Jones\AppData\Local\Microsoft\WindowsApps;C:\Users\Mr.Jones\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Mr.Jones\AppData\Local\Yarn\bin;C:\Users\Mr.Jones\AppData\Roaming\npm;C:\Program Files\heroku\bin;C:\Program Files\OpenSSL-Win64\bin;C:\Users\Mr.Jones\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\ProgramData\Microsoft\Windows\Start Menu\Programs\NVM for Windows;C:\Users\Mr.Jones\AppData\Local\GitHubDesktop\bin
+  C:\Program Files (x86)\Zulu\zulu-17\bin\;D:\tools\WINDOWS.X64_193000_db_home\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS;C:\WINDOWS\system32;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Windows;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\y84154336\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\OpenVPN\bin;C:\Program Files\PuTTY\;C:\Program Files\dotnet\;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.8.6\bin;C:\Program Files (x86)\NetSarang\Xshell 7\;C:\Program Files\Huawei QuickApp IDE\bin;C:\Program Files\Huawei QuickApp IDE\resources\app\extensions\deveco-debug\lib\toolkit\nodeTool;C:\Program Files\Huawei QuickApp IDE\resources\app\extensions\deveco-debug\lib\toolkit;C:\ProgramData\ComposerSetup\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\y84154336\AppData\Local\Android\Sdk\platform-tools;C:\flutter\bin;C:\Users\y84154336\AppData\Local\Android\Sdk\tools;C:\Users\y84154336\AppData\Local\Android\Sdk\tools\bin;C:\Users\y84154336\watchman\windows\bin;C:\Users\y84154336\AppData\Roaming\Composer\vendor\bin;%DevEco Studio%;C:\harmonySDK\toolchains;C:\Users\y84154336\AppData\Local\Huawei\Sdk\toolchains;C:\Users\y84154336\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\JetBrains\IntelliJ IDEA 2021.2.2\bin;;C:\curl\bin;C:\android\gradle-6.3\bin;C:\Users\y84154336\AppData\Local\Programs\Microsoft VS Code\bin;D:\__tasks__\_analyze\_toolss\bananalyzer_1.0.1_win64;C:\Users\y84154336\AppData\Local\Pandoc\;C:\Program Files\OpenSSL-Win64\bin;D:\__tasks__\appFinder\#Lighthouse\exe_tools;C:\Program Files (x86)\GnuWin32\bin;D:\#scripts;C:\Users\y84154336\AppData\Local\Microsoft\WindowsApps;C:\Users\y84154336\.dotnet\tools;C:\Python26;C:\Users\y84154336\AppData\Local\GitHubDesktop\bin;C:\php8;
 
 Yarn version: 
-  1.22.5
+  1.22.19
 
 Node version: 
-  16.10.0
+  14.17.3
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/CSVTOJSON: Not found
-      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66097:18)
-      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140749:22)
-      at Request.emit (node:events:390:28)
-      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141721:10)
-      at Request.emit (node:events:390:28)
-      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141643:12)
-      at Object.onceWrapper (node:events:509:28)
-      at IncomingMessage.emit (node:events:402:35)
-      at endReadableNT (node:internal/streams/readable:1343:12)
-      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+  Error: write EPROTO 3116:error:14094410:SSL routines:ssl3_read_bytes:sslv3 alert handshake failure:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1544:SSL alert number 40
+  
+      at WriteWrap.onWriteComplete [as oncomplete] (internal/stream_base_commons.js:94:16)
 
 npm manifest: 
   {
@@ -33,25 +25,26 @@ npm manifest:
     "description": "A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata",
     "author": "Younes Megaache",
     "homepage": "https://github.com/megaacheyounes/bananalyzer",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
     "displayName": "bananalyzer",
     "scripts": {
       "prepublish": "npm run clean && npm run copy-files && npm run build:npm",
       "dev": "cross-env NODE_ENV=debug ts-node tests/dev.ts",
-      "start": "cross-env NODE_ENV=debug ts-node src/index.ts -k -r -d",
-      "start:package": "cross-env NODE_ENV=debug ts-node src/index.ts package -k -d --name",
-      "start:apk": "cross-env NODE_ENV=debug ts-node src/index.ts apk -k -d --path",
-      "start:apklist": "cross-env NODE_ENV=debug ts-node src/index.ts apklist -k -r -d",
-      "start:help": "cross-env NODE_ENV=debug ts-node src/index.ts help",
+      "start": "cross-env NODE_ENV=debug ts-node src/cli.ts -k -r -d",
+      "start:package": "cross-env NODE_ENV=debug ts-node src/cli.ts package -k -d --name",
+      "start:apk": "cross-env NODE_ENV=debug ts-node src/cli.ts apk -k -d --path",
+      "start:apklist": "cross-env NODE_ENV=debug ts-node src/cli.ts apklist -k -r -d",
+      "start:help": "cross-env NODE_ENV=debug ts-node src/cli.ts help",
       "devider_build_cli": " __________________ build cli exe  __________________ ",
       "build": "npm run clean && npm run copy-files &&  npm run build:cli && npm run build:exe",
       "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"lib/AppCheck.jar\" \"lib/apktool.jar\" dist",
       "clean": "rimraf dist esm build",
-      "build:cli": "ncc build src/cli.ts -m -o build",
-      "build:exe": "pkg -t node16-win-x64 -C GZip -o dist/bananalyzer.exe --public  build/index.js ",
+      "build:cli": "ncc build src/cli.ts -m -o build_cli",
+      "build:exe": "pkg -t node16-win-x64 -C GZip -o dist/bananalyzer.exe --public  build_cli/index.js ",
       "devider_build_js": " __________________ build js for npm package __________________ ",
-      "build:npm": "tsc --target ESNext --module ES6 ",
+      "build:npm": "npm run clean && npm run build:npm_src",
+      "build:npm_src": "tsc --target ESNext --module ES6",
       "devider_test": " __________________ test __________________ ",
       "test": "jest",
       "test:analyzer": "jest tests/analyzer.test.ts",
@@ -75,6 +68,8 @@ npm manifest:
       "@types/semver": "^7.3.13",
       "@types/xml2js": "^0.4.11",
       "cli-meow-help": "^2.0.2",
+      "csv-parse": "^5.3.6",
+      "csv-parser": "^3.0.0",
       "debug": "^4.3.4",
       "decompress-zip": "^0.3.3",
       "download-chromium": "^2.2.1",
@@ -1767,7 +1762,7 @@ Lockfile:
   
   "@vercel/ncc@^0.36.1":
     version "0.36.1"
-    resolved "https://registry.yarnpkg.com/@vercel/ncc/-/ncc-0.36.1.tgz#d4c01fdbbe909d128d1bf11c7f8b5431654c5b95"
+    resolved "https://registry.npmjs.org/@vercel/ncc/-/ncc-0.36.1.tgz"
     integrity sha512-S4cL7Taa9yb5qbv+6wLgiKVZ03Qfkc4jGRuiUQMQ8HGBD5pcNRnHeYM33zBvJE4/zJGjJJ8GScB+WmTsn9mORw==
   
   abab@^2.0.3, abab@^2.0.5:
@@ -2636,6 +2631,18 @@ Lockfile:
     integrity sha512-AZL67abkUzIuvcHqk7c09cezpGNcxUxU4Ioi/05xHk4DQeTkWmGYftIE6ctU6AEt+Gn4n1lDStOtj7FKycP71A==
     dependencies:
       cssom "~0.3.6"
+  
+  csv-parse@^5.3.6:
+    version "5.3.6"
+    resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.3.6.tgz#181d7c12300a60684bb51261ea9a5c3135ba8688"
+    integrity sha512-WI330GjCuEioK/ii8HM2YE/eV+ynpeLvU+RXw4R8bRU8R0laK5zO3fDsc4gH8s472e3Ga38rbIjCAiQh+tEHkw==
+  
+  csv-parser@^3.0.0:
+    version "3.0.0"
+    resolved "https://registry.yarnpkg.com/csv-parser/-/csv-parser-3.0.0.tgz#b88a6256d79e090a97a1b56451f9327b01d710e7"
+    integrity sha512-s6OYSXAK3IdKqYO33y09jhypG/bSDHPuyCme/IdEHfWpLf/jKcpitVFyOC6UemgGk8v7Q5u2XE0vvwmanxhGlQ==
+    dependencies:
+      minimist "^1.2.0"
   
   data-uri-to-buffer@1:
     version "1.2.0"
@@ -6151,6 +6158,13 @@ Lockfile:
       kind-of "^2.0.1"
       lazy-cache "^0.2.3"
       mixin-object "^2.0.1"
+  
+  shallow-clone@^3.0.0:
+    version "3.0.1"
+    resolved "https://registry.yarnpkg.com/shallow-clone/-/shallow-clone-3.0.1.tgz#8f2981ad92531f55035b01fb230769a40e02efa3"
+    integrity sha512-/6KqX+GVUdqPuPPd2LxDDxzX6CAbjJehAAOKlNpqqUpAqPM6HeL8f+o3a+JsyGjn2lv0WY8UsTgUJjU9Ok55NA==
+    dependencies:
+      kind-of "^6.0.2"
   
   shebang-command@^2.0.0:
     version "2.0.0"
