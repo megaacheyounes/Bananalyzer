@@ -1,8 +1,9 @@
-import Bananalyzer from '../build/index';
+import Bananalyzer from '../build';
 
-async () => {
+(async () => {
   const dl = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
   console.log('dl', dl);
+
   const result = await Bananalyzer.analyzeAPKs(
     [
       {
@@ -12,4 +13,4 @@ async () => {
     true
   );
   console.log('result', result);
-};
+})();
