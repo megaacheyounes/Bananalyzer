@@ -9,18 +9,20 @@ debugModule.enable('*');
 (async () => {
   //****************** */
   // non-cli usage tests
-  // const dl = await Bananalyzer.getDownloadLink('com.naddad.pricena');
-  // console.log('dl', dl);
+  const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
+  console.log('dl', dl);
+
+  
   //todo: revert back, use apk from test folder
-  const result = await Bananalyzer.analyzeAPKs(
-    [
-      {
-        filePath: './tests/samples/sample.apk',
-      },
-    ],
-    true
-  );
-  console.log('result', result);
+  // const result = await Bananalyzer.analyzeAPKs(
+  //   [
+  //     {
+  //       filePath: './tests/samples/sample.apk',
+  //     },
+  //   ],
+  //   true
+  // );
+  // console.log('result', result);
   // ******************************
   // todo: test getInnerApk (xapk)
   // const path = await getInnerApk('D:\\__tasks__\\_analyze\\_toolss\\Bananalyzer\\downloads\\com.ahleen.voice.apk');

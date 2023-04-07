@@ -1,6 +1,6 @@
 import xml2js from 'xml2js';
 import debugModule from 'debug';
-import { AndroidManifest } from './models/manifest';
+import { AndroidManifest } from '../models/manifest';
 
 const parser = new xml2js.Parser();
 const debug = debugModule('xml2json');

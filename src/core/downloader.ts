@@ -11,8 +11,8 @@ import { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 
 import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from '../consts';
-import { APK } from '../utils/models/apk';
-import { ApkSource, ApkDownloadInfo } from '../utils/models/storeInfo';
+import { APK } from '../models/apk';
+import { ApkSource, ApkDownloadInfo } from '../models/storeInfo';
 import BrowserUtils from '../utils/browserUtils';
 import { delay, downloadFileGot } from './utils';
 
@@ -62,7 +62,7 @@ const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolea
       if (maybeError.toLowerCase().indexOf('not found or invalid') != -1) {
         debug('got error: ' + maybeError);
         // we have an error
-        return reject(Error('the requested app is not found or invalid'));
+        return reject(new Error('the requested app is not found or invalid'));
       }
 
       const storeInfo: ApkDownloadInfo = {
@@ -123,7 +123,7 @@ const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolea
       resolve(storeInfo);
     } catch (e) {
       debug(e);
-      reject(Error('failed to get download link'));
+      reject(new Error('failed to get download link'));
     }
   });
 
@@ -139,7 +139,7 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
       await page.goto(link, { waitUntil: 'domcontentloaded' });
     } catch (e) {
       debug(e);
-      return reject(Error('no Internet'));
+      return reject(new Error('no Internet'));
     }
     await page.waitForSelector('.card-body .btn');
     debug('page loaded');
@@ -161,12 +161,12 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
 
       if (errorMessage.indexOf('we are not able to download') != -1) {
         // can't download apk, move on
-        return reject(Error(errorMessage));
+        return reject(new Error(errorMessage));
       }
 
       const retryAfter = async (delayInMillis: number) => {
         if (attempt >= MAX_ATTEMPTS_COUNT) {
-          reject(Error('failed to download apk ' + attempt + ' times!'));
+          reject(new Error('failed to download apk ' + attempt + ' times!'));
         }
         console.log("I'm taking a nap (◡‿◡) zzZZZ");
         debug('delay ==>> ' + delayInMillis + ' millis...');
@@ -198,7 +198,7 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
       }
 
       // package name is probabely wrong or invalid
-      reject(Error(errorMessage));
+      reject(new Error(errorMessage));
 
       return; // do not invoke the rest of the code
     }
@@ -233,7 +233,7 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
     const downloadLink = await page.$eval('a.btn.btn-success', (el: any) => el.href);
 
     if (!downloadLink || downloadLink.length < 0) {
-      reject(Error('failed to get download url'));
+      reject(new Error('failed to get download url'));
       return;
     }
     storeInfo.downloadLink = downloadLink;
@@ -294,7 +294,7 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
       if (!fs.existsSync(DOWNLOAD_FOLDER)) fs.mkdirSync(DOWNLOAD_FOLDER);
     } catch (e: any) {
       console.log("Bruhhh I coulnd't mkdir a folder!!!");
-      reject(Error(e));
+      reject(new Error(e));
       return;
     }
 
@@ -376,7 +376,7 @@ export const getDownloadLink = async (
     // } catch (e2) {
     //   debug(e2);
     if (!!page) await page.close();
-    throw Error('failed to get download link');
+    throw new Error('failed to get download link');
 
     //   }
   }

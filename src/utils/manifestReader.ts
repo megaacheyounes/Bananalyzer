@@ -19,7 +19,7 @@ import {
   Receiver,
   UsesLibrary,
   Provider,
-} from './models/manifest';
+} from '../models/manifest';
 import { ParsedManifest, parseManifest } from './manifestParser';
 
 import {

@@ -1,8 +1,8 @@
-import { AnalyzedApp } from '../src/utils/models/analyzedApp';
+import { AnalyzedApp } from '../src/models/analyzedApp';
 import path from 'path';
 
 import { analyzeAPKs } from '../src/core/analyzer';
-import { APK } from '../src/utils/models/apk';
+import { APK } from '../src/models/apk';
 
 import debugModule from 'debug';
 
@@ -69,7 +69,7 @@ describe('Analyzer', () => {
       const test = tests[i];
       const res = analyzedApps[i];
       expect(res.packageName).toEqual(test.apk.packageName);
-      expect(res.uploadDate).toEqual(test.apk.uploadDate);
+      expect(res.storeUploadDate).toEqual(test.apk.uploadDate);
       expect(res.GMS.length).toHaveLength(test.gmsCount);
       expect(res.HMS.length).toHaveLength(test.hmsCount);
       expect(res.googleMetadata.length).toBeGreaterThan(1);

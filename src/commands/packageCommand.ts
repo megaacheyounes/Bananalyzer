@@ -1,5 +1,5 @@
 import { Command } from './command';
-import { APK } from '../utils/models/apk';
+import { APK } from '../models/apk';
 import { downloadAPK, downoadChromiumIfMissing, closeBrowser } from '../core/downloader';
 import debugModule from 'debug';
 

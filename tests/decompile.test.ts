@@ -1,9 +1,9 @@
+import { APK } from './../src/models/apk';
 import { decompileApk } from './../src/core/apktool/decompile';
 import path from 'path';
 import fs from 'fs';
 
 import { analyzeAPKs } from '../src/core/analyzer';
-import { APK } from '../src/models/apk';
 import { ANDROID_MANIFEST } from '../src/consts';
 
 //normal apk

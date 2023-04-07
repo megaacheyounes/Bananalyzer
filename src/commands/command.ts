@@ -1,8 +1,8 @@
 import path from 'path';
 import { MyFlags, commitSuicide } from '../cliHelper';
 import { analyzeAPKs } from '../core/analyzer';
-import { APK } from '../utils/models/apk';
-import { AnalyzedApk, AnalyzedApp } from '../utils/models/analyzedApp';
+import { APK } from '../models/apk';
+import { AnalyzedApk, AnalyzedApp } from '../models/analyzedApp';
 import { saveResult } from '../core/ExcelHelper';
 import { EXPORT_DIR } from '../consts';
 import debugModule from 'debug';

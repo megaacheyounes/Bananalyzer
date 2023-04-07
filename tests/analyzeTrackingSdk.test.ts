@@ -4,7 +4,6 @@ import path from 'path';
 import fs from 'fs';
 
 import { analyzeAPKs } from '../src/core/analyzer';
-import { APK } from '../src/models/apk';
 import { ANDROID_MANIFEST } from '../src/consts';
 
 import debugModule from 'debug';

@@ -32,7 +32,8 @@
     "test:excelHelper": "jest tests/excelHelper.test.ts",
     "test:decompile": "jest tests/decompile.test",
     "test:tracking": "jest tests/analyzeTrackingSdk.test.ts",
-    "test:parseManifest": "jest tests/parseManifest.test.ts"
+    "test:parseManifest": "jest tests/parseManifest.test.ts",
+    "test:utils": "jest tests/utils.test.ts"
   },
   "bin": "index.ts",
   "keywords": [

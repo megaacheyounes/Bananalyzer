@@ -11,7 +11,7 @@ import path from 'path';
 import { readManifest } from './apkreader/apkreader';
 // import DecompressZip from 'decompress-zip';
 import { APP_DATA_FOLDER, ERR_LOG_FILE, LOG_FOLDER, OUT_LOG_FILE, TEMP_FOLDER } from '../consts';
-import { AndroidManifest } from '../utils/models/manifest';
+import { AndroidManifest } from '../models/manifest';
 
 const DecompressZip = require('decompress-zip');
 
@@ -81,7 +81,7 @@ export const getApkInfo = (apkPath: string, lookForRootApkIfFailed = true) =>
     debug('parsing ' + apkPath + ' look for root apk= ' + lookForRootApkIfFailed);
     if (!fs.existsSync(apkPath)) {
       debug(apkPath + ' does not exist');
-      return reject(Error(apkPath + ' does not exists!'));
+      return reject(new Error(apkPath + ' does not exists!'));
     }
 
     try {
@@ -100,10 +100,10 @@ export const getApkInfo = (apkPath: string, lookForRootApkIfFailed = true) =>
         if (lookForRootApkIfFailed) {
           resolve(await getApkInfo(apkpath2, false));
         } else {
-          reject(Error('APK does not contain AndroidManifest.xml'));
+          reject(new Error('APK does not contain AndroidManifest.xml'));
         }
       } else if (message.indexOf('end of central directory record signature not found') != -1) {
-        reject(Error('APK is corrupt or partially downloaded!'));
+        reject(new Error('APK is corrupt or partially downloaded!'));
       } else reject(e);
     }
   });
@@ -141,7 +141,7 @@ export const getInnerApk = (apkPath: string, destinationPath: string) =>
         resolve(destinationPath);
       } else {
         // shit!
-        reject(Error('Could not parse APK, what kind of APK is this?'));
+        reject(new Error('Could not parse APK, what kind of APK is this?'));
       }
     });
 

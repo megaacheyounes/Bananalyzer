@@ -7,7 +7,7 @@ import { deprecate } from 'util';
 import * as Zip from 'yauzl';
 import { ANDROID_MANIFEST } from '../../consts';
 
-import { AndroidManifest } from '../../utils/models/manifest';
+import { AndroidManifest } from '../../models/manifest';
 import ManifestParser from './manifestParser';
 
 // it has been updated to include application meta data
