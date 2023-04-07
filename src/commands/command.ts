@@ -18,7 +18,7 @@ export abstract class Command {
 
   async die(): Promise<boolean> {
     this.clean();
-    process.exit(2);
+    process.exit(1);
   }
 
   async clean(): Promise<boolean> {

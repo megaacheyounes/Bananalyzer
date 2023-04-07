@@ -89,7 +89,6 @@ const getServices = (manifestData: AndroidManifest, prefix: string) =>
     ?.map((a: Service) => a.name)
     .filter((a: string) => !!a && a.indexOf(prefix) != -1) || [];
 
-//fixme: returns same result for google aand huawei
 const getMessagingService = (manifestData: AndroidManifest, actionName: string) =>
   manifestData.application.services
     ?.filter(

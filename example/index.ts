@@ -1,13 +1,14 @@
-import Bananalyzer from '../build';
+import Bananalyzer from 'bananalyzer';
 
 (async () => {
-  const dl = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
-  console.log('dl', dl);
+  // const dl = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
+  // console.log('dl', dl);
 
   const result = await Bananalyzer.analyzeAPKs(
     [
       {
-        filePath: './tests/samples/sample.apk',
+        //todo: set apk path
+        filePath: '../tests/samples/sample.apk',
       },
     ],
     true

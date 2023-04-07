@@ -43,7 +43,7 @@ const requiredTools = [APP_CHECK_JAR, APKTOOL_JAR];
 for (const tool of requiredTools) {
   if (!fs.existsSync(tool)) {
     commitSuicide("(ಠ_ಠ) some parts of me are missing! I couldn't find " + tool);
-    process.exit(2);
+    process.exit(3);
     //program will stop here
   }
 }
@@ -114,20 +114,18 @@ const cli = async () => {
     }
     case CMD_VERSION: {
       // console.log('Banalyzer version=', info.version);
-      // process.exit(2)
       cliHelper.showVersion();
       break;
     }
     default: {
       //show help
       cliHelper.showHelp();
-      break;
     }
   }
 };
 debug(
   'DebugLogs =' + enableLogs,
-  ' UseExisting =' + useExisting,
+  ', UseExisting =' + useExisting,
   ', BatchSize = ' + batchSize,
   ', KeepAPKs = ' + keepApks
 );

@@ -20,6 +20,6 @@ export declare type AnalyzedSDKs = {
     others?: string[];
 };
 export declare type AnalyzedApk = {
-    uploadDate: string;
+    storeUploadDate: string;
     apkCreationTime: string;
 };

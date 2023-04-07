@@ -45,18 +45,17 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
     jar: APP_CHECK_JAR,
   });
 
-  //todo: uncomment
-  // fs.writeFileSync(HMS_OUTPUT, '');
-  // fs.writeFileSync(GMS_OUTPUT, '');
-  //todo: uncomment
+  fs.writeFileSync(HMS_OUTPUT, '');
+  fs.writeFileSync(GMS_OUTPUT, '');
+
   // eslint-disable-next-line no-unused-vars
-  // const { status, stdout, stderr } = await java.run(['-Gtrue -Dfalse -Cfalse']);
+  const { status, stdout, stderr } = await java.run(['-Gtrue -Dfalse -Cfalse']);
   //    debug("--- status ----")
   //    debug(status)
   //    debug("--- stdout ----")S
   //    debug(stdout)
   //    debug("--- stderr ----")
-  //    debug(stderr)
+  if (stderr) debug(stderr);
 
   //todo: use csv parsing library
   // 4- parse bad AppCheck results

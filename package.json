@@ -15,6 +15,7 @@
     "start:apk": "cross-env NODE_ENV=debug ts-node src/cli.ts apk -k -d --path",
     "start:apklist": "cross-env NODE_ENV=debug ts-node src/cli.ts apklist -k -r -d",
     "start:help": "cross-env NODE_ENV=debug ts-node src/cli.ts help",
+    "start:version": "cross-env NODE_ENV=debug ts-node src/cli.ts version",
     "devider_build_cli": " __________________ build cli exe  __________________ ",
     "build": "npm run clean && npm run copy-files &&  npm run build:cli && npm run build:exe",
     "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"lib/AppCheck.jar\" \"lib/apktool.jar\" dist",

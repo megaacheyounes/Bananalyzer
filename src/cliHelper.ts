@@ -38,12 +38,12 @@ const flags: any = {
     default: false,
     desc: 'Keep downloaded APKs (can be found in downloads/ folder)',
   },
-  reuse: {
-    type: 'boolean',
-    alias: 'r',
-    default: false,
-    desc: 'Re-use existing APKs that are found in download folder',
-  },
+  // reuse: {
+  //   type: 'boolean',
+  //   alias: 'r',
+  //   default: false,
+  //   desc: 'Re-use existing APKs that are found in download folder',
+  // },
   batch: {
     type: 'number',
     alias: 'b',
