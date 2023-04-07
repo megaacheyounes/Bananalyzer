@@ -10,25 +10,42 @@ A simple tool for windows 10, that downloads APKs from Google playstore, analyze
 
 ## Contents
 
-- [Use in code](#use-in-code) - [get apk direct download link](#get-apk-direct-download-link)
-  - [Notes](#notes)
-  - [TODO](#todo)
-  - [License](#license)
+- [Bananalyzer](#bananalyzer)
+- [Contents](#contents)
+- [How does it work?](#how-does-it-work)
+- [Usage](#usage)
+- [Demo](#demo)
+- [Download](#download)
+- [Instructions](#instructions)
+      - [Downloading and analyzing a list of apps](#downloading-and-analyzing-a-list-of-apps)
+      - [Downloading and analyzing one app](#downloading-and-analyzing-one-app)
+      - [Analyzing a list of APKs](#analyzing-a-list-of-apks)
+      - [Analyze one apk](#analyze-one-apk)
+- [Use in code](#use-in-code)
+- [Notes](#notes)
+- [Run locally](#run-locally)
+- [Build](#build)
+- [TODO](#todo)
+- [License](#license)
 
 ## How does it work?
 
-This is a simple nodejs script that has been packaged into an executable (exe) for ease of use. it uses chromium to download APKs from playstore using two sources (websites), then it uses a Java tool called "AppCheck" that looks inside the APK and determines what Google and Huawei SDKs are integrated, then it parses the AndroidManifest.xml file to get some metadata, finaly the tool exports the results into an excel file (scroll down to see a demo)
+This is a simple nodejs script that has been packaged into an executable (exe) for ease of use. it uses chromium to download APKs from playstore using two sources (websites), then it uses a Java tool called "AppCheck" that looks inside the APK and determines what Google and Huawei SDKs are integrated, then it parses the AndroidManifest.xml file to get some metadata, finally the tool exports the results into an excel file (scroll down to see a demo)
 
 ## Usage
 
 ```
-$ bananalyzer <command> [option]
+
+   USAGE
+
+  $ bananalyzer <command> [option]
 
    COMMANDS
 
   package  Download and analyze an app by providing its package name
   apk      Analyze an Apk by providing its file path
   list     Download and analyze a list of apps by providing a file that contains their package names
+  apklist  Analyze a list of apps by providing a file that contains their apk file paths
   help     Print help information
 
    OPTIONS
@@ -37,7 +54,6 @@ $ bananalyzer <command> [option]
   -n, --name   App package name, required when using Command 'package'
   -d, --debug  Print debug logs Default: false
   -k, --keep   Keep downloaded APKs (can be found in downloads/ folder) Default: false
-  -r, --reuse  Re-use existing APKs that are found in download folder Default: false
   -b, --batch  Batch size, optional when using command 'file' Default: 3
 
 ```
@@ -48,9 +64,11 @@ $ bananalyzer <command> [option]
 
 video: https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4
 
-## download
+## Download
 
-latest release: https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.2
+latest release (Bananalyzer_1.0.2_win64.zip):
+
+https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.2
 
 ## Instructions
 
@@ -59,45 +77,48 @@ latest release: https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.
 1. Download latest release and extract it
 2. create a txt file and write the package names into it, one package name per line, see `example_apps.txt`
 3. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
-4. navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`
-5. run the command `bananalyzer.exe file -k -r`
-6. Bananalyzer will open a file picker, choose the txt file that you created in step 1 and click `Open`
-7. Bananalyzer will start working, analyzing 3 apks at a time ( change batch count using --batch or -b).
+4. navigate to the folder that contains this tool, example: `cd C://bananalyzer`
+5. run the command `bananalyzer.exe list -k`
+6. Bananalyzer will open a file picker, choose the txt file that you created in **step 1** and click `Open`
+7. Bananalyzer will start working, analyzing 3 APKs at a time ( change batch count using `--batch`).
 8. when finished, the results can be found in an excel file, that has the same name as the txt file (example: `example_apps.xlsx`)
 
 ##### Downloading and analyzing one app
 
 1. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
-2. navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`
-3. run the command `bananalyzer.exe package --name 'com.package.name' -k -r`
+2. navigate to the folder that contains this tool, example: `cd C://bananalyzer`
+3. run the command `bananalyzer.exe package --name 'com.package.name' -k`
 4. Bananalyzer will start downloading then analyzing the app
 5. when finished, the results can be found in an excel file, that has the same name as the package name (example: `com.package.name.xlsx`)
 
-##### Analyze an apk
+##### Analyzing a list of APKs
+
+1. create a txt file and write the apk path into it, one APK path per line, see `example_apklist.txt`
+2. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
+3. navigate to the folder that contains this tool, example: `cd C://bananalyzer`
+4. run the command `bananalyzer.exe apklist -k`
+5. Bananalyzer will open a file picker, choose the txt file that you created in **step 1** and click `Open`
+6. Bananalyzer will start working, analyzing 3 APKs at a time ( change batch count using `--batch` ).
+7. when finished, the results can be found in an excel file, that has the same name as the txt file (example: `example_apklist.xlsx`)
+
+##### Analyze one apk
 
 1. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
-2. navigate to the folder that contains this tool, exmaple: `cd C://bananalyzer`
+2. navigate to the folder that contains this tool, example: `cd C://bananalyzer`
 3. run the command `bananalyzer.exe apk --path 'C://apks/apk_name.apk'`
 4. Bananalyzer will start analyzing the apk
 5. when finished, the results can be found in an excel file, that has the same name as the apk file (example: `apk_name.xlsx`)
 
-## Run locally
-
-1. Install NodeJS and Java
-2. Clone the repo `git clone https://github.com/megaacheyounes/Bananalyzer.git`
-3. Run `npm install`
-4. Run `ts-node index.ts`
-
-# Use in code
+## Use in code
 
 install
 
-`npm install banalyzer`
+`npm install bananalyzer`
 
 get apk direct download link
 
 ```typescript
-import Bananalyzer from './src/Bananalyzer';
+import Bananalyzer from 'bananalyzer';
 
 await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
 /*
@@ -116,7 +137,7 @@ result
 analyze an APK
 
 ```typescript
-import Bananalyzer from './src/Bananalyzer';
+import Bananalyzer from 'bananalyzer';
 
 await Bananalyzer.analyzeAPKs(
   [
@@ -218,19 +239,31 @@ result [
 2. Bananalyzer will fail to download some apps that are avaialble in certain regions only
 3. Bananalyzer has unlimited lives, and will commit suicide many times, but it's still being developed and will be made more stable :)
 
-### Develope
+## Run locally
+
+1. Install NodeJS and Java
+2. Clone the repo `git clone https://github.com/megaacheyounes/Bananalyzer.git`
+3. Run `npm install`
+4. Run `ts-node index.ts`
+
+## Build
 
 1. clone repo
-2. its recommneded to install global packages: `npm install --global tsc typescript ts-node coyfiles rimraf @vercel/ncc `
+2. its recommended to install global packages: `npm install --global tsc typescript ts-node coyfiles rimraf @vercel/ncc `
 3. install modules: `npm install`
-4. run cli
-5. build CLI windows EXE file:
+4. run cli: `npm run start`
+5. build CLI windows executable (.exe): `npm run build` => result in `dist/`
+6. build library to publish to npm: `npm run build:npm` => result in `build/`
 
 ## TODO
 
 - [x] Use a proper logging library for debugging instead of console.log
 - [x] Migrate to TypeScript
 - [x] Add unit tests
+- [x] Publish npm module
+- [ ] Detect Ads and Tracking SDKs
+- [ ] Detect Firebase/AppGallery cloud services
+- [ ] Add download options from apk repos (APKMirror, ApkPure, ApkMonk)
 - [ ] Improve and add missing documentation
 
 ## License

@@ -18,7 +18,7 @@
     "start:version": "cross-env NODE_ENV=debug ts-node src/cli.ts version",
     "devider_build_cli": " __________________ build cli exe  __________________ ",
     "build": "npm run clean && npm run copy-files &&  npm run build:cli && npm run build:exe",
-    "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"lib/AppCheck.jar\" \"lib/apktool.jar\" dist",
+    "copy-files": "copyfiles \"instructions.txt\" \"example_apps.txt\" \"example_apklist.txt\" \"lib/AppCheck.jar\" \"lib/apktool.jar\" dist",
     "clean": "rimraf dist esm build",
     "build:cli": "ncc build src/cli.ts -m -o build_cli",
     "build:exe": "pkg -t node16-win-x64 -C GZip -o dist/bananalyzer.exe --public  build_cli/index.js ",
