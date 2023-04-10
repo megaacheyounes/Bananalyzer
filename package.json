@@ -1,12 +1,11 @@
 {
   "name": "bananalyzer",
-  "version": "1.1.0-rc3",
+  "version": "1.1.0-rc4",
   "description": "A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata",
   "author": "Younes Megaache",
   "homepage": "https://github.com/megaacheyounes/bananalyzer",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "type": "module",
   "displayName": "bananalyzer",
   "scripts": {
     "prepublish": "npm run clean && npm run copy-files && npm run build:npm",
@@ -25,7 +24,7 @@
     "build:exe": "pkg -t node16-win-x64 -C GZip -o dist/bananalyzer.exe --public  build_cli/index.js ",
     "devider_build_js": " __________________ build js for npm package __________________ ",
     "build:npm": "npm run clean && npm run build:npm_src",
-    "build:npm_src": "tsc --target esnext --module ES6",
+    "build:npm_src": "tsc --target es5 ",
     "devider_test": " __________________ test __________________ ",
     "test": "jest",
     "test:analyzer": "jest tests/analyzer.test.ts",
