@@ -318,14 +318,16 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bananalyzer@^1.0.4-rc4:
-  version "1.0.4-rc4"
-  resolved "https://registry.yarnpkg.com/bananalyzer/-/bananalyzer-1.0.4-rc4.tgz#e7bac4fce5fe60814a1834f7d339ad65de56b1da"
-  integrity sha512-BSWXu3Xk7mSmaAkn9z6pizLEhgcNaSEzHurWZJ9YzxHJlVjbWmo/g0ckaZIzQCeBmWZnzPxKJ5ocycTexmj7kA==
+bananalyzer@^1.1.0-rc1:
+  version "1.1.0-rc1"
+  resolved "https://registry.yarnpkg.com/bananalyzer/-/bananalyzer-1.1.0-rc1.tgz#b945090343e048ee2f24fe45fc1748e358632ea3"
+  integrity sha512-ScsYJmdDTPydfaSM0CcOYwIpQSwEEvmzJ37r/DhtBczDFKAYAYaBy05ImJYWMwMv51L3RCo1CWtlUIf/j5J7LA==
   dependencies:
     "@types/semver" "^7.3.13"
     "@types/xml2js" "^0.4.11"
     cli-meow-help "^2.0.2"
+    csv-parse "^5.3.6"
+    csv-parser "^3.0.0"
     debug "^4.3.4"
     decompress-zip "^0.3.3"
     download-chromium "^2.2.1"
@@ -601,6 +603,18 @@ cross-fetch@3.1.5:
   integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
   dependencies:
     node-fetch "2.6.7"
+
+csv-parse@^5.3.6:
+  version "5.3.6"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.3.6.tgz#181d7c12300a60684bb51261ea9a5c3135ba8688"
+  integrity sha512-WI330GjCuEioK/ii8HM2YE/eV+ynpeLvU+RXw4R8bRU8R0laK5zO3fDsc4gH8s472e3Ga38rbIjCAiQh+tEHkw==
+
+csv-parser@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/csv-parser/-/csv-parser-3.0.0.tgz#b88a6256d79e090a97a1b56451f9327b01d710e7"
+  integrity sha512-s6OYSXAK3IdKqYO33y09jhypG/bSDHPuyCme/IdEHfWpLf/jKcpitVFyOC6UemgGk8v7Q5u2XE0vvwmanxhGlQ==
+  dependencies:
+    minimist "^1.2.0"
 
 data-uri-to-buffer@1:
   version "1.2.0"
