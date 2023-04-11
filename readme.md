@@ -125,7 +125,8 @@ Get direct download link to download APK from PlayStore, Split APKs will be auto
 ```typescript
 import Bananalyzer from 'bananalyzer';
 
-await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
+const result = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
+console.log(result);
 /*
 result 
 {
@@ -146,10 +147,12 @@ download latest apk from PlayStore, APKs will be saved in `/downloads` folder
 ```typescript
 import Bananalyzer from 'bananalyzer';
 
-await Bananalyzer.downloadAPK('com.ubercab.uberlite');
+const result = await Bananalyzer.downloadAPK('com.ubercab.uberlite');
+console.log(result);
+
 /*
 result
- {    
+ {  
       packageName: 'com.ubercab.uberlite',
       filePath: 'D:\\github\\bananalyzer\\downloads\\com.ubercab.uberlite.apk',
       uploadDate: '27 Jan 2023'
@@ -164,7 +167,7 @@ Analyze an APK, see CLI description above or result below for more details
 ```typescript
 import Bananalyzer from 'bananalyzer';
 
-await Bananalyzer.analyzeAPKs(
+const result = await Bananalyzer.analyzeAPKs(
   [
     {
       filePath: './sample.apk',
@@ -172,9 +175,11 @@ await Bananalyzer.analyzeAPKs(
   ],
   true
 );
+console.log(result);
+
 /*
-  result
-result [
+result
+[
   {
     HMS: [ 'account', 'location', 'ads' ],
     GMS: [],
