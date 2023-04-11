@@ -16,7 +16,11 @@ A simple tool for windows 10, that downloads APKs from Google playstore, analyze
 - [Usage](#usage)
 - [Demo](#demo)
 - [Download](#download)
-- [Instructions](#instructions) - [Downloading and analyzing a list of apps](#downloading-and-analyzing-a-list-of-apps) - [Downloading and analyzing one app](#downloading-and-analyzing-one-app) - [Analyzing a list of APKs](#analyzing-a-list-of-apks) - [Analyze one apk](#analyze-one-apk)
+- [Instructions](#instructions)
+  - [Downloading and analyzing a list of apps](#downloading-and-analyzing-a-list-of-apps)
+  - [Downloading and analyzing one app](#downloading-and-analyzing-one-app)
+  - [Analyzing a list of APKs](#analyzing-a-list-of-apks)
+  - [Analyze one apk](#analyze-one-apk)
 - [Use in code](#use-in-code)
   - [get apk direct download link](#get-apk-direct-download-link)
   - [download an APK](#download-an-apk)
@@ -71,7 +75,7 @@ latest release (Bananalyzer_1.1.1_win64.zip):
 
 ## Instructions
 
-##### Downloading and analyzing a list of apps
+### Downloading and analyzing a list of apps
 
 1. Download latest release and extract it
 2. create a txt file and write the package names into it, one package name per line, see `example_apps.txt`
@@ -82,7 +86,7 @@ latest release (Bananalyzer_1.1.1_win64.zip):
 7. Bananalyzer will start working, analyzing 3 APKs at a time ( change batch count using `--batch`).
 8. when finished, the results can be found in an excel file, that has the same name as the txt file (example: `example_apps.xlsx`)
 
-##### Downloading and analyzing one app
+### Downloading and analyzing one app
 
 1. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
 2. navigate to the folder that contains this tool, example: `cd C://bananalyzer`
@@ -90,7 +94,7 @@ latest release (Bananalyzer_1.1.1_win64.zip):
 4. Bananalyzer will start downloading then analyzing the app
 5. when finished, the results can be found in an excel file, that has the same name as the package name (example: `com.package.name.xlsx`)
 
-##### Analyzing a list of APKs
+### Analyzing a list of APKs
 
 1. create a txt file and write the apk path into it, one APK path per line, see `example_apklist.txt`
 2. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
@@ -100,7 +104,7 @@ latest release (Bananalyzer_1.1.1_win64.zip):
 6. Bananalyzer will start working, analyzing 3 APKs at a time ( change batch count using `--batch` ).
 7. when finished, the results can be found in an excel file, that has the same name as the txt file (example: `example_apklist.xlsx`)
 
-##### Analyze one apk
+### Analyze one apk
 
 1. open a terminal like PowerShell or cmd (if you use cmd, press enter from time to time)
 2. navigate to the folder that contains this tool, example: `cd C://bananalyzer`
