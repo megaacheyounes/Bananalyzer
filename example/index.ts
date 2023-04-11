@@ -1,10 +1,13 @@
 import Bananalyzer from 'bananalyzer';
 
 (async () => {
-  const dl = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
-  console.log('dl', dl);
+  const getDownloadLinkResult = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
+  console.log('getDownloadLinkResult', getDownloadLinkResult);
 
-  const result = await Bananalyzer.analyzeAPKs(
+  const downloadAPKResult = await Bananalyzer.downloadAPK('com.ubercab.uberlite', false);
+  console.log('downloadAPKResult', downloadAPKResult);
+
+  const analyzeAPKsResult = await Bananalyzer.analyzeAPKs(
     [
       {
         //todo: set apk path
@@ -13,5 +16,8 @@ import Bananalyzer from 'bananalyzer';
     ],
     true
   );
-  console.log('result', result);
+  console.log('analyzeAPKsResult', analyzeAPKsResult);
+
+  console.log('done');
+  process.exit(0);
 })();

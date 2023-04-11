@@ -13,16 +13,20 @@ describe('Downloader', () => {
   it('should get download link from apk.support ', async () => {
     const result = await getDownloadLink(packageName);
 
-    expect(result?.packageName).toEqual(packageName);
-    expect(result?.source).toEqual(ApkSource.APK_SUPPORT);
-    expect(result?.downloadLink).toBeTruthy();
-  });
+    expect(result).toBeTruthy();
+    expect(result!.packageName).toEqual(packageName);
+    expect(result!.source).toEqual(ApkSource.APK_SUPPORT);
+    expect(result!.downloadLink).toBeTruthy();
+  }, 60_000);
 
   it('should throw error for wrong page names apk.support  (source 1)', async () => {
-    var result = await getDownloadLink(wrongPackageName).catch((e) => expect(e).toBeTruthy());
-
-    expect(result).toBeFalsy();
-  });
+    try {
+      var result = await getDownloadLink(wrongPackageName);
+      expect(result).toBeFalsy();
+    } catch (e) {
+      expect(e).toBeTruthy();
+    }
+  }, 240_000);
 
   it('should download apk', async () => {
     const result = await downloadAPK(packageName, false);

@@ -7,7 +7,9 @@ import { analyzeAPKs } from './core/analyzer';
 
 import { getDownloadLink } from './core/downloader';
 
+import { downloadAPK } from './core/downloader';
 export default {
   getDownloadLink,
+  downloadAPK,
   analyzeAPKs,
 };

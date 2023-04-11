@@ -16,12 +16,11 @@ A simple tool for windows 10, that downloads APKs from Google playstore, analyze
 - [Usage](#usage)
 - [Demo](#demo)
 - [Download](#download)
-- [Instructions](#instructions)     
-      - [Downloading and analyzing a list of apps](#downloading-and-analyzing-a-list-of-apps)   
-      - [Downloading and analyzing one app](#downloading-and-analyzing-one-app)     
-      - [Analyzing a list of APKs](#analyzing-a-list-of-apks)     
-      - [Analyze one apk](#analyze-one-apk)     
+- [Instructions](#instructions) - [Downloading and analyzing a list of apps](#downloading-and-analyzing-a-list-of-apps) - [Downloading and analyzing one app](#downloading-and-analyzing-one-app) - [Analyzing a list of APKs](#analyzing-a-list-of-apks) - [Analyze one apk](#analyze-one-apk)
 - [Use in code](#use-in-code)
+  - [get apk direct download link](#get-apk-direct-download-link)
+  - [download an APK](#download-an-apk)
+  - [analyze an APK](#analyze-an-apk)
 - [Notes](#notes)
 - [Run locally](#run-locally)
 - [Build](#build)
@@ -115,7 +114,9 @@ install
 
 `npm install bananalyzer`
 
-get apk direct download link
+### get apk direct download link
+
+Get direct download link to download APK from PlayStore, Split APKs will be automatically merged into one APK
 
 ```typescript
 import Bananalyzer from 'bananalyzer';
@@ -134,7 +135,27 @@ result
 */
 ```
 
-analyze an APK
+### download an APK
+
+download latest apk from PlayStore, APKs will be saved in `/downloads` folder
+
+```typescript
+import Bananalyzer from 'bananalyzer';
+
+await Bananalyzer.downloadAPK('com.ubercab.uberlite');
+/*
+result
+ {        
+      packageName: 'com.ubercab.uberlite',
+      filePath: 'D:\\github\\bananalyzer\\downloads\\com.ubercab.uberlite.apk',
+      uploadDate: '27 Jan 2023'
+    }
+*/
+```
+
+### analyze an APK
+
+Analyze an APK, see CLI description above or result below for more details
 
 ```typescript
 import Bananalyzer from 'bananalyzer';
