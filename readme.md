@@ -61,13 +61,13 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 
 <img src="/screenshot/bananalyzer_demo.gif" width="800" height="474"/>
 
-video: https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4
+video: [https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4](https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/bananalyzer_demo.mp4)
 
 ## Download
 
-latest release (Bananalyzer_1.0.2_win64.zip):
+latest release (Bananalyzer_1.1.1_win64.zip):
 
-https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.0.2
+[https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.1.1](https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.1.1)
 
 ## Instructions
 
@@ -145,7 +145,7 @@ import Bananalyzer from 'bananalyzer';
 await Bananalyzer.downloadAPK('com.ubercab.uberlite');
 /*
 result
- {        
+ {    
       packageName: 'com.ubercab.uberlite',
       filePath: 'D:\\github\\bananalyzer\\downloads\\com.ubercab.uberlite.apk',
       uploadDate: '27 Jan 2023'
