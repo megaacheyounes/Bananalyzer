@@ -2,6 +2,7 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/megaacheyounes/bananalyzer)
 ![Platform win64](https://img.shields.io/badge/platform-Win64-red)
 ![GitHub all releases](https://img.shields.io/github/downloads/megaacheyounes/bananalyzer/total)
+![npm](https://img.shields.io/npm/dm/bananalyzer?label=npm%20downloads)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/megaacheyounes/bananalyzer/issues)
 
 ## Bananalyzer
