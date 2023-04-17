@@ -17,6 +17,8 @@ import { getApkInfo } from './utils';
 import { HUAWEI_MESSAGING_EVENT } from '../consts';
 import { analyzeKits } from './analyzer/AnalyzeKits';
 import { getAndroidManifestData } from '../utils/manifestReader';
+import { version } from 'os';
+import YAML from 'yaml';
 
 const debug = debugModule('analyzer');
 
@@ -52,17 +54,33 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
       const SDKs = await analyzeKits(apk);
       debug('sdks', SDKs);
       const manifestResult = await analyzeManifest(decRes.manifestPath!);
+
+      const apkToolYmlResult = await analyzeApkToolYml(decRes.apkToolYmlPath!);
+
       // debug('manifestResult', manifestResult);
       const apkFileResult = analyzeApk(apk);
       // debug('apkfileresult', apkFileResult);
       results.push({
         ...SDKs,
         ...manifestResult,
+        ...apkToolYmlResult,
         ...apkFileResult,
       });
     }
     resolve(results);
   });
+
+//todo: move to separate file
+const analyzeApkToolYml = (apkToolYmlPath: string) => {
+  const result = YAML.parse(fs.readFileSync(apkToolYmlPath, 'utf-8'));
+  const versionName = result['versionInfo']['versionName'];
+  const versionCode = result['versionInfo']['versionCode'];
+
+  return {
+    versionName,
+    versionCode,
+  };
+};
 
 /*** parse manifest */
 const getCompanyMetadata = (manifestData: AndroidManifest, company: string) =>
@@ -122,7 +140,7 @@ const analyzeManifest = async (manifestPath: string): Promise<AnalyzedManifest> 
     packageName = manifestData.package;
 
     // console.dir(manifestData)
-    versionName = manifestData ? manifestData.versionName : 'NOT FOUND';
+    if (!versionName) versionName = manifestData.versionName || 'NOT FOUND';
 
     const metadata = manifestData['application']['metaData'];
 
@@ -183,7 +201,7 @@ const analyzeApk = (apk: APK): AnalyzedApk => {
     // console.log(stat);
     if (!!stat.mtime) apkCreationTime = stat.mtime.toLocaleString();
   } catch (e) {
-    debug(e);
+    debug('failed to get stats', e);
   }
   return {
     storeUploadDate: apk.uploadDate || '',

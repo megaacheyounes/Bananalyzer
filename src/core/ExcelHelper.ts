@@ -13,8 +13,8 @@ const HEADER_PACKAGE_NAME = 'Package name'; //
 const HEADER_VERSION_NAME = 'Version name';
 const HEADER_APK_CREATION_DATE = 'APK creation date';
 const HEADER_GOOGLE_PLAY_UPDATE_DATE = 'Google Play update date';
-const HEADER_GMS_KITS = 'GMS kits';
-const HEADER_HMS_KITS = 'HMS kits';
+const HEADER_GMS_KITS = 'GMS kits (low accuracy)';
+const HEADER_HMS_KITS = 'HMS kits (medium accuracy)';
 const HEADER_HUAWEI_APP_ID = 'Huawei App Id';
 
 const HEADER_HUAWEI_METADATAS = 'Huawei Metadatas';
@@ -26,8 +26,8 @@ const HEADER_HUAWEI_PERMISSIONS = 'Huawei Permissions';
 const HEADER_GOOGLE_ACTIVITIES = 'Google activities';
 const HEADER_HUAWEI_ACTIVITIES = 'Huawei activities';
 
-const HEADER_GOOGLE_SERVICES = 'Google Servicies';
-const HEADER_HUAWEI_SERVICES = 'Huawei Servicies';
+const HEADER_GOOGLE_SERVICES = 'Google Services';
+const HEADER_HUAWEI_SERVICES = 'Huawei Services';
 
 const HEADER_GOOGLE_MESSAGING_SERVICES = 'Google Messaging Services';
 const HEADER_HUAWEI_MESSAGING_SERVICES = 'Huawei Messaging Services';

@@ -32,7 +32,6 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
 
   try {
     fs.copyFileSync(apk.filePath, dest);
-    apk.filePath = dest;
   } catch (e) {
     debug('analyzer:failed to move apk ' + apkName + ' from /downloads to /appdataxsj');
     debug('analyzer:apk path= ' + apk.filePath + ' ,dest = ' + dest);
@@ -68,6 +67,14 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
 
   const HMS: string[] = getServices(hmsEntries) || [];
   const GMS: string[] = getServices(gmsEntries) || [];
+
+  try {
+    fs.unlinkSync(dest);
+  } catch (e) {
+    debug('analyzer:failed to unlink apk ' + apkName + ' from /appdataxsj');
+    // console.log(`⤫ failed to analyze apk → ${apkName} : ${e.message}`);
+    debug(e);
+  }
 
   return {
     HMS,

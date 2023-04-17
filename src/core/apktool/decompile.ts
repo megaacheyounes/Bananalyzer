@@ -1,4 +1,4 @@
-import { ANDROID_MANIFEST, APKTOOL_JAR, DECOMPILE_FOLDER } from '../../consts';
+import { ANDROID_MANIFEST, APKTOOL_JAR, APK_TOOL_YML, DECOMPILE_FOLDER } from '../../consts';
 import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
@@ -12,6 +12,7 @@ interface DecompileResult {
   decompileFolderPath?: string;
   manifestPath?: string;
   error?: string;
+  apkToolYmlPath?: string;
 }
 // java -jar apktool.jar d -o D:\__tasks__\_analyze\dtse_orion\decompile\sample sample.apk
 export const decompileApk = async (apk: APK, keepSources: boolean): Promise<DecompileResult> =>
@@ -51,5 +52,6 @@ export const decompileApk = async (apk: APK, keepSources: boolean): Promise<Deco
       error,
       decompileFolderPath: resultPath,
       manifestPath: path.join(resultPath, ANDROID_MANIFEST),
+      apkToolYmlPath: path.join(resultPath, APK_TOOL_YML),
     });
   });

@@ -8,6 +8,7 @@ export var EXPORT_DIR = process.cwd();
 
 //files
 export const ANDROID_MANIFEST = 'AndroidManifest.xml';
+export const APK_TOOL_YML = 'apktool.yml';
 
 //app check
 export const APP_DATA_XSJ = 'appdataxsj';

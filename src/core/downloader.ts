@@ -343,7 +343,7 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
         return reject(e);
       }
       console.log('✓ APK file is ready → ' + packageName);
-      resolve({ packageName, filePath, uploadDate });
+      resolve({ packageName, filePath, uploadDate, versionName, size: apkSize });
       debug('Downlading APK file started ==>> ' + packageName);
     } catch (e) {
       debug(e);
