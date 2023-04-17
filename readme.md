@@ -70,9 +70,9 @@ video: [https://github.com/megaacheyounes/Bananalyzer/blob/master/screenshot/ban
 
 ## Download
 
-latest release (Bananalyzer_1.1.1_win64.zip):
+latest release (Bananalyzer_v1.1.2_win64.zip):
 
-[https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.1.1](https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.1.1)
+[https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.1.2](https://github.com/megaacheyounes/Bananalyzer/releases/tag/v1.1.2)
 
 ## Instructions
 
