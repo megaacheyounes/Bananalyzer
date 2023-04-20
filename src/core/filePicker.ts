@@ -9,7 +9,7 @@ import fs from 'fs';
 
 const spawn = childProcess.spawn;
 
-const debug = debugModule('psHelper');
+const debug = debugModule('bananalyzer:psHelper');
 
 /**
  * a hack to open a windows file picker (explorer) from the console, using a PowerSheel script

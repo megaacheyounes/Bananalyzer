@@ -7,7 +7,7 @@ import { saveResult } from '../core/ExcelHelper';
 import { EXPORT_DIR } from '../consts';
 import debugModule from 'debug';
 import { cleanDataFolder } from '../core/analyzer/AnalyzeKits';
-const debug = debugModule('command');
+const debug = debugModule('bananalyzer:command');
 
 export abstract class Command {
   flags: MyFlags;

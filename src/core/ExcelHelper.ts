@@ -7,7 +7,7 @@ import { AnalyzedApk, AnalyzedApp } from '../models/analyzedApp';
 import { ExcelRow } from '../models/excelRow';
 import { IS_PROD } from '../consts';
 
-const debug = debugModule('excleHelper');
+const debug = debugModule('bananalyzer:excleHelper');
 
 const HEADER_PACKAGE_NAME = 'Package name'; //
 const HEADER_VERSION_NAME = 'Version name';

@@ -16,7 +16,7 @@ import { ApkSource, ApkDownloadInfo } from '../models/storeInfo';
 import BrowserUtils from '../utils/browserUtils';
 import { delay, downloadFileGot } from './utils';
 
-const debug = debugModule('downloader');
+const debug = debugModule('bananalyzer:downloader');
 
 const downloadChromium = require('download-chromium');
 

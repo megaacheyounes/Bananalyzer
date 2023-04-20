@@ -22,7 +22,7 @@ import { HUAWEI_MESSAGING_EVENT } from '../../consts';
 
 const JavaCallerModule = require('java-caller');
 
-const debug = debugModule('analyzeKits');
+const debug = debugModule('bananalyzer:analyzeKits');
 
 export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
   const apkName = path.basename(apk.filePath);

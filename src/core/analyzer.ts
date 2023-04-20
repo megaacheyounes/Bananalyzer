@@ -20,7 +20,7 @@ import { getAndroidManifestData } from '../utils/manifestReader';
 import { version } from 'os';
 import YAML from 'yaml';
 
-const debug = debugModule('analyzer');
+const debug = debugModule('bananalyzer:analyzer');
 
 //to find messaging services
 const MESSAGING_EVENT = 'MESSAGING_EVENT';

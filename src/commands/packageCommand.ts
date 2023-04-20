@@ -3,7 +3,7 @@ import { APK } from '../models/apk';
 import { downloadAPK, downoadChromiumIfMissing, closeBrowser } from '../core/downloader';
 import debugModule from 'debug';
 
-const debug = debugModule('PackageCommand');
+const debug = debugModule('bananalyzer:PackageCommand');
 
 export default class PackageCommand extends Command {
   async exec(): Promise<boolean> {

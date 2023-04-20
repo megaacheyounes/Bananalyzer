@@ -8,7 +8,7 @@ import glob from 'glob';
 
 import debugModule from 'debug';
 import { match } from 'assert';
-const debug = debugModule('analyzeTrackingSdks');
+const debug = debugModule('bananalyzer:analyzeTrackingSdks');
 
 export interface TrackingSdkResult {
   name: string;

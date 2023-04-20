@@ -8,7 +8,7 @@ import path from 'path';
 import { APK } from '../models/apk';
 import PackageCommand from './packageCommand';
 
-const debug = debugModule('PickFile');
+const debug = debugModule('bananalyzer:PickFile');
 
 export class PickFileCommand extends PackageCommand {
   async exec(): Promise<boolean> {

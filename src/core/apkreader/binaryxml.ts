@@ -10,7 +10,7 @@
 import assert from 'assert';
 import debugModule from 'debug';
 
-const debug = debugModule('adb:apkreader:parser:binaryxml');
+const debug = debugModule('bananalyzer:binaryxml');
 
 const NodeType = {
   ELEMENT_NODE: 1,

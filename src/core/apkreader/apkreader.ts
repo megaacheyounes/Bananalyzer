@@ -12,7 +12,7 @@ import ManifestParser from './manifestParser';
 
 // it has been updated to include application meta data
 
-const debug = debugModule('apkreader');
+const debug = debugModule('bananalyzer:apkreader');
 
 /**
  *

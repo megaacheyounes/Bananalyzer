@@ -17,7 +17,7 @@ const DecompressZip = require('decompress-zip');
 
 const got = require('got');
 
-const debug = debugModule('');
+const debug = debugModule('bananalyzer:utils');
 
 // remove styling
 const cleanLogs = (buffer: Uint8Array | string) => `${buffer}`.replace(/\[(.*?)m/g, '').replace(/\[(.*?)m/g, '');

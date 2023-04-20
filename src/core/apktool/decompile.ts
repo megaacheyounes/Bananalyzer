@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { APK } from '../../models/apk';
 
-const debug = debugModule('apkreader');
+const debug = debugModule('bananalyzer:apkreader');
 const JavaCallerModule = require('java-caller');
 
 interface DecompileResult {
