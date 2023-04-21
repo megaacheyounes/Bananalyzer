@@ -1,7 +1,5 @@
 /**
- *
- * it download apps from playstore using puppeteer and the website https://apps.evozi.com/apk-downloader
- * (this script is identical to ./downloader.ts, except it uses a different website which i found faster and more reliable)
+ * get app details from google play using puppeteer
  */
 import debugModule from 'debug';
 import { Browser, Page } from 'puppeteer';
@@ -9,6 +7,7 @@ import puppeteer from 'puppeteer-extra';
 
 import { CHROMIUM_EXEC_PATH } from '../consts';
 import BrowserUtils from '../utils/browserUtils';
+import { isValidDate } from '../utils/dateTimeUtils';
 import { downoadChromiumIfMissing } from './downloader';
 
 const debug = debugModule('bananalyzer:appDetailsScrapper');
@@ -37,29 +36,33 @@ const APP_DETAILS_KEYS = [
   'downloads',
   'downloadsDetails',
   'developer',
-  'offeredBy',
-  'interactiveElements',
-  'contentRating',
   'reviewsNumber',
   'icon',
   'screenshots',
 ] as const;
 
+enum Format {
+  DATE,
+  NOT_DATE,
+}
+
 type AppDetailsSelector = {
-  selector: string;
+  selector: string | string[];
   type: DataToScrapeType;
   getFromAppDetailsDialog?: boolean;
-  multiple?: boolean;
+  manyValues?: boolean;
   startingIndex?: number;
   multipleMaxCount?: number;
+  format?: Format;
+  transform?: { [key: string]: string };
 };
 
 type SelectorsType = {
   [key in typeof APP_DETAILS_KEYS[number]]: AppDetailsSelector;
 };
-
+type SelectorResultType = string | undefined | string[];
 type AppDetails = {
-  [key in typeof APP_DETAILS_KEYS[number]]: string | undefined | (string | undefined)[];
+  [key in typeof APP_DETAILS_KEYS[number]]: SelectorResultType;
 };
 
 const SELECTOR_MULTIPLE_INDEX = '__INDEX__';
@@ -78,19 +81,27 @@ const APP_DETAILS_SELECTORS: SelectorsType = {
     getFromAppDetailsDialog: true,
   },
   updatedOn: {
+    //*[@id="yDmH0d"]/div[6]/div[2]/div/div/div/div/div[2]/div[3]/div[9]/div[2]
+
     selector: 'div.sMUprd:nth-child(2) > div:nth-child(2)',
+    // selector: 'div.sMUprd:nth-child(2) > div:nth-child(2)',
     type: DataToScrapeType.TEXT_CONTENT,
     getFromAppDetailsDialog: true,
+    format: Format.DATE,
   },
   releasedOn: {
-    selector: 'div.sMUprd:nth-child(9) > div:nth-child(2)',
+    selector: ['div.sMUprd:nth-child(8) > div:nth-child(2)', 'div.sMUprd:nth-child(9) > div:nth-child(2)'],
     type: DataToScrapeType.TEXT_CONTENT,
     getFromAppDetailsDialog: true,
+    format: Format.DATE,
   },
   requiresAndroid: {
     selector: 'div.sMUprd:nth-child(3) > div:nth-child(2)',
     type: DataToScrapeType.TEXT_CONTENT,
     getFromAppDetailsDialog: true,
+    transform: {
+      'Varies with device': 'VARY',
+    },
   },
   rating: { selector: '.TT9eCd', type: DataToScrapeType.TEXT_CONTENT },
   downloads: { selector: 'div.wVqUob:nth-child(2) > div:nth-child(1)', type: DataToScrapeType.TEXT_CONTENT },
@@ -100,21 +111,7 @@ const APP_DETAILS_SELECTORS: SelectorsType = {
     getFromAppDetailsDialog: true,
   },
   developer: { selector: '.Vbfug > a:nth-child(1) > span:nth-child(1)', type: DataToScrapeType.TEXT_CONTENT },
-  offeredBy: {
-    selector: 'div.sMUprd:nth-child(10) > div:nth-child(2)',
-    type: DataToScrapeType.TEXT_CONTENT,
-    getFromAppDetailsDialog: true,
-  },
-  interactiveElements: {
-    selector: 'div.sMUprd:nth-child(8) > div:nth-child(2)',
-    type: DataToScrapeType.TEXT_CONTENT,
-    getFromAppDetailsDialog: true,
-  },
-  contentRating: {
-    selector: 'div.sMUprd:nth-child(6) > div:nth-child(2) > div:nth-child(1)',
-    type: DataToScrapeType.TEXT_CONTENT,
-    getFromAppDetailsDialog: true,
-  },
+
   reviewsNumber: { selector: 'div.wVqUob:nth-child(1) > div:nth-child(2)', type: DataToScrapeType.TEXT_CONTENT },
   icon: {
     selector: '.cN0oRe',
@@ -123,7 +120,7 @@ const APP_DETAILS_SELECTORS: SelectorsType = {
   screenshots: {
     selector: `div.ULeU3b:nth-child(${SELECTOR_MULTIPLE_INDEX}) > div:nth-child(1) > img:nth-child(1)`,
     type: DataToScrapeType.SRC,
-    multiple: true,
+    manyValues: true,
     startingIndex: 1,
     multipleMaxCount: 8,
   },
@@ -132,7 +129,7 @@ const APP_DETAILS_SELECTORS: SelectorsType = {
 //fixme: causes errors when building .exe
 // puppeteer.use(stealthPlugin());
 // download from https://apk.support/download-app
-const getAppDetailsFromPlaystore = (page: Page, packageName: string) =>
+const getAppDetailsFromGooglePlay = (page: Page, packageName: string) =>
   new Promise<AppDetails>(async (resolve, reject) => {
     try {
       const link = `https://play.google.com/store/apps/details?id=${packageName}&hl=en`;
@@ -152,7 +149,7 @@ const getAppDetailsFromPlaystore = (page: Page, packageName: string) =>
 
       const initialDetails = await scrapeAppDetailsData(page, false);
 
-      //click on details button
+      //click on details button to load 'about this app' dialog
       await page.click(
         '.qZmL0 > c-wiz:nth-child(2) > div:nth-child(1) > section:nth-child(1) > header:nth-child(1) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)'
       );
@@ -170,24 +167,36 @@ const getAppDetailsFromPlaystore = (page: Page, packageName: string) =>
 
       resolve(appDetails);
     } catch (e) {
-      debug(e);
-      reject(new Error('failed to get download link'));
+      debug('getAppDetailsFromGooglePlay:e::');
+      reject(new Error('Failed to extract date from google play'));
     }
   });
 
 const scrapeAppDetailsData = async (page: Page, scrapeFromDialog: boolean): Promise<AppDetails | undefined> => {
   const appDetails: AppDetails = {} as any;
-  for (let itemSelector of APP_DETAILS_KEYS) {
-    const selectorItem = APP_DETAILS_SELECTORS[itemSelector];
+  for (let detailsItemKey of APP_DETAILS_KEYS) {
+    const selectorItem = APP_DETAILS_SELECTORS[detailsItemKey];
 
     if (scrapeFromDialog && !selectorItem.getFromAppDetailsDialog) continue;
     try {
       debug('attempting to get', selectorItem.selector);
-      if (selectorItem.multiple) {
-        appDetails[itemSelector] = await scrapeMultipleStringValue(page, selectorItem);
+      let value: SelectorResultType;
+      if (selectorItem.manyValues) {
+        value = await scrapeMultipleStringValue(page, selectorItem);
+      } else if (selectorItem.selector instanceof Array) {
+        value = await scrapSingleStringValueWithManySelectors(
+          page,
+          selectorItem.type,
+          selectorItem.selector,
+          selectorItem.format!
+        );
       } else {
-        appDetails[itemSelector] = await scrapSingleStringValue(page, selectorItem);
+        value = await scrapSingleStringValue(page, selectorItem.type, selectorItem.selector);
       }
+      if (!!value && typeof value == 'string') {
+        value = transformStringValue(selectorItem, value);
+      }
+      appDetails[detailsItemKey] = value;
     } catch (e) {
       debug('scrapeAppDetailsData:error::', e);
     }
@@ -195,56 +204,79 @@ const scrapeAppDetailsData = async (page: Page, scrapeFromDialog: boolean): Prom
   return appDetails;
 };
 
-const scrapSingleStringValue = async (page: Page, itemSelector: AppDetailsSelector): Promise<string | undefined> => {
-  switch (itemSelector.type) {
+const scrapSingleStringValue = async (
+  page: Page,
+  type: DataToScrapeType,
+  selector: string
+): Promise<string | undefined> => {
+  switch (type) {
     case DataToScrapeType.HREF: {
-      return await BrowserUtils.getHref(page, itemSelector.selector);
+      return await BrowserUtils.getHref(page, selector);
     }
     case DataToScrapeType.SRC: {
-      return await BrowserUtils.getSrc(page, itemSelector.selector);
+      return await BrowserUtils.getSrc(page, selector);
     }
     case DataToScrapeType.TEXT_CONTENT: {
-      return await BrowserUtils.getTextContent(page, itemSelector.selector);
+      return await BrowserUtils.getTextContent(page, selector);
     }
   }
 };
 
-const scrapeMultipleStringValue = async (
+const scrapSingleStringValueWithManySelectors = async (
   page: Page,
-  itemSelector: AppDetailsSelector
-): Promise<(string | undefined)[]> => {
+  type: DataToScrapeType,
+  selectors: string[],
+  format: Format
+): Promise<string | undefined> => {
+  switch (format) {
+    case Format.DATE: {
+      for (let selector of selectors) {
+        const value = await scrapSingleStringValue(page, type, selector);
+        if (isValidDate(value)) {
+          return value;
+        }
+      }
+    }
+  }
+  return undefined;
+};
+const scrapeMultipleStringValue = async (page: Page, itemSelector: AppDetailsSelector): Promise<string[]> => {
   let iteration = 0;
-  let data: (string | undefined)[] = [];
+  let data: string[] = [];
   const maxIteration = itemSelector.multipleMaxCount || 20;
   while (iteration < maxIteration) {
-    const selector = itemSelector.selector.replace(SELECTOR_MULTIPLE_INDEX, iteration + '');
+    const selector = (itemSelector.selector as string).replace(SELECTOR_MULTIPLE_INDEX, iteration + '');
     if (!BrowserUtils.elementExist(page, selector)) {
       break;
     }
     switch (itemSelector.type) {
       case DataToScrapeType.SRC: {
-        data.push(await BrowserUtils.getSrc(page, selector));
+        data.push((await BrowserUtils.getSrc(page, selector)) || '');
         break;
       }
       case DataToScrapeType.HREF: {
-        data.push(await BrowserUtils.getHref(page, selector));
+        data.push((await BrowserUtils.getHref(page, selector)) || '');
         break;
       }
       case DataToScrapeType.TEXT_CONTENT: {
-        data.push(await BrowserUtils.getTextContent(page, selector));
+        data.push((await BrowserUtils.getTextContent(page, selector)) || '');
         break;
       }
     }
     iteration++;
   }
-  return data.filter((item) => !!item);
+  return data.filter((item) => !!item && item.length > 0);
 };
 
+const transformStringValue = (itemSelector: AppDetailsSelector, value: string) =>
+  !!itemSelector.transform ? itemSelector.transform[value] || value : value;
+
 /**
+ * //todo: move to Browser utils
  * return chromium tab object (page)
- * @param {boolean} openBrowser if true, it will force create new instance of browser (usefull for tesitng)
+ * @param {boolean} openBrowser if true, it will force create new instance of browser
  */
-const getChromiumPage = async (openBrowser = false): Promise<Page> => {
+const getChromiumPage = async (openBrowser: boolean = false): Promise<Page> => {
   try {
     await downoadChromiumIfMissing();
   } catch (e) {
@@ -277,20 +309,30 @@ const getChromiumPage = async (openBrowser = false): Promise<Page> => {
   return page;
 };
 
-export const getAppDetails = async (packageName: string): Promise<AppDetails | undefined> => {
+export const getAppDetails = async (packageName: string, closeBrowser = false): Promise<AppDetails | undefined> => {
   const page = await getChromiumPage();
 
   let appDetails: AppDetails;
   try {
     // try from source 1 (1 attempt)
-    appDetails = await getAppDetailsFromPlaystore(page, packageName);
+    appDetails = await getAppDetailsFromGooglePlay(page, packageName);
     if (!!page) await page.close();
+    if (closeBrowser && !!browser) {
+      await browser.close();
+      browser = undefined;
+    }
     return appDetails;
   } catch (e1) {
     debug(e1);
     debug('failed to get app details');
 
     if (!!page) await page.close();
-    throw new Error('failed to get app details');
+    if (closeBrowser && !!browser) {
+      await browser.close();
+      browser = undefined;
+    }
+
+    console.log('failed to get app details');
+    return undefined;
   }
 };

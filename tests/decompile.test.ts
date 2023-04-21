@@ -7,15 +7,15 @@ import { analyzeAPKs } from '../src/core/analyzer';
 import { ANDROID_MANIFEST } from '../src/consts';
 
 //normal apk
-const sampleApk = path.join(__dirname, 'apks', 'sample.apk');
+const sampleApk = path.join(__dirname, 'samples', 'sample.apk');
 
 //todo: support split apk
-const uberApk = path.join(__dirname, 'apks', 'com.ubercab.uberlite.apk');
+const uberApk = path.join(__dirname, 'samples', 'com.ubercab.uberlite.apk');
 
 export const testApks: APK[] = [
   {
     packageName: 'com.megaache.trackingsdks',
-    filePath: sampleApk,
+    filePath: './tests/samples/sample.apk',
     uploadDate: 'feb 24, 2023',
   },
   {
@@ -27,7 +27,7 @@ export const testApks: APK[] = [
 
 describe('Decompiler', () => {
   it('should decompile apk', async () => {
-    const result = await decompileApk(testApks[0], true);
+    const result = await decompileApk(testApks[0], false);
     console.dir(result);
 
     expect(result.isSuccessful).toEqual(true);

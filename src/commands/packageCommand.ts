@@ -48,7 +48,7 @@ export default class PackageCommand extends Command {
   async downloadOneAPK(packageName: string): Promise<APK | null> {
     return new Promise(async (resolve, reject) => {
       try {
-        resolve(await downloadAPK(packageName, true));
+        resolve(await downloadAPK(packageName, true, true, false));
       } catch (e) {
         debug(e);
         var error = 'The requested app is not found or invalid';

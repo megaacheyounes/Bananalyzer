@@ -1,32 +1,48 @@
+import { decompileApk } from './../src/core/apktool/decompile';
 import debugModule from 'debug';
 import Bananalyzer from '../src/index';
 import { analyzeAPKs } from '../src/core/analyzer';
+import { getAppDetails } from '../src/core/appDetailsScrapper';
 
 const keepApks = true;
 const useExisting = true;
-debugModule.enable('*');
+debugModule.enable('bananalyzer*');
 
 (async () => {
   //****************** */
-  // non-cli usage tests
+  // non-cli usage example
+  //***************** get app details  */
+  // const appDetails = await getAppDetails('com.king.candycrushsaga');
+  // console.log('appDetails', appDetails);
+
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
 
   //todo: revert back, use apk from test folder
-  const result = await Bananalyzer.analyzeAPKs(
-    [
-      {
-        filePath: './tests/samples/sample.apk',
-      },
-    ],
-    true
-  );
-  console.log('result', result);
+  // const result = await Bananalyzer.analyzeAPKs(
+  //   [
+  //     {
+  //       filePath: './tests/samples/sample.apk',
+  //     },
+  //   ],
+  //   true
+  // );
+  // console.log('result', result);
   // ******************************
   // todo: test getInnerApk (xapk)
   // const path = await getInnerApk('D:\\__tasks__\\_analyze\\_toolss\\Bananalyzer\\downloads\\com.ahleen.voice.apk');
   // console.log('Paht == ', path);
   // ******************************
+  // decompile apk
+  const appDetails = await decompileApk(
+    {
+      packageName: 'com.megaache.trackingsdks',
+      filePath: './tests/samples/sample.apk',
+    },
+    true
+  );
+  console.log('appDetails', appDetails);
+  //**************************
   // todo: test download
   // // await downloadAPK('com.twitter.android.lite');
   // ******************************

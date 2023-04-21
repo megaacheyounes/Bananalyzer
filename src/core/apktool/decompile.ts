@@ -28,7 +28,7 @@ export const decompileApk = async (apk: APK, keepSources: boolean): Promise<Deco
 
     if (!fs.existsSync(DECOMPILE_FOLDER)) fs.mkdirSync(DECOMPILE_FOLDER);
 
-    // 3- analyze using AppCheck
+    // 3- decompile with apktool
     const java = new JavaCallerModule.JavaCaller({
       jar: APKTOOL_JAR,
     });

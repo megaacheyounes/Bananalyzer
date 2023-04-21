@@ -1,3 +1,4 @@
+import { getAppDetails } from './core/appDetailsScrapper';
 /**
  * No Copyright 2022 Younes Megaache
  * All right can be abused (respectfully)
@@ -9,7 +10,8 @@ import { getDownloadLink } from './core/downloader';
 
 import { downloadAPK } from './core/downloader';
 export default {
-  getDownloadLink,
-  downloadAPK,
+  getDownloadLink: (packageName: string) => getDownloadLink(packageName, true, true),
+  downloadAPK: (packageName: string, mergeSplitApk = true) => downloadAPK(packageName, mergeSplitApk, true, true),
   analyzeAPKs,
+  getAppDetails: (packageName: string) => getAppDetails(packageName, true),
 };

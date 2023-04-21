@@ -1,4 +1,3 @@
-'use strict';
 /**
  *
  * it download apps from playstore using puppeteer and the website https://apps.evozi.com/apk-downloader
@@ -285,7 +284,7 @@ const getChromiumPage = async (openBrowser = false): Promise<Page> => {
  *
  * @return {Promise}
  */
-export const downloadAPK = (packageName: string, useExisting: boolean) =>
+export const downloadAPK = (packageName: string, useExisting: boolean, mergeSplitApk = true, closeBrowser = false) =>
   new Promise<APK>(async (resolve, reject) => {
     debug('download APK → ' + packageName);
     // create download folder if missing
@@ -311,7 +310,7 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
         }
       }
 
-      const downloadData = await getDownloadLink(packageName, false);
+      const downloadData = await getDownloadLink(packageName, mergeSplitApk, closeBrowser);
 
       if (!downloadData || !downloadData.downloadLink) {
         throw Error('failed to get download link');
@@ -355,7 +354,8 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
 
 export const getDownloadLink = async (
   packageName: string,
-  mergeSplitApk = true
+  mergeSplitApk = true,
+  closeBrowserWhenDone = false
 ): Promise<ApkDownloadInfo | undefined> => {
   const page = await getChromiumPage();
   console.log('Searching for APK File → ' + packageName, '(can take up to 3 minutes!)');
@@ -365,6 +365,8 @@ export const getDownloadLink = async (
     // try from source 1 (1 attempt)
     downloadData = await getDownloadLink1(page, packageName, mergeSplitApk);
     if (!!page) await page.close();
+    if (closeBrowserWhenDone) await closeBrowser();
+
     return downloadData;
   } catch (e1) {
     debug(e1);
@@ -376,11 +378,14 @@ export const getDownloadLink = async (
     // } catch (e2) {
     //   debug(e2);
     if (!!page) await page.close();
+    if (closeBrowserWhenDone) await closeBrowser();
+
     throw new Error('failed to get download link');
 
     //   }
   }
 };
+
 /**
  * as the name suggestes, this function simply try to get a browser instance
  * when chromium is missing, partially downloaded or corrupted, `puppetter.launch` will throw an exception, and that when the function downloads chromium browser
@@ -433,7 +438,7 @@ export const downoadChromiumIfMissing = async () => {
 };
 
 /**
- * we are done downloading, tell puppeteer to close browser and releaase resources blah blah
+ * close puppeteer browser and release resources
  */
 export const closeBrowser = async () => {
   if (!!browser) {
