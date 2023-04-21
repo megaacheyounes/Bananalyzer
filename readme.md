@@ -295,7 +295,7 @@ result
 - [ ] Update npm packages
 - [ ] Detect Ads and Tracking SDKs
 - [ ] Detect Firebase/AppGallery cloud services
-- [ ] Add download options from apk repos (APKMirror, ApkPure, ApkMonk)
+- [ ] Get app details from google play
 - [ ] Improve and add missing documentation
 
 ## License

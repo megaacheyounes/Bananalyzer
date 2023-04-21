@@ -1,6 +1,6 @@
 {
   "name": "bananalyzer",
-  "version": "1.1.2",
+  "version": "1.2.0-rc1",
   "description": "A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata",
   "author": "Younes Megaache",
   "homepage": "https://github.com/megaacheyounes/bananalyzer",
@@ -33,7 +33,8 @@
     "test:decompile": "jest tests/decompile.test",
     "test:tracking": "jest tests/analyzeTrackingSdk.test.ts",
     "test:parseManifest": "jest tests/parseManifest.test.ts",
-    "test:utils": "jest tests/utils.test.ts"
+    "test:utils": "jest tests/utils.test.ts",
+    "test:appDetailsScrapper": "jest tests/appDetailsScrapper"
   },
   "bin": "index.ts",
   "keywords": [
