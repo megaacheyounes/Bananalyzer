@@ -1,7 +1,8 @@
-import { Command } from './command';
-import { APK } from '../models/apk';
-import { downloadAPK, downoadChromiumIfMissing, closeBrowser } from '../core/downloader';
 import debugModule from 'debug';
+import { downloadAPK } from '../core/downloader';
+import { APK } from '../models/apk';
+import BrowserManager from '../core/BrowserManager';
+import { Command } from './command';
 
 const debug = debugModule('bananalyzer:PackageCommand');
 
@@ -63,7 +64,7 @@ export default class PackageCommand extends Command {
 
   async clean(): Promise<boolean> {
     super.clean();
-    await closeBrowser();
+    await BrowserManager.closeBrowser();
     return true;
   }
 }

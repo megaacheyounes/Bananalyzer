@@ -2,18 +2,12 @@
  * get app details from google play using puppeteer
  */
 import debugModule from 'debug';
-import { Browser, Page } from 'puppeteer';
-import puppeteer from 'puppeteer-extra';
+import { Page } from 'puppeteer';
 
-import { CHROMIUM_EXEC_PATH } from '../consts';
-import BrowserUtils from '../utils/browserUtils';
+import BrowserManager from './BrowserManager';
 import { isValidDate } from '../utils/dateTimeUtils';
-import { downoadChromiumIfMissing } from './downloader';
 
 const debug = debugModule('bananalyzer:appDetailsScrapper');
-
-// use one browser
-let browser: undefined | Browser;
 
 // block ads and tracker to speed page loading
 // puppeteer.use(adblockerPlugin({ blockTrackers: true }));
@@ -139,7 +133,7 @@ const getAppDetailsFromGooglePlay = (page: Page, packageName: string) =>
       debug('page loaded');
 
       // first check if thereis an error
-      const maybeError = await BrowserUtils.getTextContent(page, '#error-section');
+      const maybeError = await BrowserManager.getTextContent(page, '#error-section');
 
       if (!!maybeError && maybeError.toLowerCase().indexOf('not found on this server') != -1) {
         debug('got error: ' + maybeError);
@@ -211,13 +205,13 @@ const scrapSingleStringValue = async (
 ): Promise<string | undefined> => {
   switch (type) {
     case DataToScrapeType.HREF: {
-      return await BrowserUtils.getHref(page, selector);
+      return await BrowserManager.getHref(page, selector);
     }
     case DataToScrapeType.SRC: {
-      return await BrowserUtils.getSrc(page, selector);
+      return await BrowserManager.getSrc(page, selector);
     }
     case DataToScrapeType.TEXT_CONTENT: {
-      return await BrowserUtils.getTextContent(page, selector);
+      return await BrowserManager.getTextContent(page, selector);
     }
   }
 };
@@ -246,20 +240,20 @@ const scrapeMultipleStringValue = async (page: Page, itemSelector: AppDetailsSel
   const maxIteration = itemSelector.multipleMaxCount || 20;
   while (iteration < maxIteration) {
     const selector = (itemSelector.selector as string).replace(SELECTOR_MULTIPLE_INDEX, iteration + '');
-    if (!BrowserUtils.elementExist(page, selector)) {
+    if (!BrowserManager.elementExist(page, selector)) {
       break;
     }
     switch (itemSelector.type) {
       case DataToScrapeType.SRC: {
-        data.push((await BrowserUtils.getSrc(page, selector)) || '');
+        data.push((await BrowserManager.getSrc(page, selector)) || '');
         break;
       }
       case DataToScrapeType.HREF: {
-        data.push((await BrowserUtils.getHref(page, selector)) || '');
+        data.push((await BrowserManager.getHref(page, selector)) || '');
         break;
       }
       case DataToScrapeType.TEXT_CONTENT: {
-        data.push((await BrowserUtils.getTextContent(page, selector)) || '');
+        data.push((await BrowserManager.getTextContent(page, selector)) || '');
         break;
       }
     }
@@ -271,66 +265,22 @@ const scrapeMultipleStringValue = async (page: Page, itemSelector: AppDetailsSel
 const transformStringValue = (itemSelector: AppDetailsSelector, value: string) =>
   !!itemSelector.transform ? itemSelector.transform[value] || value : value;
 
-/**
- * //todo: move to Browser utils
- * return chromium tab object (page)
- * @param {boolean} openBrowser if true, it will force create new instance of browser
- */
-const getChromiumPage = async (openBrowser: boolean = false): Promise<Page> => {
-  try {
-    await downoadChromiumIfMissing();
-  } catch (e) {
-    debug(e);
-  }
-  if (!browser || openBrowser) {
-    browser = await puppeteer.launch({
-      executablePath: CHROMIUM_EXEC_PATH, // comment when debugging, to use chromium thats included with pupputeer
-    });
-  }
-  const page = await browser.newPage();
-  // set viewport to a random mobile screen resolution
-  await page.setViewport({
-    width: 1280 + Math.floor(Math.random() * 100),
-    height: 720 + Math.floor(Math.random() * 100),
-  });
-
-  // skip loading images and visual resources to reduce loding time
-  await page.setRequestInterception(true);
-  page.on('request', (request: any) => {
-    if (request.isInterceptResolutionHandled()) {
-      return;
-    }
-    const REQUESTS_TO_IGNORE = ['font', 'image', 'stylesheet', 'media', 'imageset'];
-    if (REQUESTS_TO_IGNORE.indexOf(request.resourceType()) !== -1) {
-      return request.abort();
-    }
-    request.continue();
-  });
-  return page;
-};
-
 export const getAppDetails = async (packageName: string, closeBrowser = false): Promise<AppDetails | undefined> => {
-  const page = await getChromiumPage();
+  const page = await BrowserManager.getChromiumPage();
 
   let appDetails: AppDetails;
   try {
     // try from source 1 (1 attempt)
     appDetails = await getAppDetailsFromGooglePlay(page, packageName);
     if (!!page) await page.close();
-    if (closeBrowser && !!browser) {
-      await browser.close();
-      browser = undefined;
-    }
+    if (closeBrowser) await BrowserManager.closeBrowser;
     return appDetails;
   } catch (e1) {
     debug(e1);
     debug('failed to get app details');
 
     if (!!page) await page.close();
-    if (closeBrowser && !!browser) {
-      await browser.close();
-      browser = undefined;
-    }
+    if (closeBrowser) await BrowserManager.closeBrowser();
 
     console.log('failed to get app details');
     return undefined;
