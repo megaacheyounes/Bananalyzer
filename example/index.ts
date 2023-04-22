@@ -1,6 +1,9 @@
 import Bananalyzer from 'bananalyzer';
 
 (async () => {
+  const getAppDetailsResult = await Bananalyzer.getAppDetails('com.ubercab.uberlite');
+  console.log('getAppDetailsResult', getAppDetailsResult);
+
   const getDownloadLinkResult = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
   console.log('getDownloadLinkResult', getDownloadLinkResult);
 
