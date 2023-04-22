@@ -20,7 +20,7 @@ enum DataToScrapeType {
 
 const APP_DETAILS_KEYS = [
   'packageName',
-  'appName',
+  'name',
   'versionName',
   'description',
   'updatedOn',
@@ -32,7 +32,7 @@ const APP_DETAILS_KEYS = [
   'developer',
   'reviewsNumber',
   'icon',
-  'screenshots',
+  // 'screenshots' defined below in SelectorsType & AppDetails
 ] as const;
 
 enum Format {
@@ -44,7 +44,7 @@ type AppDetailsSelector = {
   selector: string | string[];
   type: DataToScrapeType;
   getFromAppDetailsDialog?: boolean;
-  manyValues?: boolean;
+  isScreenshots?: boolean;
   startingIndex?: number;
   multipleMaxCount?: number;
   format?: Format;
@@ -52,18 +52,24 @@ type AppDetailsSelector = {
 };
 
 type SelectorsType = {
-  [key in typeof APP_DETAILS_KEYS[number]]: AppDetailsSelector;
+  screenshots: AppDetailsSelector;
+} & {
+  [key in (typeof APP_DETAILS_KEYS)[number]]: AppDetailsSelector;
 };
-type SelectorResultType = string | undefined | string[];
+
+type SelectorResultType = string | undefined;
+
 type AppDetails = {
-  [key in typeof APP_DETAILS_KEYS[number]]: SelectorResultType;
+  screenshots: string[];
+} & {
+  [key in (typeof APP_DETAILS_KEYS)[number]]: SelectorResultType;
 };
 
 const SELECTOR_MULTIPLE_INDEX = '__INDEX__';
 
 const APP_DETAILS_SELECTORS: SelectorsType = {
   packageName: { selector: '.ignore' + new Date().getTime(), type: DataToScrapeType.TEXT_CONTENT },
-  appName: { selector: '.Fd93Bb > span:nth-child(1)', type: DataToScrapeType.TEXT_CONTENT },
+  name: { selector: '.Fd93Bb > span:nth-child(1)', type: DataToScrapeType.TEXT_CONTENT },
   versionName: {
     selector: 'div.sMUprd:nth-child(1) > div:nth-child(2)',
     type: DataToScrapeType.TEXT_CONTENT,
@@ -114,7 +120,7 @@ const APP_DETAILS_SELECTORS: SelectorsType = {
   screenshots: {
     selector: `div.ULeU3b:nth-child(${SELECTOR_MULTIPLE_INDEX}) > div:nth-child(1) > img:nth-child(1)`,
     type: DataToScrapeType.SRC,
-    manyValues: true,
+    isScreenshots: true,
     startingIndex: 1,
     multipleMaxCount: 8,
   },
@@ -174,10 +180,14 @@ const scrapeAppDetailsData = async (page: Page, scrapeFromDialog: boolean): Prom
     if (scrapeFromDialog && !selectorItem.getFromAppDetailsDialog) continue;
     try {
       debug('attempting to get', selectorItem.selector);
-      let value: SelectorResultType;
-      if (selectorItem.manyValues) {
-        value = await scrapeMultipleStringValue(page, selectorItem);
-      } else if (selectorItem.selector instanceof Array) {
+
+      if (selectorItem.isScreenshots) {
+        appDetails.screenshots = await scrapeMultipleStringValue(page, selectorItem);
+        continue;
+      }
+
+      let value: SelectorResultType | string[];
+      if (selectorItem.selector instanceof Array) {
         value = await scrapSingleStringValueWithManySelectors(
           page,
           selectorItem.type,
@@ -187,9 +197,11 @@ const scrapeAppDetailsData = async (page: Page, scrapeFromDialog: boolean): Prom
       } else {
         value = await scrapSingleStringValue(page, selectorItem.type, selectorItem.selector);
       }
+
       if (!!value && typeof value == 'string') {
         value = transformStringValue(selectorItem, value);
       }
+
       appDetails[detailsItemKey] = value;
     } catch (e) {
       debug('scrapeAppDetailsData:error::', e);

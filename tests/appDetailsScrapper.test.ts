@@ -28,7 +28,7 @@ describe('appDetailsScrapper', () => {
   for (const testApp of testApps) {
     it(`should get ${testApp.name} app information`, async () => {
       const details = await getAppDetails(testApp.packageName);
-      expect(details?.appName).toEqual(testApp.name);
+      expect(details?.name).toEqual(testApp.name);
       expect(details?.packageName).toEqual(testApp.packageName);
       expect(details?.developer).toEqual(testApp.developer);
       expect(details?.requiresAndroid).toEqual(testApp.requiresAndroid);
