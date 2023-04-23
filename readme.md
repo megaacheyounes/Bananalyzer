@@ -1,11 +1,11 @@
+# Bananalyzer
+
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/megaacheyounes/bananalyzer)
 ![GitHub Release Date](https://img.shields.io/github/release-date/megaacheyounes/bananalyzer)
 ![Platform win64](https://img.shields.io/badge/platform-Win64-red)
 ![GitHub all releases](https://img.shields.io/github/downloads/megaacheyounes/bananalyzer/total)
 ![npm](https://img.shields.io/npm/dm/bananalyzer?label=npm%20downloads)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/megaacheyounes/bananalyzer/issues)
-
-## Bananalyzer
 
 A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata
 
@@ -38,7 +38,7 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 
 ## Usage
 
-```
+```cli
 
    USAGE
 
@@ -159,6 +159,33 @@ result
       uploadDate: '27 Jan 2023'
     }
 */
+```
+
+### get app details
+
+get app listing information from google play (scrap)
+
+```typescript
+import Bananalyzer from 'bananalyzer';
+
+const result = await Bananalyzer.getAppDetails('com.ubercab.uberlite');
+console.log(result);
+
+/*result = {
+  packageName: 'com.ubercab.uberlite',
+  name: 'Uber Lite',
+  versionName: '1.149.10000',
+  description: "Uber Lite is a  new, simple way to request a ride [...]",
+  updatedOn: 'Feb 3, 2023',
+  releasedOn: 'Mar 18, 2019',
+  requiresAndroid: '7.0 and up',
+  rating: '4.4star',
+  downloads: '10M+',
+  downloadsDetails: '10,000,000+ downloads',
+  developer: 'Uber Technologies, Inc.',
+  reviewsNumber: '446K reviews',
+  icon: 'https://play-lh.googleusercontent.com/_o0_RTIrrCQsZQONTIJF9EJ43vXTp8ieuiQtdCplT_kpfEE_z2d6wIVVO2BYzMxcJZMl=w240-h480-rw'
+}*/
 ```
 
 ### analyze an APK
@@ -295,12 +322,12 @@ result
 - [ ] Update npm packages
 - [ ] Detect Ads and Tracking SDKs
 - [ ] Detect Firebase/AppGallery cloud services
-- [ ] Get app details from google play
+- [x] Get app details from google play
 - [ ] Improve and add missing documentation
 
 ## License
 
-```
+```text
 No Copyright (!c) 2022 Younes Megaache
 All rights can be abused (respectfully)
 ```
