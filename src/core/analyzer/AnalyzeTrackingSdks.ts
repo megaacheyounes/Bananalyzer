@@ -1,13 +1,11 @@
-import { TrackingSDK, MinVersion, SdkVersionLocation, TRACKING_SDKS } from './../apktool/sdks';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 import readline, { Interface } from 'readline';
-import semver from 'semver';
+import { SdkVersionLocation, TrackingSDK, TRACKING_SDKS } from './../apktool/sdks';
 
 import glob from 'glob';
 
 import debugModule from 'debug';
-import { match } from 'assert';
 const debug = debugModule('bananalyzer:analyzeTrackingSdks');
 
 export interface TrackingSdkResult {

@@ -22,7 +22,7 @@ debugModule.enable('bananalyzer*');
   // const result = await Bananalyzer.analyzeAPKs(
   //   [
   //     {
-  //       filePath: './tests/samples/sample.apk',
+  //       filePath: './samples/sample.apk',
   //     },
   //   ],
   //   true
@@ -34,14 +34,14 @@ debugModule.enable('bananalyzer*');
   // console.log('Paht == ', path);
   // ******************************
   // decompile apk
-  const appDetails = await decompileApk(
-    {
-      packageName: 'com.megaache.trackingsdks',
-      filePath: './tests/samples/sample.apk',
-    },
-    true
-  );
-  console.log('appDetails', appDetails);
+  // const appDetails = await decompileApk(
+  //   {
+  //     packageName: 'com.megaache.trackingsdks',
+  //     filePath: './tests/samples/sample.apk',
+  //   },
+  //   true
+  // );
+  // console.log('appDetails', appDetails);
   //**************************
   // todo: test download
   // // await downloadAPK('com.twitter.android.lite');

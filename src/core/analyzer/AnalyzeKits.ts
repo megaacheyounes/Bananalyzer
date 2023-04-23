@@ -1,30 +1,18 @@
+import debugModule from 'debug';
 import { AnalyzedSDKs } from '../../models/analyzedApp';
 ('use strict');
-import debugModule from 'debug';
 
 import fs from 'fs';
 import path from 'path';
 
-import {
-  APP_CHECK_JAR,
-  APP_DATA_FOLDER,
-  GMS_OUTPUT,
-  HMS_OUTPUT,
-  UNKNOWN_INFO,
-  GOOGLE_MESSAGING_EVENT,
-} from '../../consts';
-import { AnalyzedApk } from '../../models/analyzedApp';
+import { APP_CHECK_JAR, APP_DATA_FOLDER, GMS_OUTPUT, HMS_OUTPUT } from '../../consts';
 import { APK } from '../../models/apk';
-import { Action, Activity, AndroidManifest, IntentFilter, Service, UsesPermission } from '../../models/manifest';
-import { moveFile } from '../mv';
-import { getApkInfo } from '../utils';
-import { HUAWEI_MESSAGING_EVENT } from '../../consts';
 
 const JavaCallerModule = require('java-caller');
 
 const debug = debugModule('bananalyzer:analyzeKits');
 
-export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
+export const analyzeGmsHmsSdks = async (apk: APK): Promise<AnalyzedSDKs> => {
   const apkName = path.basename(apk.filePath);
   //   move apks from /downloads to /appdataxsj
 
