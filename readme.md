@@ -117,7 +117,9 @@ latest release (Bananalyzer_v1.1.2_win64.zip):
 
 install
 
-`npm install bananalyzer`
+1. `npm install bananalyzer`
+
+_if you get an error related to missing JARs, then copy the folder `lib` to your projects root folder, in other word, folder `lib/` and your `package.json` should be on the same level_
 
 ### get apk direct download link
 

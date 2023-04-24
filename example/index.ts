@@ -13,8 +13,7 @@ import Bananalyzer from 'bananalyzer';
   const analyzeAPKsResult = await Bananalyzer.analyzeAPKs(
     [
       {
-        //todo: set apk path
-        filePath: '../tests/samples/sample.apk',
+        filePath: downloadAPKResult.filePath,
       },
     ],
     true
