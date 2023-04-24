@@ -1,8 +1,6 @@
-import { decompileApk } from './../src/core/apktool/decompile';
 import debugModule from 'debug';
+import path from 'path';
 import Bananalyzer from '../src/index';
-import { analyzeAPKs } from '../src/core/analyzer';
-import { getAppDetails } from '../src/core/appDetailsScrapper';
 
 const keepApks = true;
 const useExisting = true;
@@ -12,22 +10,25 @@ debugModule.enable('bananalyzer*');
   //****************** */
   // non-cli usage example
   //***************** get app details  */
-  // const appDetails = await getAppDetails('com.king.candycrushsaga');
+  // const appDetails = await Bananalyzer.getAppDetails('com.king.candycrushsaga');
   // console.log('appDetails', appDetails);
 
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
 
+  // const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite');
+  // console.log('downloadAPK', downloadAPK);
+
   //todo: revert back, use apk from test folder
-  // const result = await Bananalyzer.analyzeAPKs(
-  //   [
-  //     {
-  //       filePath: './samples/sample.apk',
-  //     },
-  //   ],
-  //   true
-  // );
-  // console.log('result', result);
+  const result = await Bananalyzer.analyzeAPKs(
+    [
+      {
+        filePath: path.join(__dirname, 'samples', 'sample.apk'),
+      },
+    ],
+    true
+  );
+  console.log('result', result);
   // ******************************
   // todo: test getInnerApk (xapk)
   // const path = await getInnerApk('D:\\__tasks__\\_analyze\\_toolss\\Bananalyzer\\downloads\\com.ahleen.voice.apk');
@@ -44,7 +45,7 @@ debugModule.enable('bananalyzer*');
   // console.log('appDetails', appDetails);
   //**************************
   // todo: test download
-  // // await downloadAPK('com.twitter.android.lite');
+  // await downloadAPK('com.twitter.android.lite');
   // ******************************
   // todo: test analyze apks
   // const d = await analyzeAPKs([testApks[0]], true);

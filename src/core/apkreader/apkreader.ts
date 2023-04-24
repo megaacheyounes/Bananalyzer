@@ -1,6 +1,3 @@
-/* eslint-disable require-jsdoc */
-'use strict';
-
 import debugModule from 'debug';
 import internal from 'stream';
 import { deprecate } from 'util';

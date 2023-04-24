@@ -1,8 +1,7 @@
-import { readFileSync } from 'fs';
-import meow, { AnyFlags, AnyFlag, Flag, FlagType } from 'meow';
-import { pause } from './core/utils';
+import meow, { AnyFlag, AnyFlags } from 'meow';
 import { DEFAULT_BATCH_SIZE } from './consts';
-const meowHelp = require('cli-meow-help');
+//@ts-ignore
+import meowHelp from 'cli-meow-help';
 
 export type MyFlags = {
   debug: boolean;
@@ -18,11 +17,13 @@ const flags: any = {
     type: 'string',
     alias: 'p',
     default: '',
+
     desc: "Apk full path, required when using command 'apk'",
   },
   name: {
     type: 'string',
     alias: 'n',
+
     default: '',
     desc: "App package name, required when using Command 'package'",
   },

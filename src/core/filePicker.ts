@@ -1,5 +1,4 @@
 'use strict';
-// var spawn = require("child_process").spawn  ;
 import * as childProcess from 'child_process';
 import debugModule from 'debug';
 /**

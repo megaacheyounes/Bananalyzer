@@ -5,7 +5,8 @@ import path from 'path';
 import { APK } from '../../models/apk';
 
 const debug = debugModule('bananalyzer:apkreader');
-const JavaCallerModule = require('java-caller');
+//@ts-ignore
+import JavaCallerModule from 'java-caller';
 
 interface DecompileResult {
   isSuccessful: boolean;

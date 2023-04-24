@@ -1,6 +1,3 @@
-/* eslint-disable require-jsdoc */
-'use strict';
-
 import debugModule from 'debug';
 
 import BinaryXmlParser from './binaryxml';

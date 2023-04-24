@@ -134,7 +134,7 @@ const getAppDetailsFromGooglePlay = (page: Page, packageName: string) =>
     try {
       const link = `https://play.google.com/store/apps/details?id=${packageName}&hl=en`;
       debug('using link ' + link);
-      await page.goto(link, { waitUntil: 'domcontentloaded' });
+      await page.goto(link, { waitUntil: 'networkidle2' });
 
       debug('page loaded');
 
@@ -210,11 +210,7 @@ const scrapeAppDetailsData = async (page: Page, scrapeFromDialog: boolean): Prom
   return appDetails;
 };
 
-const scrapSingleStringValue = async (
-  page: Page,
-  type: DataToScrapeType,
-  selector: string
-): Promise<string | undefined> => {
+const scrapSingleStringValue = async (page: Page, type: DataToScrapeType, selector: string): Promise<string> => {
   switch (type) {
     case DataToScrapeType.HREF: {
       return await BrowserManager.getHref(page, selector);

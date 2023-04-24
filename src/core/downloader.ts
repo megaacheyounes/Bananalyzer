@@ -145,10 +145,11 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
     debug('apk info loaded');
 
     // check if we got an error
-    const errrorEl = await page.$('#apk_info .text-danger');
-    if (!!errrorEl) {
+    const errorSelector = '#apk_info .text-danger';
+    const errorEl = await page.$(errorSelector);
+    if (!!errorEl) {
       debug('GOT ERROR while waiting for apk info');
-      const errorMessage: string = await (await errrorEl.getProperty('textContent')).jsonValue();
+      const errorMessage = await BrowserManager.getTextContent(page, errorSelector);
 
       console.log('☹  Download Error → ', packageName, ':', errorMessage);
 

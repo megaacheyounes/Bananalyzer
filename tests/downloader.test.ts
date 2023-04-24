@@ -21,7 +21,7 @@ describe('Downloader', () => {
     } catch (e) {
       expect(e).toBeTruthy();
     }
-  }, 240_000);
+  }, 120_000);
 
   it('should download apk', async () => {
     const result = await downloadAPK(packageName, false, false, true);

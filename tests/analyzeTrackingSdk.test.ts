@@ -1,5 +1,4 @@
 import path from 'path';
-import { analyzeTrackingSdks } from './../src/core/analyzer/AnalyzeTrackingSdks';
 
 import debugModule from 'debug';
 

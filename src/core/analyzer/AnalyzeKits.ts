@@ -8,7 +8,8 @@ import path from 'path';
 import { APP_CHECK_JAR, APP_DATA_FOLDER, GMS_OUTPUT, HMS_OUTPUT } from '../../consts';
 import { APK } from '../../models/apk';
 
-const JavaCallerModule = require('java-caller');
+//@ts-ignore
+import JavaCallerModule from 'java-caller';
 
 const debug = debugModule('bananalyzer:analyzeKits');
 
