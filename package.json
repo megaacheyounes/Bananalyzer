@@ -25,15 +25,15 @@
     "build:npm": "npm run clean && npm run build:npm_src",
     "build:npm_src": "tsc --target es5 ",
     "devider_test": " __________________ test __________________ ",
-    "test": "jest",
-    "test:analyzer": "jest tests/analyzer.test.ts",
+    "test": "jest  --runInBand tests/all.test.ts",
+    "test:appDetailsScrapper": "jest tests/appDetailsScrapper --detectOpenHandles",
     "test:downloader": "jest tests/downloader.test.ts",
-    "test:excelHelper": "jest tests/excelHelper.test.ts",
     "test:decompile": "jest tests/decompile.test",
-    "test:tracking": "jest tests/analyzeTrackingSdk.test.ts",
+    "test:analyzer": "jest tests/analyzer.test.ts",
     "test:parseManifest": "jest tests/parseManifest.test.ts",
-    "test:utils": "jest tests/utils.test.ts",
-    "test:appDetailsScrapper": "jest tests/appDetailsScrapper --detectOpenHandles"
+    "test:excelHelper": "jest tests/excelHelper.test.ts",
+    "test:tracking": "jest tests/analyzeTrackingSdk.test.ts",
+    "test:utils": "jest tests/utils.test.ts"
   },
   "bin": "index.ts",
   "keywords": [
