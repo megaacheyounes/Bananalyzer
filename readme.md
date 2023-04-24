@@ -321,7 +321,7 @@ result
 - [x] Migrate to TypeScript
 - [x] Add unit tests
 - [x] Publish npm module
-- [ ] Update npm packages
+- [x] Update npm packages
 - [ ] Detect Ads and Tracking SDKs
 - [ ] Detect Firebase/AppGallery cloud services
 - [x] Get app details from google play
