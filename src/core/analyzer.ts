@@ -1,3 +1,4 @@
+import { SdkPerDomain } from './../models/analyzedApp';
 import debugModule from 'debug';
 import { decompileApk } from './apktool/decompile';
 ('use strict');
@@ -14,6 +15,7 @@ import { APK } from '../models/apk';
 import analyzeApkToolYml from './analyzer/AnalyzeApkToolYml';
 import { analyzeGmsHmsSdks } from './analyzer/AnalyzeKits';
 import analyzeManifest from './analyzer/AnalyzeManifest';
+import { analyzeSdks } from './analyzer/AnalyzeSdks';
 
 const debug = debugModule('bananalyzer:analyzer');
 
@@ -40,19 +42,23 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
       }
 
       // debug('decRes', decRes);
-      const SDKs = await analyzeGmsHmsSdks(apk);
+      const appCheckResult = await analyzeGmsHmsSdks(apk);
 
       const manifestResult = await analyzeManifest(decRes.manifestPath!);
+
+      const sdkPerDomain = await analyzeSdks(decRes.decompileFolderPath!);
 
       const apkToolYmlResult = analyzeApkToolYml(decRes.apkToolYmlPath!);
 
       const apkFileResult = analyzeApk(apk);
+
       // debug('apkfileresult', apkFileResult);
       results.push({
-        ...SDKs,
+        ...appCheckResult,
         ...manifestResult,
         ...apkToolYmlResult,
         ...apkFileResult,
+        sdkPerDomain,
       });
     }
     resolve(results);

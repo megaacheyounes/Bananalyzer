@@ -7,7 +7,7 @@ import { SdkSearchLocation } from './../apktool/sdks';
 import glob from 'glob';
 
 import debugModule from 'debug';
-import { SdkVersion } from '../../models/analyzedApp';
+import { SdkPerDomain, SdkVersion } from '../../models/analyzedApp';
 const debug = debugModule('bananalyzer:analyzeTrackingSdks');
 
 export interface DetectedSdk {
@@ -15,14 +15,14 @@ export interface DetectedSdk {
   version: string;
   meetsRequirements: boolean;
 }
-export interface SdkLookupResult {
-  domain: string;
-  sdks: SdkVersion[];
-}
 
-export const analyzeSdks = async (decompileFolderPath: string): Promise<SdkLookupResult[]> => {
-  const res: SdkLookupResult[] = [];
+export const analyzeSdks = async (decompileFolderPath: string): Promise<SdkPerDomain[]> => {
+  const res: SdkPerDomain[] = [];
   //todo: add safety tests
+
+  if (!fs.existsSync(decompileFolderPath)) {
+    return [];
+  }
 
   const domains = [
     {

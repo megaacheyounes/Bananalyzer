@@ -1,5 +1,10 @@
 export type AnalyzedApp = AnalyzedManifest & AnalyzedSDKs & AnalyzedApk;
 
+export interface SdkPerDomain {
+  domain: string;
+  sdks: SdkVersion[];
+}
+
 export type SdkVersion = {
   name: string;
   version: string;
@@ -30,6 +35,7 @@ export type AnalyzedSDKs = {
   GMS: string[];
   HMS: string[];
   others?: string[];
+  sdkPerDomain?: SdkPerDomain[];
 };
 
 export type AnalyzedApk = {
