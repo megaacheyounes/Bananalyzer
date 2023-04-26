@@ -4,6 +4,8 @@ export type SdkVersion = {
   name: string;
   version: string;
   accuracy: 'high' | 'medium' | 'low';
+  requiredVersion?: string;
+  meetsRequirement?: boolean;
 };
 
 export type AnalyzedManifest = {

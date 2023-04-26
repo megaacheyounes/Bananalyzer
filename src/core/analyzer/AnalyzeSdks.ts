@@ -1,43 +1,67 @@
 import fs from 'fs';
 import path from 'path';
 import readline, { Interface } from 'readline';
-import { SdkVersionLocation, TrackingSDK, TRACKING_SDKS } from './../apktool/sdks';
+import { AG_CLOUD_SERVICES, GMS_SDKS, SdkVersionLocation, TRACKING_SDKS } from '../apktool/sdks';
+import { SdkSearchLocation } from './../apktool/sdks';
 
 import glob from 'glob';
 
 import debugModule from 'debug';
+import { SdkVersion } from '../../models/analyzedApp';
 const debug = debugModule('bananalyzer:analyzeTrackingSdks');
 
-export interface TrackingSdkResult {
+export interface DetectedSdk {
   name: string;
   version: string;
   meetsRequirements: boolean;
 }
-export interface TrackingSdksResult {
-  sdksNumber: number;
-  sdks: TrackingSdkResult[];
+export interface SdkLookupResult {
+  domain: string;
+  sdks: SdkVersion[];
 }
 
-export const analyzeTrackingSdks = (decompileFolderPath: string): Promise<TrackingSdksResult> =>
-  new Promise(async (resolve, reject) => {
-    const sdks: TrackingSdkResult[] = [];
-    debug('path ', decompileFolderPath);
+export const analyzeSdks = async (decompileFolderPath: string): Promise<SdkLookupResult[]> => {
+  const res: SdkLookupResult[] = [];
+  //todo: add safety tests
 
-    for (const sdkToSearchFor of TRACKING_SDKS) {
-      //todo: loop through all sdks
-      const version = await findTrackingSdkVersion(decompileFolderPath, sdkToSearchFor);
+  const domains = [
+    {
+      name: 'AG Cloud Services',
+      sdkSearchLocation: AG_CLOUD_SERVICES,
+    },
+    {
+      name: 'GMS SDKs',
+      sdkSearchLocation: GMS_SDKS,
+    },
+    {
+      name: 'Tracking SDKs',
+      sdkSearchLocation: TRACKING_SDKS,
+    },
+  ];
 
-      debug('found SDK ', sdkToSearchFor.name, ':', version);
+  for (const domain of domains) {
+    const domainRes: SdkVersion[] = [];
+    for (const sdkToSearchFor of domain.sdkSearchLocation) {
+      const sdkVersion = await lookupSdkInSmaliSrc(decompileFolderPath, sdkToSearchFor);
+      domainRes.push({
+        name: sdkToSearchFor.name,
+        version: sdkVersion || '-1',
+        accuracy: 'high',
+      });
+
+      debug('found SDK ', sdkToSearchFor.name, ':', sdkVersion);
+
       //todo: check if meets requirement
     }
-
-    resolve({
-      sdksNumber: sdks.length,
-      sdks,
+    res.push({
+      domain: domain.name,
+      sdks: domainRes,
     });
-  });
+  }
+  return res;
+};
 
-const findTrackingSdkVersion = async (folderPath: string, trackingSdk: TrackingSDK): Promise<String | undefined> =>
+const lookupSdkInSmaliSrc = async (folderPath: string, trackingSdk: SdkSearchLocation): Promise<string | undefined> =>
   new Promise(async (resolve, reject) => {
     for (const index in trackingSdk.versionSearchLocations) {
       const versionLocation = trackingSdk.versionSearchLocations[index];
@@ -45,16 +69,17 @@ const findTrackingSdkVersion = async (folderPath: string, trackingSdk: TrackingS
 
       //find files to search inside for version number
       glob(
-        // 'smali/**/appsflyer/**.smali',
         versionLocation.filePathWildcard,
         {
           cwd: folderPath,
         },
         async (err: Error | null, matches: string[]) => {
+          //files that match the search wildcard
           debug('matches: ', index, '=>', matches);
 
           let version = undefined;
-          for (let matchPath of matches.slice(0, 2)) {
+
+          for (let matchPath of matches) {
             version = await getVersionFromFileIfMatches(path.join(folderPath, matchPath), versionLocation);
 
             if (!!version) {
@@ -75,21 +100,17 @@ const getVersionFromFileIfMatches = async (
 
   //check if file content contains all strings in sdkVersionLocation.fileContainsExact
   const stringToSearch = sdkVersionLocation.fileContainsExact;
-  let stringFound = false;
-  //todo: optimize, stop searching when finding the first occurrence
-  for await (const line of fileLinesStream(filePath)) {
-    if (line.includes(stringToSearch)) {
-      stringFound = true;
-      debug('found string', stringToSearch);
+  if (!!stringToSearch && stringToSearch.length > 0) {
+    //string was not found, the file is not what we're looking for
+    if (!stringExistInFile(filePath, stringToSearch)) {
+      debug('the string ' + stringToSearch + ' was not found in ' + filePath, ' >>> aborting !!!');
+      return undefined;
     }
   }
 
-  //string was not found, the file is not what we're looking for
-  if (!stringFound) return undefined;
-
   //at this point all required strings where found in the file
   //aka, we found the file we're looking for
-  debug('now searching for version ');
+  debug('now searching for version name');
   //search for sdk version  number
   for await (const line of fileLinesStream(filePath)) {
     //todo: optimize, stop processing after finding version
@@ -102,6 +123,17 @@ const getVersionFromFileIfMatches = async (
   //version could not be found
   debug('!!! file found but version was not found, file=>', filePath, ' regex => ');
   return undefined;
+};
+
+const stringExistInFile = async (filePath: string, stringToSearch: string): Promise<boolean> => {
+  //todo: optimize, stop searching when finding the first occurrence
+  for await (const line of fileLinesStream(filePath)) {
+    if (line.includes(stringToSearch)) {
+      debug('found string', stringToSearch);
+      return true;
+    }
+  }
+  return false;
 };
 
 const fileLinesStream = (filePath: string): Interface => {

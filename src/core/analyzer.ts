@@ -33,13 +33,15 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
 
     for (const apk of apks) {
       const decRes = await decompileApk(apk, true);
+      debug('decompile res:', decRes);
       if (!!decRes.error) {
         console.log('error while decoding APK: ', decRes.error);
         continue;
       }
+
       // debug('decRes', decRes);
       const SDKs = await analyzeGmsHmsSdks(apk);
-      debug('sdks', SDKs);
+
       const manifestResult = await analyzeManifest(decRes.manifestPath!);
 
       const apkToolYmlResult = analyzeApkToolYml(decRes.apkToolYmlPath!);

@@ -1,12 +1,23 @@
+import { analyzeSdks } from '../src/core/analyzer/AnalyzeSdks';
+import { decompileApk } from './../src/core/apktool/decompile';
 import debugModule from 'debug';
 import path from 'path';
 import Bananalyzer from '../src/index';
+import fs from 'fs';
 
 const keepApks = true;
 const useExisting = true;
 debugModule.enable('bananalyzer*');
 
 (async () => {
+  //***** tracking sdk analyzer  */
+
+  const decompilePath = 'D:\\CODE\\_huawei\\Bananalyzer\\decompile\\sample_2.apk';
+  if (!fs.existsSync(decompilePath)) {
+    return console.warn('path does not exist, see test/dev.ts');
+  }
+  const sdksRes = await analyzeSdks(decompilePath);
+  console.log(JSON.stringify(sdksRes));
   //****************** */
   // non-cli usage example
   //***************** get app details  */
@@ -20,21 +31,15 @@ debugModule.enable('bananalyzer*');
   // console.log('downloadAPK', downloadAPK);
 
   //todo: revert back, use apk from test folder
-  const result = await Bananalyzer.analyzeAPKs(
-    [
-      {
-        filePath: path.join(__dirname, 'samples', 'sample_2.apk'),
-      },
-    ],
-    true
-  );
-  console.log('result', result);
-  console.log('hms versions', result[0].hmsVersions);
-  console.log(
-    'hms',
-    result[0].HMS,
-    result[0].hmsVersions.map((i) => i.name + '>' + i.version)
-  );
+  // const result = await Bananalyzer.analyzeAPKs(
+  //   [
+  //     {
+  //       filePath: path.join(__dirname, 'samples', 'sample_2.apk'),
+  //     },
+  //   ],
+  //   true
+  // );
+  // console.log('result', result);
 
   // ******************************
   // todo: test getInnerApk (xapk)

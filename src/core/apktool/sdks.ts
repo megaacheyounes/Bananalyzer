@@ -1,48 +1,92 @@
-export type MinVersion = {
-  OAID: string;
-  referrer?: string;
-};
 export type SdkVersionLocation = {
   filePathWildcard: string;
-  fileContainsExact: string;
+  fileContainsExact?: string;
   versionRegex: RegExp;
 };
 
-export type TrackingSDK = {
+export type SdkSearchLocation = {
   name: string;
-  minVersion: MinVersion;
+  minVersion?: string;
+  maxVersion?: string;
   versionSearchLocations: SdkVersionLocation[];
 };
-export const TRACKING_SDKS: TrackingSDK[] = [
+
+export const STANDARD_SMALI_VERSION_NAME = new RegExp(
+  'field public static final VERSION_NAME:Ljava/lang/String; = "(.*)"'
+);
+
+export const STANDARD_GMS_SDK_VERSION_REF = new RegExp('.source "com.google.android.gms:.*@@(.*)"');
+
+export const TRACKING_SDKS: SdkSearchLocation[] = [
   {
     name: 'appsflyer_oaid',
-    minVersion: {
-      OAID: '5.4.0',
-    },
+    minVersion: '5.4.0',
     versionSearchLocations: [
       {
-        filePathWildcard: 'smali*/com/appsflyer/oaid/*.smali',
+        filePathWildcard: 'smali*/com/appsflyer/oaid/BuildConfig.smali',
         fileContainsExact: '.class public final Lcom/appsflyer/oaid/BuildConfig;',
         versionRegex: new RegExp('field public static final VERSION_NAME:Ljava/lang/String; = "(.*)"'),
       },
     ],
   },
-  //   {
-  //     appsflyer: [
-  //       {
-  //         name: 'appsflyer',
-  //         minVersion: {
-  //           OAID: '5.4.0',
-  //           referrer: '6.2.3',
-  //         },
-  //         versionLocation: [
-  //           {
-  //             filePath: '*/smali*/appsflyer/*.smali',
-  //             contains: ['com/appsflyer/AFLogger'],
-  //             versionRegex: 'const-string v2, "AppsFlyer_(.*)"',
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
+];
+
+export const GMS_SDKS: SdkSearchLocation[] = [
+  {
+    name: 'admob',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/google/android/gms/ads/AdActivity.smali',
+        versionRegex: STANDARD_GMS_SDK_VERSION_REF,
+      },
+    ],
+  },
+  {
+    name: 'cloud messaging',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/google/android/gms/cloudmessaging/CloudMessage.smali',
+        versionRegex: STANDARD_GMS_SDK_VERSION_REF,
+      },
+    ],
+  },
+];
+
+export const AG_CLOUD_SERVICES: SdkSearchLocation[] = [
+  {
+    name: 'auth',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/huawei/agconnect/auth/BuildConfig.smali',
+        versionRegex: STANDARD_SMALI_VERSION_NAME,
+      },
+    ],
+  },
+  {
+    name: 'credential',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/huawei/agconnect/credential/BuildConfig.smali',
+        versionRegex: STANDARD_SMALI_VERSION_NAME,
+      },
+    ],
+  },
+  {
+    name: 'core',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/huawei/agconnect/core/BuildConfig.smali',
+        versionRegex: STANDARD_SMALI_VERSION_NAME,
+      },
+    ],
+  },
+  {
+    name: 'datastore',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/huawei/agconnect/datastore/BuildConfig.smali',
+        versionRegex: STANDARD_SMALI_VERSION_NAME,
+      },
+    ],
+  },
 ];
