@@ -8,7 +8,7 @@ import { AndroidManifest, Service, UsesPermission } from '../../models/manifest'
  */
 
 import { GOOGLE_MESSAGING_EVENT, HUAWEI_MESSAGING_EVENT, UNKNOWN_INFO } from '../../consts';
-import { AnalyzedManifest } from '../../models/analyzedApp';
+import { AnalyzedManifest, SdkVersion } from '../../models/analyzedApp';
 import { Action, Activity, IntentFilter } from '../../models/manifest';
 import { getAndroidManifestData } from '../../utils/manifestReader';
 
@@ -39,6 +39,8 @@ const analyzeManifest = async (manifestPath: string): Promise<AnalyzedManifest> 
   let googleMessagingServices: string[] = [UNKNOWN_INFO];
   let huaweiMessagingServices: string[] = [UNKNOWN_INFO];
 
+  let hmsVersions: SdkVersion[] = [];
+
   try {
     const manifestData: AndroidManifest = await getAndroidManifestData(manifestPath);
 
@@ -63,6 +65,7 @@ const analyzeManifest = async (manifestPath: string): Promise<AnalyzedManifest> 
       }
 
       huaweiMetadata = getCompanyMetadata(manifestData, 'huawei');
+      hmsVersions = getHmsSdkVersion(huaweiMetadata);
       googleMetadata = getCompanyMetadata(manifestData, 'google');
     }
 
@@ -95,12 +98,52 @@ const analyzeManifest = async (manifestPath: string): Promise<AnalyzedManifest> 
     huaweiServices,
     googleMessagingServices,
     huaweiMessagingServices,
+    hmsVersions,
   };
 };
 
 export default analyzeManifest;
 
 /*** parse manifest */
+const getHmsSdkVersion = (metadata: string[]): SdkVersion[] => {
+  const res: SdkVersion[] = [];
+  for (const item of metadata) {
+    const regexVer = /(.*):(.*)=(.*):(.*)/;
+    const matchRes = item.match(regexVer);
+    if (!!matchRes && matchRes!.length > 4) {
+      let name = matchRes[3];
+      let version = matchRes[4];
+      res.push({
+        name,
+        version,
+        accuracy: 'high',
+      });
+      continue;
+    }
+
+    const regexN = /(.*):(.*)=(.*)/;
+    const matchResN = item.match(regexN);
+    if (!!matchRes && matchRes!.length > 3) {
+      let name = matchRes[3];
+      let version = matchRes[3];
+      res.push({
+        name,
+        version,
+        accuracy: 'medium',
+      });
+      continue;
+    }
+
+    res.push({
+      name: item,
+      accuracy: 'low',
+      version: '-1',
+    });
+  }
+
+  return res;
+};
+
 const getCompanyMetadata = (manifestData: AndroidManifest, company: string) =>
   manifestData.application.metaData
     ?.filter((m) => !!m.name && m.name.toLowerCase().indexOf(company) != -1)

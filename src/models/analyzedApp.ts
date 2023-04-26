@@ -1,5 +1,11 @@
 export type AnalyzedApp = AnalyzedManifest & AnalyzedSDKs & AnalyzedApk;
 
+export type SdkVersion = {
+  name: string;
+  version: string;
+  accuracy: 'high' | 'medium' | 'low';
+};
+
 export type AnalyzedManifest = {
   packageName: string;
   versionName: string;
@@ -15,6 +21,7 @@ export type AnalyzedManifest = {
   huaweiServices: string[];
   googleMessagingServices: string[];
   huaweiMessagingServices: string[];
+  hmsVersions: SdkVersion[];
 };
 
 export type AnalyzedSDKs = {

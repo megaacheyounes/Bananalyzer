@@ -23,12 +23,19 @@ debugModule.enable('bananalyzer*');
   const result = await Bananalyzer.analyzeAPKs(
     [
       {
-        filePath: path.join(__dirname, 'samples', 'sample.apk'),
+        filePath: path.join(__dirname, 'samples', 'sample_2.apk'),
       },
     ],
     true
   );
   console.log('result', result);
+  console.log('hms versions', result[0].hmsVersions);
+  console.log(
+    'hms',
+    result[0].HMS,
+    result[0].hmsVersions.map((i) => i.name + '>' + i.version)
+  );
+
   // ******************************
   // todo: test getInnerApk (xapk)
   // const path = await getInnerApk('D:\\__tasks__\\_analyze\\_toolss\\Bananalyzer\\downloads\\com.ahleen.voice.apk');
