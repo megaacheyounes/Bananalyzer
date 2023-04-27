@@ -15,3 +15,6 @@ tests/
 /dist/*.zip
 dist/instructions.txt
 dist/example_apps.txt
+.yarn/* 
+.pnp.*
+.pnp/*

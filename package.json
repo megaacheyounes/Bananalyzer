@@ -102,5 +102,6 @@
   },
   "overrides": {
     "clone-deep": "4.0.1"
-  }
+  },
+  "packageManager": "yarn@3.5.0"
 }

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import readline, { Interface } from 'readline';
-import { AG_CLOUD_SERVICES, GMS_SDKS, SdkVersionLocation, TRACKING_SDKS } from '../apktool/sdks';
+import { HMS_AG_CLOUD_SERVICES, GMS_SDKS, OTHER_SDKS, SdkVersionLocation, TRACKING_SDKS } from '../apktool/sdks';
 import { SdkSearchLocation } from './../apktool/sdks';
 
 import glob from 'glob';
@@ -27,7 +27,7 @@ export const analyzeSdks = async (decompileFolderPath: string): Promise<SdkPerDo
   const domains = [
     {
       name: 'AG Cloud Services',
-      sdkSearchLocation: AG_CLOUD_SERVICES,
+      sdkSearchLocation: HMS_AG_CLOUD_SERVICES,
     },
     {
       name: 'GMS SDKs',
@@ -37,16 +37,21 @@ export const analyzeSdks = async (decompileFolderPath: string): Promise<SdkPerDo
       name: 'Tracking SDKs',
       sdkSearchLocation: TRACKING_SDKS,
     },
+    {
+      name: 'Other SDKs',
+      sdkSearchLocation: OTHER_SDKS,
+    },
   ];
 
   for (const domain of domains) {
     const domainRes: SdkVersion[] = [];
     for (const sdkToSearchFor of domain.sdkSearchLocation) {
       const sdkVersion = await lookupSdkInSmaliSrc(decompileFolderPath, sdkToSearchFor);
+      //todo: filter out not found sdks
       domainRes.push({
         name: sdkToSearchFor.name,
         version: sdkVersion || '-1',
-        accuracy: 'high',
+        accuracy: !!sdkVersion ? 'high' : 'low',
       });
 
       debug('found SDK ', sdkToSearchFor.name, ':', sdkVersion);
@@ -78,6 +83,11 @@ const lookupSdkInSmaliSrc = async (folderPath: string, trackingSdk: SdkSearchLoc
           debug('matches: ', index, '=>', matches);
 
           let version = undefined;
+
+          if (!versionLocation.versionRegex) {
+            //we don't need to look for version
+            return resolve('0');
+          }
 
           for (let matchPath of matches) {
             version = await getVersionFromFileIfMatches(path.join(folderPath, matchPath), versionLocation);
@@ -114,7 +124,7 @@ const getVersionFromFileIfMatches = async (
   //search for sdk version  number
   for await (const line of fileLinesStream(filePath)) {
     //todo: optimize, stop processing after finding version
-    const matchResult = line.match(sdkVersionLocation.versionRegex);
+    const matchResult = line.match(sdkVersionLocation.versionRegex!);
     debug('match result', matchResult);
     if (!!matchResult) {
       return matchResult[1];

@@ -26,13 +26,13 @@ debugModule.enable('bananalyzer*');
   const result = await Bananalyzer.analyzeAPKs(
     [
       {
-        filePath: path.join(__dirname, 'samples', 'sample_2.apk'),
+        filePath: path.join(__dirname, 'samples', 'fb_cs_fit_cast_mediation.apk'),
       },
     ],
     true
   );
   console.log('result', result);
-
+  fs.writeFileSync('fb_cs_fit_cast_mediation.json', JSON.stringify(result), 'utf-8');
   //*****   sdk analyzer  */
 
   // const decompilePath = 'D:\\CODE\\_huawei\\Bananalyzer\\decompile\\sample_2.apk';
