@@ -1,0 +1,2 @@
+moengage: class: .class public final Lcom/moengage/BuildConfig; 
+registered service in manifest: com.moengage.firebase / com.moengage.hms
