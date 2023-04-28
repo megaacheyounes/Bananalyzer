@@ -123,9 +123,9 @@ const getHmsSdkVersion = (metadata: string[]): SdkVersion[] => {
 
     const regexN = /(.*):(.*)=(.*)/;
     const matchResN = item.match(regexN);
-    if (!!matchRes && matchRes!.length > 3) {
-      let name = matchRes[3];
-      let version = matchRes[3];
+    if (!!matchResN && matchResN!.length > 3) {
+      let name = matchResN[2];
+      let version = matchResN[3];
       res.push({
         name,
         version,
@@ -134,11 +134,11 @@ const getHmsSdkVersion = (metadata: string[]): SdkVersion[] => {
       continue;
     }
 
-    res.push({
-      name: item,
-      accuracy: 'low',
-      version: '-1',
-    });
+    // res.push({
+    //   name: item,
+    //   accuracy: 'low',
+    //   version: '-1',
+    // });
   }
 
   return res;

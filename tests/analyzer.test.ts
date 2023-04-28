@@ -35,27 +35,8 @@ export const tests = [
     },
     gmsCount: 0,
     hmsCount: 3,
+    locationVersion: '6.9.0.300',
   },
-  // {
-  //   apk: {
-  //     packageName: 'com.aswat.carrefouruae',
-  //     filePath: path.join(__dirname, 'samples', 'com.aswat.carrefouruae.apk'),
-  //     uploadDate: 'April 01, 2023',
-  //   },
-  //   gmsCount: 6,
-  //   hmsCount: 0,
-  // },
-
-  // {
-  //   apk: {
-  //     packageName: 'com.ubercab.uberlite',
-  //     filePath: uberApk,
-  //     uploadDate: 'Mar 30, 2022',
-  //   },
-  //   gmsCount: 0,
-  //   hmsCount: 0,
-  //   googlePermissionsCount: 1,
-  // },
 ];
 
 describe('Analyzer', () => {

@@ -28,6 +28,8 @@ const app: AnalyzedApp = {
   huaweiMessagingServices: [],
   huaweiServices: [],
   googleServices: [],
+  hmsVersions: [],
+  sdkPerDomain: [],
   others: [],
 };
 const testTempFolder = path.join(__dirname, 'temp');

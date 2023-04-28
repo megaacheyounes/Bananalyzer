@@ -1,9 +1,10 @@
-import { analyzeSdks } from '../src/core/analyzer/AnalyzeSdks';
+import { analyzeSdks } from '../src/core/analyzer/sdkAnalyzer/AnalyzeSdks';
 import { decompileApk } from './../src/core/apktool/decompile';
 import debugModule from 'debug';
 import path from 'path';
 import Bananalyzer from '../src/index';
 import fs from 'fs';
+import { saveResult } from '../src/core/ExcelHelper';
 
 const keepApks = true;
 const useExisting = true;
@@ -26,13 +27,14 @@ debugModule.enable('bananalyzer*');
   const result = await Bananalyzer.analyzeAPKs(
     [
       {
-        filePath: path.join(__dirname, 'samples', 'fb_cs_fit_cast_mediation.apk'),
+        filePath: path.join(__dirname, 'samples', 'trackingSDKs_latestRelease_1.2_lite-fido-gtm.apk'),
       },
     ],
     true
   );
   console.log('result', result);
-  fs.writeFileSync('fb_cs_fit_cast_mediation.json', JSON.stringify(result), 'utf-8');
+  // fs.writeFileSync('trackingSDKs_latestRelease_1.2_lite-fido-gtm.apk.json', JSON.stringify(result), 'utf-8');
+  await saveResult(result, 'trackingSDks1.xlsx');
   //*****   sdk analyzer  */
 
   // const decompilePath = 'D:\\CODE\\_huawei\\Bananalyzer\\decompile\\sample_2.apk';

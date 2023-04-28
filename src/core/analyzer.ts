@@ -15,7 +15,7 @@ import { APK } from '../models/apk';
 import analyzeApkToolYml from './analyzer/AnalyzeApkToolYml';
 import { analyzeGmsHmsSdks } from './analyzer/AnalyzeKits';
 import analyzeManifest from './analyzer/AnalyzeManifest';
-import { analyzeSdks } from './analyzer/AnalyzeSdks';
+import { analyzeSdks } from './analyzer/sdkAnalyzer/AnalyzeSdks';
 
 const debug = debugModule('bananalyzer:analyzer');
 
@@ -47,6 +47,11 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
       const manifestResult = await analyzeManifest(decRes.manifestPath!);
 
       const sdkPerDomain = await analyzeSdks(decRes.decompileFolderPath!);
+
+      sdkPerDomain.splice(0, 0, {
+        domain: 'HMS',
+        sdks: manifestResult.hmsVersions.filter((sdk) => sdk.accuracy == 'high'),
+      });
 
       const apkToolYmlResult = analyzeApkToolYml(decRes.apkToolYmlPath!);
 

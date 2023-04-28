@@ -17,13 +17,11 @@ const flags: any = {
     type: 'string',
     alias: 'p',
     default: '',
-
     desc: "Apk full path, required when using command 'apk'",
   },
   name: {
     type: 'string',
     alias: 'n',
-
     default: '',
     desc: "App package name, required when using Command 'package'",
   },
