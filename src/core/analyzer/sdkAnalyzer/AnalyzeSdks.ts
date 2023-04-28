@@ -149,8 +149,6 @@ const getVersionFromFileIfMatches = async (
   filePath: string,
   sdkVersionLocation: SdkVersionLocation
 ): Promise<string | undefined> => {
-  debug('=== search for version in: ', filePath);
-
   //check if file content contains all strings in sdkVersionLocation.fileContainsExact
   const stringToSearch = sdkVersionLocation.fileContainsExact;
   if (!!stringToSearch && stringToSearch.length > 0) {

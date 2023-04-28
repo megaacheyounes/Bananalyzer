@@ -79,8 +79,7 @@ const getServices = (entries: string[][]): string[] => {
     return [];
   }
   const serviceEntries = entries[1]; //.filter((appEntries) => appEntries.length > 0);
-  debug('headers', headers);
-  debug('serviceEntries', serviceEntries);
+
   if (serviceEntries.length == 0) return [];
 
   const kits = serviceEntries

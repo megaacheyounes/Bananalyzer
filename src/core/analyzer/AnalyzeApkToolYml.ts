@@ -1,22 +1,25 @@
+import { debug } from 'console';
 import fs from 'fs';
 import YAML from 'yaml';
 
 const analyzeApkToolYml = (apkToolYmlPath: string) => {
-  if (!fs.existsSync(apkToolYmlPath)) {
+  try {
+    const content = fs.readFileSync(apkToolYmlPath, 'utf-8');
+    const lineToRemove = '!!brut.androlib.meta.MetaInfo';
+
+    const result = YAML.parse(content.replace(lineToRemove, ''));
+
+    return {
+      versionName: result['versionInfo']['versionName'],
+      versionCode: result['versionInfo']['versionCode'],
+    };
+  } catch (e) {
+    debug(e);
     return {
       versionName: '',
       versionCode: '',
     };
   }
-  const result = YAML.parse(fs.readFileSync(apkToolYmlPath, 'utf-8'));
-
-  const versionName = result['versionInfo']['versionName'];
-  const versionCode = result['versionInfo']['versionCode'];
-
-  return {
-    versionName,
-    versionCode,
-  };
 };
 
 export default analyzeApkToolYml;
