@@ -54,11 +54,10 @@ export const analyzeSdks = async (decompileFolderPath: string): Promise<SdkPerDo
     for (const sdkToSearchFor of domain.sdkSearchLocation) {
       const sdkVersion = await lookupSdkInSmaliSrc(decompileFolderPath, sdkToSearchFor);
       if (!!sdkVersion) {
+        //todo: check if sdks meets requirement
         domainRes.push(sdkVersion!);
         // debug('found SDK ', sdkToSearchFor.name, ':', sdkVersion);
       }
-
-      //todo: check if meets requirement
     }
     res.push({
       domain: domain.name,
@@ -73,14 +72,6 @@ const lookupSdkInSmaliSrc = async (
   sdkToSearchFor: SdkSearchLocation
 ): Promise<SdkVersion | undefined> =>
   new Promise(async (resolve, reject) => {
-    if (!!sdkToSearchFor.ifFileExist) {
-      //check if file exist first
-      const files = await getMatchingFilesGlob(sdkToSearchFor.ifFileExist, folderPath);
-      if (!files || files.length == 0) {
-        return resolve(undefined);
-      }
-    }
-
     if (!sdkToSearchFor.versionSearchLocations || sdkToSearchFor.versionSearchLocations.length == 0) {
       console.warn('!!! No search locations declared for', sdkToSearchFor.name);
       return resolve(undefined);
@@ -88,24 +79,35 @@ const lookupSdkInSmaliSrc = async (
 
     const name = sdkToSearchFor.name;
 
-    for (const index in sdkToSearchFor.versionSearchLocations) {
-      const versionLocation = sdkToSearchFor.versionSearchLocations[index];
-      // debug('checking #', index, '=>', versionLocation.filePathWildcard);
+    let matchedAtLeastOne = false;
+    for (const versionLocation of sdkToSearchFor.versionSearchLocations) {
+      if (!!versionLocation.ifFileExist) {
+        //check if file exist first
+        const files = await getMatchingFilesGlob(versionLocation.ifFileExist, folderPath);
+        if (!files || files.length == 0) {
+          debug(`${sdkToSearchFor.name} sdk location does not meet requirements (ifFileExist false)`);
+          continue;
+        }
+      }
+
+      debug('checking #', versionLocation.filePathWildcard);
 
       //find files to search inside for version number
       const matches = await getMatchingFilesGlob(versionLocation.filePathWildcard, folderPath);
-      // debug('matches: ', versionLocation.filePathWildcard, '=>', matches);
+      debug('matches: ', versionLocation.filePathWildcard, '=>', matches);
 
       if (!matches || matches.length == 0) {
-        //sdk does not exist in apk
-        return resolve(undefined);
+        //sdk not found at first location, continue
+        continue;
       }
+
+      matchedAtLeastOne = true;
 
       if (!versionLocation.versionRegex) {
         //we don't need to look for version
         return resolve({
           name,
-          accuracy: 'medium',
+          accuracy: versionLocation.accuracy || 'medium',
           version: VERSION_SKIPPED,
         });
       }
@@ -116,16 +118,21 @@ const lookupSdkInSmaliSrc = async (
 
         if (!!version) {
           //we found version, stop looking in other places
-          return resolve({ name, version, accuracy: 'high' });
+          return resolve({ name, version, accuracy: versionLocation.accuracy || 'high' });
         }
       }
     }
 
-    resolve({
-      name,
-      version: VERSION_LOOKUP_FAILED,
-      accuracy: 'medium',
-    });
+    //matched, but no version
+    if (matchedAtLeastOne) {
+      return resolve({
+        name,
+        version: VERSION_LOOKUP_FAILED,
+        accuracy: 'low',
+      });
+    }
+    //not match and no version
+    resolve(undefined);
   });
 
 const getMatchingFilesGlob = async (filePathWildcard: string, directory: string): Promise<string[] | undefined> =>
@@ -161,7 +168,7 @@ const getVersionFromFileIfMatches = async (
 
   //at this point all required strings where found in the file
   //aka, we found the file we're looking for
-  // debug('now searching for version name', filePath, 'exist=>', fs.existsSync(filePath));
+  debug('now searching for version name', filePath, 'exist=>', fs.existsSync(filePath));
 
   //search for sdk version  number
   //todo: optimize: search in whole file at once, not line by line
@@ -169,12 +176,12 @@ const getVersionFromFileIfMatches = async (
     const matchResult = line.match(sdkVersionLocation.versionRegex!);
 
     if (!!matchResult) {
-      // debug('match result', matchResult);
+      debug('match result', matchResult);
       return matchResult[1];
     }
   }
   //version could not be found
-  // debug('file found but version was not found, file=>', filePath, ' regex => ', sdkVersionLocation.versionRegex);
+  debug('file found but version was not found, file=>', filePath, ' regex => ', sdkVersionLocation.versionRegex);
   return undefined;
 };
 

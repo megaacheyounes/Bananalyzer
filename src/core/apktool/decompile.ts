@@ -16,16 +16,12 @@ interface DecompileResult {
   apkToolYmlPath?: string;
 }
 // java -jar apktool.jar d -o D:\__tasks__\_analyze\dtse_orion\decompile\sample sample.apk
-export const decompileApk = async (apk: APK, keepSources: boolean): Promise<DecompileResult> =>
+export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
   new Promise(async (resolve, reject) => {
     let isSuccessful = true;
     let error = undefined;
 
-    const apkName = path.basename(apk.filePath);
-
-    debug('apkName', apkName);
-
-    let resultPath = path.join(DECOMPILE_FOLDER, apkName);
+    let resultPath = getDecompileFolderPath(apk);
 
     if (!fs.existsSync(DECOMPILE_FOLDER)) fs.mkdirSync(DECOMPILE_FOLDER);
 
@@ -56,3 +52,10 @@ export const decompileApk = async (apk: APK, keepSources: boolean): Promise<Deco
       apkToolYmlPath: path.join(resultPath, APK_TOOL_YML),
     });
   });
+
+export const getDecompileFolderPath = (apk: APK) => {
+  const apkName = path.basename(apk.filePath);
+
+  debug('apkName', apkName);
+  return path.join(DECOMPILE_FOLDER, apkName);
+};

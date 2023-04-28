@@ -13,9 +13,9 @@ import { APP_DATA_FOLDER } from '../consts';
 import { AnalyzedApk, AnalyzedApp } from '../models/analyzedApp';
 import { APK } from '../models/apk';
 import analyzeApkToolYml from './analyzer/AnalyzeApkToolYml';
-import { analyzeGmsHmsSdks } from './analyzer/AnalyzeKits';
+import { analyzeGmsHmsSdks as analyzeSdksUsingAppCheck } from './analyzer/AnalyzeKits';
 import analyzeManifest from './analyzer/AnalyzeManifest';
-import { analyzeSdks } from './analyzer/sdkAnalyzer/AnalyzeSdks';
+import { analyzeSdks as analyzeSdksFromSmali } from './analyzer/sdkAnalyzer/AnalyzeSdks';
 
 const debug = debugModule('bananalyzer:analyzer');
 
@@ -26,7 +26,7 @@ const debug = debugModule('bananalyzer:analyzer');
  * ]
  * @return {AnalyzedApp[]} resolved when all apks in packageNamesObj are analyzed
  */
-export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<AnalyzedApp[]> =>
+export const analyzeAPKs = (apks: APK[], keepDecompiledSources = false): Promise<AnalyzedApp[]> =>
   new Promise<AnalyzedApp[]>(async (resolve, reject) => {
     debug('analyzer:analyzing ', apks);
 
@@ -34,7 +34,7 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
     const results: AnalyzedApp[] = [];
 
     for (const apk of apks) {
-      const decRes = await decompileApk(apk, true);
+      const decRes = await decompileApk(apk);
       debug('decompile res:', decRes);
       if (!!decRes.error) {
         console.log('error while decoding APK: ', decRes.error);
@@ -42,11 +42,11 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
       }
 
       // debug('decRes', decRes);
-      const appCheckResult = await analyzeGmsHmsSdks(apk);
+      const appCheckResult = await analyzeSdksUsingAppCheck(apk);
 
       const manifestResult = await analyzeManifest(decRes.manifestPath!);
 
-      const sdkPerDomain = await analyzeSdks(decRes.decompileFolderPath!);
+      const sdkPerDomain = await analyzeSdksFromSmali(decRes.decompileFolderPath!);
 
       sdkPerDomain.splice(0, 0, {
         domain: 'HMS',
@@ -65,7 +65,12 @@ export const analyzeAPKs = (apks: APK[], keepApks: boolean = true): Promise<Anal
         ...apkFileResult,
         sdkPerDomain,
       });
+
+      if (!keepDecompiledSources && !!decRes.decompileFolderPath) {
+        fs.unlinkSync(decRes.decompileFolderPath);
+      }
     }
+
     resolve(results);
   });
 

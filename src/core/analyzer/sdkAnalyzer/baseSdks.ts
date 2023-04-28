@@ -2,13 +2,14 @@ export type SdkVersionLocation = {
   filePathWildcard: string;
   fileContainsExact?: string;
   versionRegex?: RegExp;
+  ifFileExist?: string;
+  accuracy?: 'high' | 'medium' | 'low';
 };
 
 export type SdkSearchLocation = {
   name: string;
   minVersion?: string[];
   maxVersion?: string;
-  ifFileExist?: string;
   versionSearchLocations: SdkVersionLocation[];
 };
 
@@ -20,7 +21,13 @@ export const GOOGLE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.a
 export const FIREBASE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.firebase:.*@@(.+)"');
 export const PROPERTIES_VERSION = new RegExp('version=(.*)');
 
-export const gmsFirebasePropVersion = (fileName: string): SdkVersionLocation => ({
+export const gmsFirebasePropVersion = (
+  fileName: string,
+  ifFileExist = '',
+  accuracy: 'high' | 'medium' | 'low' = 'medium'
+): SdkVersionLocation => ({
   filePathWildcard: `unknown/${fileName}`,
   versionRegex: PROPERTIES_VERSION,
+  ifFileExist,
+  accuracy,
 });

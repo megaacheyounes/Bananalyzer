@@ -27,14 +27,14 @@ debugModule.enable('bananalyzer*');
   const result = await Bananalyzer.analyzeAPKs(
     [
       {
-        filePath: path.join(__dirname, 'samples', 'trackingSDKs_latestRelease_1.2_lite-fido-gtm.apk'),
+        filePath: path.join(__dirname, 'samples', 'app-release.apk'),
       },
     ],
     true
   );
   console.log('result', result);
-  // fs.writeFileSync('trackingSDKs_latestRelease_1.2_lite-fido-gtm.apk.json', JSON.stringify(result), 'utf-8');
-  await saveResult(result, 'trackingSDks1.xlsx');
+  fs.writeFileSync('test_dev_analyzer_res.json', JSON.stringify(result), 'utf-8');
+  // await saveResult(result, 'com.ubercab.uberlite.xlsx');
   //*****   sdk analyzer  */
 
   // const decompilePath = 'D:\\CODE\\_huawei\\Bananalyzer\\decompile\\sample_2.apk';

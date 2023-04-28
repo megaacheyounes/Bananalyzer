@@ -5,20 +5,24 @@ import { analyzeAPKs } from '../src/core/analyzer';
 import { APK } from '../src/models/apk';
 
 import debugModule from 'debug';
+import { existsSync } from 'fs';
+import { getDecompileFolderPath } from '../src/core/apktool/decompile';
 
 debugModule.enable('*');
 
 export const tests = [
-  // {
-  //   apk: {
-  //     packageName: 'com.twitter.android.lite',
-  //     filePath: twitterApk,
-  //     uploadDate: 'feb 23, 2022',
-  //   },
-  //   gmsCount: 0,
-  //   hmsCount: 0,
-  //   googlePermissionsCount: 0,
-  // },
+  {
+    apk: {
+      packageName: 'com.ubercab.uberlite',
+      filePath: path.join(__dirname, 'samples', 'com.ubercab.uberlite.apk'),
+      uploadDate: 'feb 23, 2022',
+    },
+    gmsCount: 6,
+    hmsCount: 0,
+    googlePermissionsCount: 2,
+    versions: [],
+    keepDecompileFolder: true,
+  },
   {
     apk: {
       packageName: 'com.megaache.trackingsdks',
@@ -29,19 +33,19 @@ export const tests = [
     hmsCount: 7,
     gmsCount: 9,
     versions: ['6.3.0.301', '2.1.0.300'],
+    keepDecompileFolder: false,
   },
 ];
 
 describe('Analyzer', () => {
   it('should analyze apk', async () => {
     const testApks: APK[] = tests.map((test) => test.apk);
-    const analyzedApps = await analyzeAPKs(testApks, true);
-    console.log('analyzedApps', analyzedApps);
-    expect(analyzedApps).toHaveLength(tests.length);
 
-    for (const i in analyzedApps) {
-      const test = tests[i];
-      const res = analyzedApps[i];
+    for (const test of tests) {
+      const ress = await analyzeAPKs([test.apk], test.keepDecompileFolder);
+      expect(existsSync(getDecompileFolderPath(test.apk))).toEqual(test.keepDecompileFolder);
+
+      const res = ress[0];
       expect(res.packageName).toEqual(test.apk.packageName);
       expect(res.storeUploadDate).toEqual(test.apk.uploadDate);
       expect(res.GMS).toHaveLength(test.gmsCount);

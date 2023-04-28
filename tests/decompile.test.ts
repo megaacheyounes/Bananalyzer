@@ -12,7 +12,7 @@ const sampleApk = path.join(__dirname, 'samples', 'sample.apk');
 //todo: support split apk
 const uberApk = path.join(__dirname, 'samples', 'com.ubercab.uberlite.apk');
 
-export const testApks: APK[] = [
+export const testApks = [
   {
     packageName: 'com.megaache.trackingsdks',
     filePath: './tests/samples/sample.apk',
@@ -27,7 +27,7 @@ export const testApks: APK[] = [
 
 describe('Decompiler', () => {
   it('should decompile apk', async () => {
-    const result = await decompileApk(testApks[0], false);
+    const result = await decompileApk(testApks[0]);
     console.dir(result);
 
     expect(result.isSuccessful).toEqual(true);
