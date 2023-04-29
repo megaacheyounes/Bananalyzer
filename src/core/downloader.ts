@@ -1,3 +1,4 @@
+import { Browser } from 'puppeteer';
 /**
  *
  * it download apps from playstore using puppeteer and the website https://apps.evozi.com/apk-downloader
@@ -43,15 +44,20 @@ const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolea
       await page.click('#apksubmit');
       debug('clicked submit');
 
-      // wait for download link or error, can take up to 60 seconds
-      await page.waitForSelector('.linkarea_contents', { timeout: 60 * 1000 });
+      try {
+        // wait for download link or error, can take up to 60 seconds
+        await page.waitForSelector('.linkarea_contents', { timeout: 30 * 1000 });
+      } catch (e) {
+        return reject('app not found or invalid');
+      }
 
       // await page.waitForSelector(".dvContents", { timeout: 60 * 1000 })
       debug('page finished fetching apk info');
 
       // first check if thereis an error
-      const maybeError = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
-
+      const maybeError = await BrowserManager.getTextContent(page, '#downloader_area');
+      // const maybeError = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
+      debug('maybe error', maybeError);
       if (maybeError.toLowerCase().indexOf('not found or invalid') != -1) {
         debug('got error: ' + maybeError);
         // we have an error
@@ -338,7 +344,7 @@ export const getDownloadLink = async (
     if (!!page) await page.close();
     if (closeBrowserWhenDone) await BrowserManager.closeBrowser();
 
-    throw new Error('failed to get download link');
+    return undefined;
 
     //   }
   }

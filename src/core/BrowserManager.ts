@@ -69,8 +69,6 @@ const getSrc = async (page: Page, selector: string): Promise<string> => {
 const getBrowser = async (): Promise<Browser> => {
   const stats = await PCR(options);
 
-  debug('stats', stats);
-
   browser = await puppeteerExt
     .launch({
       headless: false,

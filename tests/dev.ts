@@ -17,23 +17,23 @@ debugModule.enable('bananalyzer*');
   // const appDetails = await Bananalyzer.getAppDetails('com.king.candycrushsaga');
   // console.log('appDetails', appDetails);
 
-  // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
-  // console.log('dl', dl);
+  const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
+  console.log('dl', dl);
 
   // const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite');
   // console.log('downloadAPK', downloadAPK);
 
   //todo: revert back, use apk from test folder
-  const result = await Bananalyzer.analyzeAPKs(
-    [
-      {
-        filePath: path.join(__dirname, 'samples', 'app-release.apk'),
-      },
-    ],
-    true
-  );
-  console.log('result', result);
-  fs.writeFileSync('test_dev_analyzer_res.json', JSON.stringify(result), 'utf-8');
+  // const result = await Bananalyzer.analyzeAPKs(
+  //   [
+  //     {
+  //       filePath: path.join(__dirname, 'samples', 'app-release.apk'),
+  //     },
+  //   ],
+  //   true
+  // );
+  // console.log('result', result);
+  // fs.writeFileSync('test_dev_analyzer_res.json', JSON.stringify(result), 'utf-8');
   // await saveResult(result, 'com.ubercab.uberlite.xlsx');
   //*****   sdk analyzer  */
 
