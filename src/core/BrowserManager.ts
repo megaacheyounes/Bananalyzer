@@ -4,15 +4,15 @@ import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION } from '..
 // puppeteer-extra is a drop-in replacement for puppeteer,
 // it augments the installed puppeteer with plugin functionality.
 // Any number of plugins can be added through `puppeteer.use()`
-import puppeteer from 'puppeteer-extra';
+import puppeteerExt from 'puppeteer-extra';
 
 // Add stealth plugin and use defaults (all tricks to hide puppeteer usage)
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-puppeteer.use(StealthPlugin());
+puppeteerExt.use(StealthPlugin());
 
 // Add adblocker plugin to block all ads and trackers (saves bandwidth)
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker';
-puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
+puppeteerExt.use(AdblockerPlugin({ blockTrackers: true }));
 
 //@ts-ignore
 import PCR from 'puppeteer-chromium-resolver';
@@ -21,7 +21,7 @@ const options = {};
 const debug = debugModule('bananalyzer:browserManager');
 
 // use one browser instance
-let browser: undefined | Browser;
+let browser: Browser | void;
 
 /**
  * this function will try to find and lunch chrome, if that fails it will try to download it and open it again
@@ -68,9 +68,12 @@ const getSrc = async (page: Page, selector: string): Promise<string> => {
 
 const getBrowser = async (): Promise<Browser> => {
   const stats = await PCR(options);
-  browser = await stats.puppeteer
+
+  debug('stats', stats);
+
+  browser = await puppeteerExt
     .launch({
-      headless: true,
+      headless: false,
       executablePath: stats.executablePath,
     })
     .catch((err: any) => debug('initBrowser failed', err));
@@ -102,17 +105,17 @@ const getChromiumPage = async (openBrowser: boolean = false): Promise<Page> => {
   });
 
   // skip loading images and visual resources to reduce loding time
-  await page.setRequestInterception(true);
-  page.on('request', (request: any) => {
-    if (request.isInterceptResolutionHandled()) {
-      return;
-    }
-    const REQUESTS_TO_IGNORE = ['font', 'image', 'stylesheet', 'media', 'imageset'];
-    if (REQUESTS_TO_IGNORE.indexOf(request.resourceType()) !== -1) {
-      return request.abort();
-    }
-    request.continue();
-  });
+  // await page.setRequestInterception(true);
+  // page.on('request', (request: any) => {
+  //   if (request.isInterceptResolutionHandled()) {
+  //     return;
+  //   }
+  //   const REQUESTS_TO_IGNORE = ['font', 'image', 'stylesheet', 'media', 'imageset'];
+  //   if (REQUESTS_TO_IGNORE.indexOf(request.resourceType()) !== -1) {
+  //     return request.abort();
+  //   }
+  //   request.continue();
+  // });
   return page;
 };
 

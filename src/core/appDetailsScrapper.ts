@@ -135,7 +135,7 @@ const getAppDetailsFromGooglePlay = (page: Page, packageName: string) =>
       const link = `https://play.google.com/store/apps/details?id=${packageName}&hl=en`;
       debug('using link ' + link);
       await page.goto(link, { waitUntil: 'networkidle2' });
-
+      // await page.waitForNetworkIdle();
       debug('page loaded');
 
       // first check if thereis an error
@@ -150,9 +150,18 @@ const getAppDetailsFromGooglePlay = (page: Page, packageName: string) =>
       const initialDetails = await scrapeAppDetailsData(page, false);
 
       //click on details button to load 'about this app' dialog
-      await page.click(
-        '.qZmL0 > c-wiz:nth-child(2) > div:nth-child(1) > section:nth-child(1) > header:nth-child(1) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)'
-      );
+      const detailsDialogButtonSelectors = [
+        '.qZmL0 > c-wiz:nth-child(2) > div:nth-child(1) > section:nth-child(1) > header:nth-child(1) > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)',
+        '#yDmH0d > c-wiz.SSPGKf.Czez9d > div > div > div.tU8Y5c > div.wkMJlb.YWi3ub > div > div.qZmL0 > div:nth-child(1) > c-wiz:nth-child(2) > div > section > header > div > div:nth-child(2) > button',
+      ];
+
+      for (const btnSelector of detailsDialogButtonSelectors) {
+        if (await BrowserManager.elementExist(page, btnSelector)) {
+          await page.click(btnSelector);
+          break;
+        }
+        debug('about app dialog button was not found');
+      }
 
       const appDetailsDialogSelector = `.jgIq1`;
       await page.waitForSelector(appDetailsDialogSelector);
@@ -167,8 +176,8 @@ const getAppDetailsFromGooglePlay = (page: Page, packageName: string) =>
 
       resolve(appDetails);
     } catch (e) {
-      debug('getAppDetailsFromGooglePlay:e::');
-      reject(new Error('Failed to extract date from google play'));
+      debug('getAppDetailsFromGooglePlay:e::', e);
+      reject(new Error('Failed to extract data from google play'));
     }
   });
 
@@ -276,6 +285,8 @@ const transformStringValue = (itemSelector: AppDetailsSelector, value: string) =
 export const getAppDetails = async (packageName: string, closeBrowser = false): Promise<AppDetails | undefined> => {
   const page = await BrowserManager.getChromiumPage();
 
+  //fixme
+  // return undefined;
   let appDetails: AppDetails;
   try {
     // try from source 1 (1 attempt)
