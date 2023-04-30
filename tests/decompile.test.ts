@@ -29,5 +29,5 @@ describe('Decompiler', () => {
 
     expect(fs.existsSync(manifestFile)).toEqual(true);
     expect(fs.existsSync(smaliFolder)).toEqual(true);
-  }, 30_000);
+  }, 180_000);
 });

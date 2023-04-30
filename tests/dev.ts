@@ -14,8 +14,8 @@ debugModule.enable('bananalyzer*');
   //****************** */
   // non-cli usage example
   //***************** get app details  */
-  // const appDetails = await Bananalyzer.getAppDetails('com.king.candycrushsaga');
-  // console.log('appDetails', appDetails);
+  const appDetails = await Bananalyzer.getAppDetails('com.facebook.lite');
+  console.log('appDetails', appDetails);
 
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
@@ -23,21 +23,19 @@ debugModule.enable('bananalyzer*');
   // const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite');
   // console.log('downloadAPK', downloadAPK);
 
-  const start = Date.now();
-  //todo: revert back, use apk from test folder
-  const result = await Bananalyzer.analyzeAPKs(
-    [
-      {
-        filePath: path.join(__dirname, 'samples', 'sample_2.apk'),
-      },
-    ],
-    false
-  );
+  // const start = Date.now();
+  // todo: revert back, use apk from test folder
+  // const result = await Bananalyzer.analyzeAPKs(
+  //   [
+  //     {
+  //       filePath: path.join(__dirname, 'samples', 'sample_2.apk'),
+  //     },
+  //   ],
+  //   false
+  // );
   // console.log('result', result);
   // fs.writeFileSync('test_dev_analyzer_res.json', JSON.stringify(result), 'utf-8');
   // await saveResult(result, 'com.ubercab.uberlite.xlsx');
-  const elapsed = Date.now() - start;
-  console.log('elapsed', elapsed, ' => ', elapsed / (1_000 * 60), 'min');
   //*****   sdk analyzer  */
 
   // const decompilePath = 'D:\\CODE\\_huawei\\Bananalyzer\\decompile\\sample_2.apk';
@@ -137,5 +135,5 @@ debugModule.enable('bananalyzer*');
   // };
   // saveResult(analyzerRes, resultFileName);
   // saveResult(analyzerRes, resultFileName);
-  // process.exit(0);
+  process.exit(0);
 })();

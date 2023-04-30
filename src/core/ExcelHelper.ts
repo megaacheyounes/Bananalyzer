@@ -3,9 +3,9 @@ import debugModule from 'debug';
 import path from 'path';
 import xlsx from 'xlsx';
 
-import { AnalyzedApk, AnalyzedApp } from '../models/analyzedApp';
-import { ExcelRow } from '../models/excelRow';
 import { IS_PROD } from '../consts';
+import { AnalyzedApp } from '../models/analyzedApp';
+import { ExcelRow } from '../models/excelRow';
 
 const debug = debugModule('bananalyzer:excleHelper');
 
@@ -17,7 +17,7 @@ const HEADER_HUAWEI_APP_ID = 'Huawei App Id';
 const HEADER_GMS_KITS = 'GMS kits (low accuracy)';
 const HEADER_HMS_KITS = 'HMS kits (medium accuracy)';
 
-const HEADER_SDKs = 'SDKs';
+const HEADER_SDKS = 'SDKs';
 
 const HEADER_HUAWEI_METADATAS = 'Huawei Metadatas';
 const HEADER_GOOGLE_METADATAS = 'Google Metadatas';
@@ -46,7 +46,7 @@ export const HEADERS = [
 
   HEADER_GMS_KITS,
   HEADER_HMS_KITS,
-  HEADER_SDKs,
+  HEADER_SDKS,
   HEADER_GOOGLE_METADATAS,
   HEADER_HUAWEI_METADATAS,
   HEADER_GOOGLE_PERMISSIONS,
@@ -79,7 +79,7 @@ export const getRowFromApp = (app: AnalyzedApp): ExcelRow => {
 [${d.domain}] ${ds.join(', ')}`;
   });
 
-  appAsRow[HEADER_SDKs] = domainSdks.join('');
+  appAsRow[HEADER_SDKS] = domainSdks.join('');
 
   appAsRow[HEADER_GOOGLE_METADATAS] = asString(app.googleMetadata);
   appAsRow[HEADER_HUAWEI_METADATAS] = asString(app.huaweiMetadata);
@@ -106,7 +106,6 @@ export const saveResult = async (apps: AnalyzedApp[], resultPath: string) =>
     // transform data
     const data: ExcelRow[] = [];
     apps.forEach(async (app) => {
-      debug(app);
       const row = getRowFromApp(app);
 
       data.push(row);

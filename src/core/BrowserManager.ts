@@ -71,7 +71,7 @@ const getBrowser = async (): Promise<Browser> => {
 
   browser = await puppeteerExt
     .launch({
-      headless: false,
+      headless: true,
       executablePath: stats.executablePath,
     })
     .catch((err: any) => debug('initBrowser failed', err));

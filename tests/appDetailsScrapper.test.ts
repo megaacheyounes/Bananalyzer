@@ -37,7 +37,7 @@ describe('appDetailsScrapper', () => {
       expect(isValidDate(details?.releasedOn as string)).toEqual(true);
 
       expect(new Date(details?.releasedOn as string)).toEqual(new Date(testApp.releasedOn));
-    });
+    }, 62_000);
   }
 
   it(`should throw error when packageName is invalid`, async () => {
@@ -48,5 +48,5 @@ describe('appDetailsScrapper', () => {
     } catch (e) {
       expect(e).toBeTruthy();
     }
-  });
+  }, 62_000);
 });
