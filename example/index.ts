@@ -1,4 +1,4 @@
-import Bananalyzer from 'bananalyzer';
+import Bananalyzer from '../build';
 
 (async () => {
   const getAppDetailsResult = await Bananalyzer.getAppDetails('com.ubercab.uberlite');

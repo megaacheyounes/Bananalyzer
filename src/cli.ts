@@ -4,7 +4,7 @@ import { APKTOOL_JAR } from './consts';
  * All right can be abused (respectfully)
  *
  * 💀💀💀 DANGER 💀💀💀
- * Reading this code can cause headaches, and may reduce your IQ level or give you a permanent brain damage
+ * Reading this code can cause headaches, reduce your IQ level or give you a permanent brain damage
  *
  */
 
@@ -16,21 +16,14 @@ import { APP_CHECK_JAR, APP_DATA_FOLDER, DOWNLOAD_FOLDER, EXPORT_DIR, IS_PROD, S
 import { currentPlatform, pause } from './core/utils';
 
 import cliHelper from './cliHelper';
-import {
-  CMD_APK,
-  CMD_LIST,
-  CMD_HELP,
-  CMD_PACKAGE,
-  CMD_VERSION,
-  commitSuicide,
-  MyFlags,
-  CMD_APK_LIST,
-} from './cliHelper';
+import { CMD_APK, CMD_LIST, CMD_PACKAGE, CMD_VERSION, commitSuicide, MyFlags, CMD_APK_LIST } from './cliHelper';
 import debugModule from 'debug';
 import { PickFileCommand } from './commands/pickFileCommand';
 import PackageCommand from './commands/packageCommand';
 import ApkCommand from './commands/apkCommand';
 import { PickFileApkCommand } from './commands/pickFileApk';
+
+require('is-plain-object');
 
 const debug = debugModule('main');
 
@@ -39,6 +32,7 @@ if (currentPlatform() == 'win32') {
   process.exit(2);
   //program will stop here
 }
+
 const requiredTools = [APP_CHECK_JAR, APKTOOL_JAR];
 for (const tool of requiredTools) {
   if (!fs.existsSync(tool)) {

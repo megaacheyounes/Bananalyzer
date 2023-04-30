@@ -32,7 +32,7 @@ const test = {
 //   googlePermissionsCount: 2,
 //   versions: ['17.0.0', '20.2.4'],
 //   keepDecompileFolder: true,
-// },
+// }
 
 describe('Analyzer', () => {
   it('should analyze apk 1', async () => {

@@ -175,6 +175,7 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
         resolve(await getDownloadLink2(page, packageName, attempt));
         return;
       };
+
       // some error message
       if (errorMessage.toLowerCase().indexOf('rate limit') != -1) {
         // you got your ass rate limited!
