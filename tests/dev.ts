@@ -17,24 +17,27 @@ debugModule.enable('bananalyzer*');
   // const appDetails = await Bananalyzer.getAppDetails('com.king.candycrushsaga');
   // console.log('appDetails', appDetails);
 
-  const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
-  console.log('dl', dl);
+  // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
+  // console.log('dl', dl);
 
   // const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite');
   // console.log('downloadAPK', downloadAPK);
 
+  const start = Date.now();
   //todo: revert back, use apk from test folder
-  // const result = await Bananalyzer.analyzeAPKs(
-  //   [
-  //     {
-  //       filePath: path.join(__dirname, 'samples', 'app-release.apk'),
-  //     },
-  //   ],
-  //   true
-  // );
+  const result = await Bananalyzer.analyzeAPKs(
+    [
+      {
+        filePath: path.join(__dirname, 'samples', 'sample_2.apk'),
+      },
+    ],
+    false
+  );
   // console.log('result', result);
   // fs.writeFileSync('test_dev_analyzer_res.json', JSON.stringify(result), 'utf-8');
   // await saveResult(result, 'com.ubercab.uberlite.xlsx');
+  const elapsed = Date.now() - start;
+  console.log('elapsed', elapsed, ' => ', elapsed / (1_000 * 60), 'min');
   //*****   sdk analyzer  */
 
   // const decompilePath = 'D:\\CODE\\_huawei\\Bananalyzer\\decompile\\sample_2.apk';
@@ -42,6 +45,7 @@ debugModule.enable('bananalyzer*');
   //   return console.warn('path does not exist, see test/dev.ts');
   // }
   // const sdksRes = await analyzeSdks(decompilePath);
+
   // console.log(JSON.stringify(sdksRes));
 
   // ******************************
@@ -133,5 +137,5 @@ debugModule.enable('bananalyzer*');
   // };
   // saveResult(analyzerRes, resultFileName);
   // saveResult(analyzerRes, resultFileName);
-  process.exit(0);
+  // process.exit(0);
 })();

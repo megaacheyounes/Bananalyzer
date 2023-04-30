@@ -90,11 +90,11 @@ const lookupSdkInSmaliSrc = async (
         }
       }
 
-      debug('checking #', versionLocation.filePathWildcard);
+      // debug('checking #', versionLocation.filePathWildcard);
 
       //find files to search inside for version number
       const matches = await getMatchingFilesGlob(versionLocation.filePathWildcard, folderPath);
-      debug('matches: ', versionLocation.filePathWildcard, '=>', matches);
+      // debug('matches: ', versionLocation.filePathWildcard, '=>', matches);
 
       if (!matches || matches.length == 0) {
         //sdk not found at first location, continue
@@ -168,7 +168,7 @@ const getVersionFromFileIfMatches = async (
 
   //at this point all required strings where found in the file
   //aka, we found the file we're looking for
-  debug('now searching for version name', filePath, 'exist=>', fs.existsSync(filePath));
+  // debug('now searching for version name', filePath, 'exist=>', fs.existsSync(filePath));
 
   //search for sdk version  number
   //todo: optimize: search in whole file at once, not line by line
@@ -176,7 +176,7 @@ const getVersionFromFileIfMatches = async (
     const matchResult = line.match(sdkVersionLocation.versionRegex!);
 
     if (!!matchResult) {
-      debug('match result', matchResult);
+      // debug('match result', matchResult);
       return matchResult[1];
     }
   }
@@ -188,7 +188,7 @@ const getVersionFromFileIfMatches = async (
 const stringExistInFile = async (filePath: string, stringToSearch: string): Promise<boolean> => {
   for await (const line of fileLinesStream(filePath)) {
     if (line.includes(stringToSearch)) {
-      debug('found string', stringToSearch);
+      // debug('found string', stringToSearch);
       return true;
     }
   }

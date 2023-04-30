@@ -1,16 +1,11 @@
-import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
+import { readFileSync } from 'fs';
 import path from 'path';
 
-import { getApkInfo, getInnerApk } from '../src/core/utils';
+import { getApkInfo } from '../src/core/utils';
 
 //normal apk
 const twitterApk = path.join(__dirname, 'samples', 'com.twitter.android.lite.apk');
 const twitterManifest = path.join(__dirname, 'samples', 'twitter-lite-manifest.json');
-//split apk
-const netflixApk = path.join(__dirname, 'samples', 'com.netflix.mediaclient.apk');
-const netflixManifest = path.join(__dirname, 'samples', 'netflix-manifest.json');
-
-const testTempFolder = path.join(__dirname, 'temp');
 
 const testApkInfo = async (apk: string, manifestPath: string) => {
   const actualManifest = await getApkInfo(apk);

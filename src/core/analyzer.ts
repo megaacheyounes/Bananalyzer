@@ -16,6 +16,7 @@ import analyzeApkToolYml from './analyzer/AnalyzeApkToolYml';
 import { analyzeGmsHmsSdks as analyzeSdksUsingAppCheck } from './analyzer/AnalyzeKits';
 import analyzeManifest from './analyzer/AnalyzeManifest';
 import { analyzeSdks as analyzeSdksFromSmali } from './analyzer/sdkAnalyzer/AnalyzeSdks';
+import rimraf from 'rimraf';
 
 const debug = debugModule('bananalyzer:analyzer');
 
@@ -67,7 +68,15 @@ export const analyzeAPKs = (apks: APK[], keepDecompiledSources = false): Promise
       });
 
       if (!keepDecompiledSources && !!decRes.decompileFolderPath) {
-        fs.unlinkSync(decRes.decompileFolderPath);
+        debug('will delete sources');
+        try {
+          rimraf(decRes.decompileFolderPath, (err) => {
+            debug('rimraf done, err:', err);
+          });
+        } catch (e) {
+          debug('failed to rimraf decompile folder');
+          debug(e);
+        }
       }
     }
 

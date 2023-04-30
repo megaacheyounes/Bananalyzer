@@ -30,10 +30,24 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
       jar: APKTOOL_JAR,
     });
 
+    const manifestPath = path.join(resultPath, ANDROID_MANIFEST);
+    const apkYamlPath = path.join(resultPath, APK_TOOL_YML);
+
     //todo: only reuse old decompile result when flag is set, and verify if manifest exists
-    if (!fs.existsSync(resultPath)) {
+    if (!fs.existsSync(resultPath) || !fs.existsSync(manifestPath) || !fs.existsSync(apkYamlPath)) {
+      const startTime = Date.now();
       // eslint-disable-next-line no-unused-vars
-      const { status, stdout, stderr } = await java.run(['d', '-f', '-o ' + resultPath, apk.filePath]);
+      const { status, stdout, stderr, childJavaProcess } = await java.run([
+        'd',
+        '--no-assets',
+        // '--no-res',
+        '--only-main-classes',
+        '-f',
+        '-o ' + resultPath,
+        apk.filePath,
+      ]);
+
+      // childJavaProcess.kill('SIGINT');
 
       // debug('--- status ----');
       // debug(status);
@@ -42,14 +56,15 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
       //todo: parse and return errors
       debug('--- stderr ----');
       debug(stderr);
+      debug(`decompiling elapsed: ${apk.packageName}  ${(Date.now() - startTime) / 1000} sec`);
     }
 
     resolve({
       isSuccessful,
       error,
       decompileFolderPath: resultPath,
-      manifestPath: path.join(resultPath, ANDROID_MANIFEST),
-      apkToolYmlPath: path.join(resultPath, APK_TOOL_YML),
+      manifestPath: manifestPath,
+      apkToolYmlPath: apkYamlPath,
     });
   });
 
