@@ -1,6 +1,6 @@
 {
   "name": "bananalyzer",
-  "version": "1.2.0-rc3",
+  "version": "1.2.0-rc4",
   "description": "A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata",
   "author": "Younes Megaache",
   "homepage": "https://github.com/megaacheyounes/bananalyzer",
