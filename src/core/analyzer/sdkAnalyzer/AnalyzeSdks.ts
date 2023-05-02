@@ -8,9 +8,9 @@ import glob from 'glob';
 
 import debugModule from 'debug';
 import { SdkPerDomain } from '../../../models/analyzedApp';
-import { HMS_AG_CLOUD_SERVICES } from './HMS_AG_SDKS';
-import { GMS_FIREBASE_SDKS } from './GMS_FIREBASE_SDKS';
 import { ADS_TACKING_SDKS } from './ADS_SDKS';
+import { GMS_FIREBASE_SDKS } from './GMS_FIREBASE_SDKS';
+import { HMS_AG_CLOUD_SERVICES } from './HMS_AG_SDKS';
 import { OTHER_SDKS } from './OTHER_SDKS';
 const debug = debugModule('bananalyzer:analyzeTrackingSdks');
 
@@ -19,6 +19,7 @@ export interface DetectedSdk {
   version: string;
   meetsRequirements: boolean;
 }
+
 const VERSION_LOOKUP_FAILED = '-1';
 const VERSION_SKIPPED = '0';
 
