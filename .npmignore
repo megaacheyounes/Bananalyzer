@@ -18,3 +18,8 @@ dist/example_apps.txt
 .yarn/* 
 .pnp.*
 .pnp/*
+temp/*
+downloads/*
+*.apk
+*.xlsx
+.research/*

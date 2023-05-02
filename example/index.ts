@@ -1,5 +1,5 @@
-// import Bananalyzer from 'bananalyzer';
-import Bananalyzer from '../build';
+import Bananalyzer from 'bananalyzer';
+// import Bananalyzer from '../build';
 
 (async () => {
   const pkgName = 'com.ubercab.uberlite';
