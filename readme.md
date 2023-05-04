@@ -170,24 +170,27 @@ get app listing information from google play (scrap)
 ```typescript
 import Bananalyzer from 'bananalyzer';
 
-const result = await Bananalyzer.getAppDetails('com.ubercab.uberlite');
+const result = await Bananalyzer.getAppDetails('com.facebook.lite');
 console.log(result);
 
-/*result = {
-  packageName: 'com.ubercab.uberlite',
-  name: 'Uber Lite',
-  versionName: '1.149.10000',
-  description: "Uber Lite is a  new, simple way to request a ride [...]",
-  updatedOn: 'Feb 3, 2023',
-  releasedOn: 'Mar 18, 2019',
-  requiresAndroid: '7.0 and up',
-  rating: '4.4star',
-  downloads: '10M+',
-  downloadsDetails: '10,000,000+ downloads',
-  developer: 'Uber Technologies, Inc.',
-  reviewsNumber: '446K reviews',
-  icon: 'https://play-lh.googleusercontent.com/_o0_RTIrrCQsZQONTIJF9EJ43vXTp8ieuiQtdCplT_kpfEE_z2d6wIVVO2BYzMxcJZMl=w240-h480-rw'
-}*/
+/*
+appDetails {
+  packageName: 'com.facebook.lite',
+  name: 'Facebook Lite',
+  versionName: 'Varies with device',
+  description: "Facebook Lite is fast, works on slow networks, uses less data and comes in a small package.Facebook Lite is recommended if you're on a phone with less than 2GB of RAM, connecting on 2G or 3G networks, or simply want to save mobile data or space on your phone. Enjoy an uncompromising Facebook experience that has reels, dark mode and all the key features, like:• Messages – Messaging is available without needing a separate messenger app - all of the benefits of Facebook Lite and Lite Messenger can be enjoyed in one app. Chat with friends in private or in group chats. Video call or voice call with whoever you choose - you're in control of your privacy.• Reels – Watch, create and share fun reels with your friends on Facebook, WhatsApp, Instagram and more. • Stories – Enjoy and share everyday moments. Add cool effects like stickers to text, music, videos or your own pics and share your story! • Videos – Discover and watch tons of shows and videos, including reels, from creators and pages you care about. Share publicly with your friends in a group message or in a private chat.• Groups – Find communities of people with similar interests and connect with them. • Marketplace – Buy and sell locally and connect with buyers and sellers on Facebook Marketplace.• News – Know what’s happening, locally and globally.Your privacy matters. Learn more about current news reports regarding Facebook data. https://m.facebook.com/help/463983701520800The Facebook Lite app is included in Facebook apps and technologies.Get early versions of the app, try out new features and give us feedback by becoming a beta tester. https://play.google.com/apps/testing/com.facebook.liteProblems downloading or installing the app? https://m.facebook.com/helpFacebook Lite is only available for people ages 13 and over.Terms of Service: http://m.facebook.com/terms.php",
+  updatedOn: 'Apr 29, 2023',
+  releasedOn: 'Jun 24, 2015',
+  requiresAndroid: 'VARY',
+  rating: '3.9star',
+  downloads: '1B+',
+  downloadsDetails: '1,000,000,000+ downloads',
+  developer: 'Meta Platforms, Inc.',
+  reviewsNumber: '24.3M reviews',
+  icon: 'https://play-lh.googleusercontent.com/J--_O-bAdNwLKs8XXsm9dTbt4B19wHXq6qGr5eCAJEagPrdC86aB8RieIkRdqKtSbNM=w240-h480-rw'
+}
+
+*/
 ```
 
 ### analyze an APK
@@ -210,84 +213,149 @@ console.log(result);
 /*
 result
 [
-  {
-    HMS: [ 'account', 'location', 'ads' ],
-    GMS: [],
-    packageName: 'com.megaache.trackingsdks',
-    versionName: '0',
-    huaweiAppId: '',
-    googleMetadata: [],
-    huaweiMetadata: [],
-    googlePermissions: [
-      'com.google.android.gms.permission.AD_ID',
-      'com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE'
-    ],
-    huaweiPermissions: [
-      'com.huawei.permission.sec.MDM.v2',
-      'com.huawei.permission.sec.ACCESS_UDID',
-      'com.huawei.permission.app.DOWNLOAD'
-    ],
-    googleActivities: [
-      'com.google.android.gms.common.api.GoogleApiActivity',
-      'com.google.android.gms.ads.AdActivity',
-      'com.google.android.gms.ads.OutOfContextTestingActivity'
-    ],
-    huaweiActivities: [
-      'com.huawei.hms.hwid.internal.ui.activity.HwIdSignInHubActivity',
-      'com.huawei.hms.account.internal.ui.activity.AccountSignInHubActivity',
-      'com.huawei.opendevice.open.OAIDSettingActivity',
-      'com.huawei.opendevice.open.SimplePrivacyActivity',
-      'com.huawei.opendevice.open.PrivacyActivity',
-      'com.huawei.opendevice.open.WhyThisAdStatementActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InstallActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.HMSSDKInstallActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.PPSActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSArActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.PPSRewardActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSRewardActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSInterstitialAdActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InterstitialAdActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.AgProtocolActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.PPSArActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.SplashFeedbackActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.AdComplainActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.PPSFullScreenNotifyActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.ComplianceActivity',
-      'com.huawei.openalliance.ad.activity.FeedbackActivity',
-      'com.huawei.hms.activity.BridgeActivity',
-      'com.huawei.hms.activity.EnableServiceActivity',
-      'com.huawei.openalliance.ad.activity.PPSLauncherActivity',
-      'com.huawei.openalliance.ad.activity.PPSBridgeActivity',
-      'com.huawei.openalliance.ad.activity.PPSNotificationActivity',
-      'com.huawei.openalliance.ad.activity.AgProtocolActivity',
-      'com.huawei.openalliance.ad.activity.TemplateStubActivity',
-      'com.huawei.openalliance.ad.activity.ComplianceActivity'
-    ],
-    googleServices: [ 'com.google.android.gms.ads.AdService' ],
-    huaweiServices: [
-      'com.huawei.android.hms.ppskit.PpsCoreService',
-      'com.huawei.agconnect.core.ServiceDiscovery'
-    ],
-    googleMessagingServices: [
-      'com.google.android.gms.ads.AdService',
-      'androidx.work.impl.background.systemalarm.SystemAlarmService',
-      'androidx.work.impl.background.systemjob.SystemJobService',
-      'androidx.work.impl.foreground.SystemForegroundService',
-      'androidx.room.MultiInstanceInvalidationService',
-      'com.huawei.agconnect.core.ServiceDiscovery'
-    ],
-    huaweiMessagingServices: [
-      'com.google.android.gms.ads.AdService',
-      'androidx.work.impl.background.systemalarm.SystemAlarmService',
-      'androidx.work.impl.background.systemjob.SystemJobService',
-      'androidx.work.impl.foreground.SystemForegroundService',
-      'androidx.room.MultiInstanceInvalidationService',
-      'com.huawei.agconnect.core.ServiceDiscovery'
-    ],
-    uploadDate: '',
-    apkCreationTime: '4/1/2023, 7:49:19 AM'
-  }
+    {
+        "HMS": [
+            "push",
+            "location",
+            "map",
+            "analytics",
+            "ads",
+            "scan",
+            "ml"
+        ],
+        "GMS": [
+            "Account",
+            "Push",
+            "Location",
+            "Map",
+            "Analytics",
+            "Ads",
+            "ML",
+            "SafetyNet",
+            "Fido"
+        ],
+        "packageName": "com.megaache.trackingsdks",
+        "versionName": "2.6.1",
+        "huaweiAppId": "",
+        "googleMetadata": [
+            "com.google.android.gms.version=@integer/google_play_services_version"
+        ],
+        "huaweiMetadata": [
+            "com.huawei.hms.client.service.name:location=location:SDK-VERSION",
+            "com.huawei.hms.min_api_level:location:location=1",
+            "com.huawei.hms.client.bi.setting=true",
+            "com.huawei.hms.min_api_level:com.huawei.hms:location:location=1",
+            "com.huawei.hms.client.service.name:videokit=videokit:1.0.1.300",
+            "com.huawei.hms.min_api_level:videokit:huawei_module_videoplayer=2",
+            "com.huawei.hms.client.service.name:push=push:6.1.0.300",
+            "com.huawei.hms.min_api_level:push:push=1",
+            "com.huawei.hms.client.service.name:ml-computer-vision=ml-computer-vision:2.0.3.300",
+            [...]
+        ],
+        "googlePermissions": [
+            "com.google.android.gms.permission.AD_ID",
+            "com.google.android.c2dm.permission.RECEIVE",
+            "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
+        ],
+        "huaweiPermissions": [
+            "com.huawei.appmarket.service.commondata.permission.GET_COMMON_DATA"
+        ],
+        "googleActivities": [
+            "com.google.android.gms.auth.api.signin.internal.SignInHubActivity",
+            "com.google.android.gms.common.api.GoogleApiActivity",
+            "com.google.android.gms.ads.AdActivity",
+            "com.google.android.gms.ads.OutOfContextTestingActivity"
+        ],
+        "huaweiActivities": [
+            "com.huawei.hms.videokit.player.UpdateActivity",
+            "com.huawei.hms.hmsscankit.ScanKitActivity",
+            "com.huawei.hms.activity.BridgeActivity",
+            "com.huawei.hms.activity.EnableServiceActivity",
+            "com.huawei.openalliance.ad.activity.PPSLauncherActivity",
+            "com.huawei.openalliance.ad.activity.PPSBridgeActivity",
+            "com.huawei.openalliance.ad.activity.PPSNotificationActivity",
+            "com.huawei.openalliance.ad.activity.AgProtocolActivity"
+        ],
+        "googleServices": [
+            "com.google.android.gms.auth.api.signin.RevocationBoundService",
+            "com.google.firebase.messaging.FirebaseMessagingService",
+            "com.google.firebase.components.ComponentDiscoveryService",
+            "com.google.android.gms.ads.AdService",
+            "com.google.android.datatransport.runtime.backends.TransportBackendDiscovery",
+            "com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+        ],
+        "huaweiServices": [
+            "com.huawei.location.lite.common.http.HttpService",
+            "com.huawei.remoteplayer.RemoteService",
+            "com.huawei.agconnect.core.ServiceDiscovery",
+            "com.huawei.hms.support.api.push.service.HmsMsgService"
+        ],
+        "googleMessagingServices": [
+            "com.google.firebase.messaging.FirebaseMessagingService"
+        ],
+        "huaweiMessagingServices": [],
+        "hmsVersions": [
+            {
+                "name": "videokit",
+                "version": "1.0.1.300",
+                "accuracy": "high"
+            },
+            [...]
+        ],
+        "versionCode": "200600100",
+        "storeUploadDate": "",
+        "apkCreationTime": "27/04/2023, 11:13:20 am",
+        "sdkPerDomain": [
+            {
+                "domain": "HMS",
+                "sdks": [
+                    {
+                        "name": "location",
+                        "version": "SDK-VERSION",
+                        "accuracy": "high"
+                    },
+                    [...]
+                ]
+            },
+            {
+                "domain": "HMS & AG",
+                "sdks": [
+                    {
+                        "name": "auth",
+                        "version": "1.4.2.301",
+                        "accuracy": "high"
+                    },
+                    [...]
+                ]
+            },
+            {
+                "domain": "GMS & FIREBASE",
+                "sdks": [
+                    {
+                        "name": "messaging",
+                        "version": "23.1.2",
+                        "accuracy": "high"
+                    },
+                    [...]
+                ]
+            },
+            {
+                "domain": "ADS & TRACKING",
+                "sdks": [
+                    {
+                        "name": "adjust",
+                        "version": "4.33.3",
+                        "accuracy": "high"
+                    },
+                    [...]
+                ]
+            },
+            {
+                "domain": "OTHER",
+                "sdks": []
+            }
+        ]
+    }
 ]
 
   */
