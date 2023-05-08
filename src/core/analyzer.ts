@@ -17,6 +17,7 @@ import { analyzeGmsHmsSdks as analyzeSdksUsingAppCheck } from './analyzer/Analyz
 import analyzeManifest from './analyzer/AnalyzeManifest';
 import { analyzeSdks as analyzeSdksFromSmali } from './analyzer/sdkAnalyzer/AnalyzeSdks';
 import rimraf from 'rimraf';
+import { getFramework } from './analyzer/frameworkDetector';
 
 const debug = debugModule('bananalyzer:analyzer');
 
@@ -58,12 +59,15 @@ export const analyzeAPKs = (apks: APK[], keepDecompiledSources = false): Promise
 
       const apkFileResult = analyzeApk(apk);
 
+      const framework = await getFramework(decRes.decompileFolderPath!)
+
       // debug('apkfileresult', apkFileResult);
       results.push({
         ...appCheckResult,
         ...manifestResult,
         ...apkToolYmlResult,
         ...apkFileResult,
+        framework,
         sdkPerDomain,
       });
 

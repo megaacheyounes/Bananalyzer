@@ -1,4 +1,4 @@
-export type AnalyzedApp = AnalyzedManifest & AnalyzedSDKs & AnalyzedApk;
+export type AnalyzedApp = AnalyzedManifest & AnalyzedSDKs & AnalyzedApk & AnalyzedFramework;
 
 export interface SdkPerDomain {
   domain: string;
@@ -16,7 +16,6 @@ export type SdkVersion = {
 export type AnalyzedManifest = {
   packageName: string;
   versionName: string;
-
   huaweiAppId: string;
   googleMetadata: string[];
   huaweiMetadata: string[];
@@ -29,6 +28,7 @@ export type AnalyzedManifest = {
   googleMessagingServices: string[];
   huaweiMessagingServices: string[];
   hmsVersions: SdkVersion[];
+
 };
 
 export type AnalyzedSDKs = {
@@ -42,3 +42,7 @@ export type AnalyzedApk = {
   storeUploadDate: string;
   apkCreationTime: string;
 };
+
+export type AnalyzedFramework = {
+  framework: SdkVersion
+}

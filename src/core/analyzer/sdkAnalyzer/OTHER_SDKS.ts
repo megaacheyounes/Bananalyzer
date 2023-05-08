@@ -57,5 +57,5 @@ export const OTHER_SDKS: SdkSearchLocation[] = [
         filePathWildcard: 'smali*/com/sendbird/android/SendBird.smali',
       },
     ],
-  },
+  }
 ];

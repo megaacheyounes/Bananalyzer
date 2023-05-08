@@ -1,4 +1,3 @@
-import debugModule from 'debug';
 import { AnalyzedSDKs } from '../../models/analyzedApp';
 ('use strict');
 
@@ -10,6 +9,7 @@ import { APK } from '../../models/apk';
 
 //@ts-ignore
 import JavaCallerModule from 'java-caller';
+import debugModule from 'debug';
 
 const debug = debugModule('bananalyzer:analyzeKits');
 

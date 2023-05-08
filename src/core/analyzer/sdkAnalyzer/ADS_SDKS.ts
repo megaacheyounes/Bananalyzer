@@ -1,3 +1,4 @@
+import { version } from 'os';
 import { BUILD_CONFIG_SMALI_VERSION_NAME, GOOGLE_SMALI_ANNOTATION_VERSION, SdkSearchLocation } from './baseSdks';
 
 //ads and tacking sdks
@@ -12,7 +13,7 @@ export const ADS_TACKING_SDKS: SdkSearchLocation[] = [
     ],
   },
   {
-    name: 'ads mediation (applovin)',
+    name: 'hauwei applovin mediation',
     versionSearchLocations: [
       {
         filePathWildcard: 'smali*/com/applovin/mediation/adapters/HuaweiMediationAdapter.smali',
@@ -20,7 +21,7 @@ export const ADS_TACKING_SDKS: SdkSearchLocation[] = [
     ],
   },
   {
-    name: 'ads mediation (admob)',
+    name: 'hauwei admob adapter',
     versionSearchLocations: [
       {
         filePathWildcard: 'smali*/com/hmscl/huawei/admob_mediation/BuildConfig.smali',
@@ -28,7 +29,7 @@ export const ADS_TACKING_SDKS: SdkSearchLocation[] = [
     ],
   },
   {
-    name: 'ads mediation (mopub)',
+    name: 'ads mopub mediation',
     versionSearchLocations: [
       {
         filePathWildcard: 'smali*/com/hmscl/huawei/ads/mediation_adapter_mopub/BuildConfig.smali',
@@ -101,4 +102,22 @@ export const ADS_TACKING_SDKS: SdkSearchLocation[] = [
       },
     ],
   },
+  {
+    name: 'unity ads',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/unity3d/ads/BuildConfig.smali',
+        versionRegex: BUILD_CONFIG_SMALI_VERSION_NAME,
+      }
+    ],
+  }, {
+    name: 'adcolony',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/adcolony/sdk/AdColony.smali'
+      }
+    ]
+  }
+
+
 ];

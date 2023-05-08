@@ -68,8 +68,8 @@ export const analyzeSdks = async (decompileFolderPath: string): Promise<SdkPerDo
   return res;
 };
 
-const lookupSdkInSmaliSrc = async (
-  folderPath: string,
+export const lookupSdkInSmaliSrc = async (
+  decompileFolderPath: string,
   sdkToSearchFor: SdkSearchLocation
 ): Promise<SdkVersion | undefined> =>
   new Promise(async (resolve, reject) => {
@@ -84,7 +84,7 @@ const lookupSdkInSmaliSrc = async (
     for (const versionLocation of sdkToSearchFor.versionSearchLocations) {
       if (!!versionLocation.ifFileExist) {
         //check if file exist first
-        const files = await getMatchingFilesGlob(versionLocation.ifFileExist, folderPath);
+        const files = await getMatchingFilesGlob(versionLocation.ifFileExist, decompileFolderPath);
         if (!files || files.length == 0) {
           debug(`${sdkToSearchFor.name} sdk location does not meet requirements (ifFileExist false)`);
           continue;
@@ -94,7 +94,7 @@ const lookupSdkInSmaliSrc = async (
       // debug('checking #', versionLocation.filePathWildcard);
 
       //find files to search inside for version number
-      const matches = await getMatchingFilesGlob(versionLocation.filePathWildcard, folderPath);
+      const matches = await getMatchingFilesGlob(versionLocation.filePathWildcard, decompileFolderPath);
       // debug('matches: ', versionLocation.filePathWildcard, '=>', matches);
 
       if (!matches || matches.length == 0) {
@@ -115,7 +115,7 @@ const lookupSdkInSmaliSrc = async (
 
       //files that match the search wildcard
       for (let matchPath of matches) {
-        const version = await getVersionFromFileIfMatches(path.join(folderPath, matchPath), versionLocation);
+        const version = await getVersionFromFileIfMatches(path.join(decompileFolderPath, matchPath), versionLocation);
 
         if (!!version) {
           //we found version, stop looking in other places
