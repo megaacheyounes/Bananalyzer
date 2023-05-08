@@ -278,7 +278,7 @@ export const downloadAPK = (packageName: string, useExisting: boolean, mergeSpli
       const downloadData = await getDownloadLink(packageName, mergeSplitApk, closeBrowser);
 
       if (!downloadData || !downloadData.downloadLink) {
-        throw Error('failed to get download link');
+        throw Error('failed to get download link (requested app is not found or invalid)');
       }
 
       const { downloadLink, versionName, apkSize, uploadDate, source } = downloadData;
