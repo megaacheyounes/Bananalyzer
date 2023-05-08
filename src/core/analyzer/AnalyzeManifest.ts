@@ -53,15 +53,17 @@ const analyzeManifest = async (manifestPath: string): Promise<AnalyzedManifest> 
 
     googlePermissions = getPermissions(manifestData, 'google');
     huaweiPermissions = getPermissions(manifestData, 'huawei');
-
     if (!!metadata) {
-      const appIdObj = metadata?.find((v) => v.name == 'com.huawei.hms.client.appid');
+      const appIdVal = metadata?.find((v) => v.name.indexOf('appid') != -1)?.value
 
-      let huaweiAppId: string;
-      if (!!appIdObj) {
-        huaweiAppId = `C${appIdObj.value}`.replace('appid=', '');
-      } else {
-        huaweiAppId = '';
+      debug("appIdObj", appIdVal)
+
+      const appIdRegex = /appid=(\d+)/
+      if (!!appIdVal) {
+        const matchRes = appIdVal.match(appIdRegex);
+        debug('matchRes', matchRes)
+        if (!!matchRes && matchRes.length > 1)
+          huaweiAppId = `C${matchRes[1]}`;
       }
 
       huaweiMetadata = getCompanyMetadata(manifestData, 'huawei');
