@@ -56,7 +56,7 @@ export const getSupportedSdks = () => {
 
         return {
           name: item.name,
-          accuracy: [...new Set(item.versionSearchLocations.map(l => l.accuracy).filter(acc => !!acc))],
+          accuracy: Array.from(new Set(item.versionSearchLocations.map(l => l.accuracy).filter(acc => !!acc))),
           canGetVersion: item.versionSearchLocations.filter(x => !!x.versionRegex).length > 0,
           //todo:
           canVerifyVersion: false
