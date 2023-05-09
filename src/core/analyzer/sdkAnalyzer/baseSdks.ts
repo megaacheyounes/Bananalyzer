@@ -1,3 +1,9 @@
+
+import { ADS_TACKING_SDKS } from './ADS_SDKS';
+import { FIREBASE_SDKS, GOOGLE_SDKS } from './GMS_FIREBASE_SDKS';
+import { AppGallery_SERVICES } from './HMS_AG_SDKS';
+import { OTHER_SDKS } from './OTHER_SDKS';
+
 export type SdkVersionLocation = {
   filePathWildcard: string;
   fileContainsExact?: string;
@@ -13,21 +19,50 @@ export type SdkSearchLocation = {
   versionSearchLocations: SdkVersionLocation[];
 };
 
-export const BUILD_CONFIG_SMALI_VERSION_NAME = new RegExp(
-  'field public static final VERSION_NAME:Ljava/lang/String; = "(.+)"'
-);
 
-export const GOOGLE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.android.gms:.*@@(.+)"');
-export const FIREBASE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.firebase:.*@@(.+)"');
-export const PROPERTIES_VERSION = new RegExp('version=(.*)');
 
-export const gmsFirebasePropVersion = (
-  fileName: string,
-  ifFileExist = '',
-  accuracy: 'high' | 'medium' | 'low' = 'medium'
-): SdkVersionLocation => ({
-  filePathWildcard: `unknown/${fileName}`,
-  versionRegex: PROPERTIES_VERSION,
-  ifFileExist,
-  accuracy,
-});
+
+
+export const SDK_DOMAINS = [
+  {
+    name: 'AppGallery Services',
+    sdkSearchLocation: AppGallery_SERVICES,
+  },
+  {
+    name: 'Google Services',
+    sdkSearchLocation: GOOGLE_SDKS,
+  },
+  {
+    name: 'Firebase Services',
+    sdkSearchLocation: FIREBASE_SDKS,
+  },
+  {
+    name: 'Ads/Tracking',
+    sdkSearchLocation: ADS_TACKING_SDKS,
+  },
+  {
+    name: 'Other',
+    sdkSearchLocation: OTHER_SDKS,
+  },
+];
+
+
+export const getSupportedSdks = () => {
+
+  return SDK_DOMAINS.map(sdkDomain => {
+    return ({
+      name: sdkDomain.name,
+      sdks: sdkDomain.sdkSearchLocation.map(item => {
+
+        return {
+          name: item.name,
+          accuracy: [...new Set(item.versionSearchLocations.map(l => l.accuracy).filter(acc => !!acc))],
+          canGetVersion: item.versionSearchLocations.filter(x => !!x.versionRegex).length > 0,
+          //todo:
+          canVerifyVersion: false
+        }
+      })
+    })
+  })
+
+}

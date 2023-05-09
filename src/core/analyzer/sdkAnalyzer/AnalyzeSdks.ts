@@ -2,16 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import readline, { Interface } from 'readline';
 import { SdkVersion } from '../../../models/analyzedApp';
-import { SdkSearchLocation, SdkVersionLocation } from './baseSdks';
+import { SdkSearchLocation, SdkVersionLocation, SDK_DOMAINS } from './baseSdks';
 
 import glob from 'glob';
 
 import debugModule from 'debug';
 import { SdkPerDomain } from '../../../models/analyzedApp';
-import { ADS_TACKING_SDKS } from './ADS_SDKS';
-import { GMS_FIREBASE_SDKS } from './GMS_FIREBASE_SDKS';
-import { HMS_AG_CLOUD_SERVICES } from './HMS_AG_SDKS';
-import { OTHER_SDKS } from './OTHER_SDKS';
+
 const debug = debugModule('bananalyzer:analyzeTrackingSdks');
 
 export interface DetectedSdk {
@@ -23,24 +20,7 @@ export interface DetectedSdk {
 const VERSION_LOOKUP_FAILED = '-1';
 const VERSION_SKIPPED = '0';
 
-const SDK_DOMAINS = [
-  {
-    name: 'HMS & AG',
-    sdkSearchLocation: HMS_AG_CLOUD_SERVICES,
-  },
-  {
-    name: 'GMS & FIREBASE',
-    sdkSearchLocation: GMS_FIREBASE_SDKS,
-  },
-  {
-    name: 'ADS & TRACKING',
-    sdkSearchLocation: ADS_TACKING_SDKS,
-  },
-  {
-    name: 'OTHER',
-    sdkSearchLocation: OTHER_SDKS,
-  },
-];
+
 
 export const analyzeSdks = async (decompileFolderPath: string): Promise<SdkPerDomain[]> => {
   const res: SdkPerDomain[] = [];

@@ -1,6 +1,9 @@
-import { BUILD_CONFIG_SMALI_VERSION_NAME, SdkSearchLocation } from './baseSdks';
+import { SdkSearchLocation } from './baseSdks';
+const BUILD_CONFIG_SMALI_VERSION_NAME = new RegExp(
+  'field public static final VERSION_NAME:Ljava/lang/String; = "(.+)"'
+);
 
-export const HMS_AG_CLOUD_SERVICES: SdkSearchLocation[] = [
+export const AppGallery_SERVICES: SdkSearchLocation[] = [
   {
     name: 'auth',
     versionSearchLocations: [

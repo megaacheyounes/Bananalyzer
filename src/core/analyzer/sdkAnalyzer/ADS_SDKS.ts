@@ -1,5 +1,12 @@
 import { version } from 'os';
-import { BUILD_CONFIG_SMALI_VERSION_NAME, GOOGLE_SMALI_ANNOTATION_VERSION, SdkSearchLocation } from './baseSdks';
+import { SdkSearchLocation } from './baseSdks';
+import { gmsFirebasePropVersion } from './GMS_FIREBASE_SDKS';
+
+const BUILD_CONFIG_SMALI_VERSION_NAME = new RegExp(
+  'field public static final VERSION_NAME:Ljava/lang/String; = "(.+)"'
+);
+export const GOOGLE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.android.gms:.*@@(.+)"');
+
 
 //ads and tacking sdks
 export const ADS_TACKING_SDKS: SdkSearchLocation[] = [
@@ -10,6 +17,11 @@ export const ADS_TACKING_SDKS: SdkSearchLocation[] = [
         filePathWildcard: 'smali*/com/google/android/gms/ads/AdActivity.smali',
         versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
       },
+      {
+        filePathWildcard: 'smali*/com/google/android/gms/ads/AdView.smali',
+        versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
+      },
+      gmsFirebasePropVersion('play-services-ads.properties', 'smali*/com/google/android/gms/ads/AdView.smali'),
     ],
   },
   {

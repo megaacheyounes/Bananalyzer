@@ -1,22 +1,26 @@
-import { version } from 'os';
-import { BUILD_CONFIG_SMALI_VERSION_NAME, GOOGLE_SMALI_ANNOTATION_VERSION, SdkSearchLocation } from './baseSdks';
-import { gmsFirebasePropVersion } from './baseSdks';
+import { SdkSearchLocation, SdkVersionLocation } from './baseSdks';
 
-export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
-  {
-    name: 'admob',
-    versionSearchLocations: [
-      {
-        filePathWildcard: 'smali*/com/google/android/gms/ads/AdActivity.smali',
-        versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
-      },
-      {
-        filePathWildcard: 'smali*/com/google/android/gms/ads/AdView.smali',
-        versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
-      },
-      gmsFirebasePropVersion('play-services-ads.properties', 'smali*/com/google/android/gms/ads/AdView.smali'),
-    ],
-  },
+const PROPERTIES_VERSION = new RegExp('version=(.*)');
+const BUILD_CONFIG_SMALI_VERSION_NAME = new RegExp(
+  'field public static final VERSION_NAME:Ljava/lang/String; = "(.+)"'
+);
+
+export const gmsFirebasePropVersion = (
+  fileName: string,
+  ifFileExist: string | undefined,
+  accuracy: 'high' | 'medium' | 'low' = 'medium'
+): SdkVersionLocation => ({
+  filePathWildcard: `unknown/${fileName}`,
+  versionRegex: PROPERTIES_VERSION,
+  ifFileExist,
+  accuracy,
+});
+
+export const GOOGLE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.android.gms:.*@@(.+)"');
+export const FIREBASE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.firebase:.*@@(.+)"');
+
+export const GOOGLE_SDKS: SdkSearchLocation[] = [
+
   {
     name: 'messaging',
     versionSearchLocations: [
@@ -28,7 +32,7 @@ export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
         filePathWildcard: 'smali*/com/google/android/gms/cloudmessaging/CloudMessage.smali',
         versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
       },
-      gmsFirebasePropVersion('firebase-messaging.properties'),
+      gmsFirebasePropVersion('firebase-messaging.properties', undefined),
       {
         filePathWildcard: 'smali*/com/google/firebase/components/BuildConfig.smali',
         versionRegex: BUILD_CONFIG_SMALI_VERSION_NAME,
@@ -42,7 +46,7 @@ export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
         filePathWildcard: 'smali*/com/google/firebase/analytics/FirebaseAnalytics.smali',
         versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
       },
-      gmsFirebasePropVersion('firebase-analytics.properties'),
+      gmsFirebasePropVersion('firebase-analytics.properties', undefined),
     ],
   },
   {
@@ -52,7 +56,7 @@ export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
         filePathWildcard: 'smali*/com/google/firebase/crashlytics/BuildConfig.smali',
         versionRegex: BUILD_CONFIG_SMALI_VERSION_NAME,
       },
-      gmsFirebasePropVersion('firebase-crashlytics.properties'),
+      gmsFirebasePropVersion('firebase-crashlytics.properties', undefined),
     ],
   },
   {
@@ -70,8 +74,8 @@ export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
         filePathWildcard: 'smali*/com/google/firebase/dynamiclinks/DynamicLink.smali',
         versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
       },
-      gmsFirebasePropVersion('firebase-dynamic-links.properties'),
-      gmsFirebasePropVersion('firebase-dynamic-links-ktx.properties'),
+      gmsFirebasePropVersion('firebase-dynamic-links.properties', undefined),
+      gmsFirebasePropVersion('firebase-dynamic-links-ktx.properties', undefined),
     ],
   },
   {
@@ -127,7 +131,7 @@ export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
         filePathWildcard: 'smali*/com/google/firebase/installations/BuildConfig.smali',
         versionRegex: BUILD_CONFIG_SMALI_VERSION_NAME,
       },
-      gmsFirebasePropVersion('firebase-installations.properties'),
+      gmsFirebasePropVersion('firebase-installations.properties', undefined),
     ],
   },
   {
@@ -191,14 +195,6 @@ export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
     ],
   },
   {
-    name: 'play appupdate',
-    versionSearchLocations: [
-      {
-        filePathWildcard: 'smali*/com/google/android/play/core/appupdate/AppUpdateManager.smali',
-      },
-    ],
-  },
-  {
     name: 'ml vision',
     versionSearchLocations: [
       {
@@ -216,6 +212,22 @@ export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
       ),
     ],
   },
+];
+export const FIREBASE_SDKS: SdkSearchLocation[] = [
+  {
+    name: 'admob',
+    versionSearchLocations: [
+      {
+        filePathWildcard: 'smali*/com/google/android/gms/ads/AdActivity.smali',
+        versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
+      },
+      {
+        filePathWildcard: 'smali*/com/google/android/gms/ads/AdView.smali',
+        versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
+      },
+      gmsFirebasePropVersion('play-services-ads.properties', 'smali*/com/google/android/gms/ads/AdView.smali'),
+    ],
+  },
   {
     name: 'sms retriever',
     versionSearchLocations: [
@@ -223,7 +235,7 @@ export const GMS_FIREBASE_SDKS: SdkSearchLocation[] = [
         filePathWildcard: 'smali*/com/google/android/gms/auth/api/phone/SmsRetriever.smali',
         versionRegex: GOOGLE_SMALI_ANNOTATION_VERSION,
       },
-      gmsFirebasePropVersion('play-services-auth-api-phone.properties'),
+      gmsFirebasePropVersion('play-services-auth-api-phone.properties', undefined),
     ],
   },
   {

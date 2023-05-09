@@ -1,6 +1,7 @@
-import { fileURLToPath } from 'url';
-import { BUILD_CONFIG_SMALI_VERSION_NAME, SdkSearchLocation } from './baseSdks';
-
+import { SdkSearchLocation } from './baseSdks';
+const BUILD_CONFIG_SMALI_VERSION_NAME = new RegExp(
+  'field public static final VERSION_NAME:Ljava/lang/String; = "(.+)"'
+);
 export const OTHER_SDKS: SdkSearchLocation[] = [
   {
     name: 'facebook login',

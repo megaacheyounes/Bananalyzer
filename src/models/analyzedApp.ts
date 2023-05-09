@@ -44,5 +44,5 @@ export type AnalyzedApk = {
 };
 
 export type AnalyzedFramework = {
-  framework: SdkVersion
+  framework?: SdkVersion
 }

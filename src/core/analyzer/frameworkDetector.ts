@@ -1,7 +1,9 @@
 import { SdkVersion } from './../../models/analyzedApp';
-import { version } from 'os';
 import { lookupSdkInSmaliSrc } from './sdkAnalyzer/AnalyzeSdks';
-import { SdkSearchLocation, BUILD_CONFIG_SMALI_VERSION_NAME } from './sdkAnalyzer/baseSdks';
+import { SdkSearchLocation } from './sdkAnalyzer/baseSdks';
+const BUILD_CONFIG_SMALI_VERSION_NAME = new RegExp(
+    'field public static final VERSION_NAME:Ljava/lang/String; = "(.+)"'
+);
 
 import debugModule from 'debug';
 

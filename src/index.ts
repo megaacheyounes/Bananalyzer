@@ -1,3 +1,4 @@
+import { getSupportedSdks } from './core/analyzer/sdkAnalyzer/baseSdks';
 import { getAppDetails } from './core/appDetailsScrapper';
 /**
  * No Copyright 2022 Younes Megaache
@@ -14,4 +15,5 @@ export default {
   downloadAPK: (packageName: string, mergeSplitApk = true) => downloadAPK(packageName, mergeSplitApk, true, true),
   analyzeAPKs,
   getAppDetails: (packageName: string) => getAppDetails(packageName, true),
+  getSupportedSdks
 };

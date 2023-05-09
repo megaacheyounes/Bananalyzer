@@ -13,9 +13,13 @@ debugModule.enable('bananalyzer*');
 (async () => {
   //****************** */
   // non-cli usage example
+  const supportedSdksRes = Bananalyzer.getSupportedSdks();
+  console.log('getSupportedSdks', supportedSdksRes);
+  fs.writeFileSync('getSupportedSdks.json', JSON.stringify(supportedSdksRes), 'utf-8');
+
   //***************** get app details  */
-  const appDetails = await Bananalyzer.getAppDetails('com.facebook.lite');
-  console.log('appDetails', appDetails);
+  // const appDetails = await Bananalyzer.getAppDetails('com.facebook.lite');
+  // console.log('appDetails', appDetails);
 
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
