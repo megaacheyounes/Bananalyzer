@@ -46,7 +46,9 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
         '-f',
         '-o ' + resultPath,
         apk.filePath,
-      ]);
+      ], {
+        detached: true
+      });
 
       // childJavaProcess.kill('SIGINT');
 

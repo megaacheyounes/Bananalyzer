@@ -24,7 +24,7 @@ debugModule.enable('*');
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
 
-  const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite');
+  const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite', true);
   console.log('downloadAPK', downloadAPK);
 
   const start = Date.now();
