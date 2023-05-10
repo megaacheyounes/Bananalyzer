@@ -39,6 +39,7 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
       // eslint-disable-next-line no-unused-vars
       const { status, stdout, stderr, childJavaProcess } = await java.run([
         'd',
+        '-v',
         '--no-assets',
         // '--no-res',
         '--only-main-classes',
