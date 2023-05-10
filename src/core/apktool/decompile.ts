@@ -49,10 +49,10 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
 
       // childJavaProcess.kill('SIGINT');
 
-      // debug('--- status ----');
-      // debug(status);
-      // debug('--- stdout ----');
-      // debug(stdout);
+      debug('--- status ----');
+      debug(status);
+      debug('--- stdout ----');
+      debug(stdout);
       //todo: parse and return errors
       debug('--- stderr ----');
       debug(stderr);

@@ -8,14 +8,14 @@ import { saveResult } from '../src/core/ExcelHelper';
 
 const keepApks = true;
 const useExisting = true;
-debugModule.enable('bananalyzer*');
+debugModule.enable('(java-caller|bananalyzer).*');
 
 (async () => {
   //****************** */
   // non-cli usage example
-  const supportedSdksRes = Bananalyzer.getSupportedSdks();
-  console.log('getSupportedSdks', supportedSdksRes);
-  fs.writeFileSync('getSupportedSdks.json', JSON.stringify(supportedSdksRes), 'utf-8');
+  // const supportedSdksRes = Bananalyzer.getSupportedSdks();
+  // console.log('getSupportedSdks', supportedSdksRes);
+  // fs.writeFileSync('getSupportedSdks.json', JSON.stringify(supportedSdksRes), 'utf-8');
 
   //***************** get app details  */
   // const appDetails = await Bananalyzer.getAppDetails('com.facebook.lite');
@@ -24,19 +24,19 @@ debugModule.enable('bananalyzer*');
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
 
-  // const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite');
-  // console.log('downloadAPK', downloadAPK);
+  const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite');
+  console.log('downloadAPK', downloadAPK);
 
-  // const start = Date.now();
-  // todo: revert back, use apk from test folder
-  // const result = await Bananalyzer.analyzeAPKs(
-  //   [
-  //     {
-  //       filePath: path.join(__dirname, 'samples', 'sample_2.apk'),
-  //     },
-  //   ],
-  //   false
-  // );
+  const start = Date.now();
+
+  const result = await Bananalyzer.analyzeAPKs(
+    [
+      {
+        filePath: downloadAPK.filePath,
+      },
+    ],
+    true
+  );
   // console.log('result', result);
   // fs.writeFileSync('test_dev_analyzer_res.json', JSON.stringify(result), 'utf-8');
   // await saveResult(result, 'com.ubercab.uberlite.xlsx');
