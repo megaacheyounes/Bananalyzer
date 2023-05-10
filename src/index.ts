@@ -12,7 +12,7 @@ import { getDownloadLink } from './core/downloader';
 import { downloadAPK } from './core/downloader';
 export default {
   getDownloadLink: (packageName: string) => getDownloadLink(packageName, true, true),
-  downloadAPK: (packageName: string, mergeSplitApk = true) => downloadAPK(packageName, mergeSplitApk, true, true),
+  downloadAPK: (packageName: string, useExistingApk = true) => downloadAPK(packageName, useExistingApk, true, true),
   analyzeAPKs,
   getAppDetails: (packageName: string) => getAppDetails(packageName, true),
   getSupportedSdks
