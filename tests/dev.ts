@@ -8,7 +8,7 @@ import { saveResult } from '../src/core/ExcelHelper';
 
 const keepApks = true;
 const useExisting = true;
-debugModule.enable('(java-caller|bananalyzer).*');
+debugModule.enable('*');
 
 (async () => {
   //****************** */
