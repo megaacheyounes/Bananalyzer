@@ -1,17 +1,41 @@
-import { analyzeSdks } from '../src/core/analyzer/sdkAnalyzer/AnalyzeSdks';
-import { decompileApk } from './../src/core/apktool/decompile';
-import debugModule from 'debug';
-import path from 'path';
 import Bananalyzer from '../src/index';
-import fs from 'fs';
-import { saveResult } from '../src/core/ExcelHelper';
+
+import { execa } from '@esm2cjs/execa';
+import debugModule from 'debug';
+import { APKTOOL_JAR } from '../src/consts';
+import { decompileApk } from '../src/core/apktool/decompile';
+import path from 'path';
 
 const keepApks = true;
 const useExisting = true;
 debugModule.enable('*');
 
 (async () => {
+
   //****************** */
+  // const dPath = path.join(".", "decompile", "twitter")
+  // console.log('dpath', dPath)
+  // const args = [
+  //   '-jar',
+  //   APKTOOL_JAR,
+  //   'd',
+  //   //  '-v',
+  //   '--no-assets',
+  //   // '--no-res',
+  //   '--only-main-classes',
+  //   '-f',
+  //   `-o ${dPath}`,
+  //   path.join(__dirname, 'samples', 'com.twitter.android.lite.apk'),
+  // ]
+  // const { status, stdout, stderr, childJavaProcess } = await java.run(, {
+  //   detached: true
+  // });
+
+  // const { stdout, stderr } = await execa('java', args)
+
+  // console.log(stdout);
+  // console.log(stderr);
+
   // non-cli usage example
   // const supportedSdksRes = Bananalyzer.getSupportedSdks();
   // console.log('getSupportedSdks', supportedSdksRes);
@@ -24,20 +48,21 @@ debugModule.enable('*');
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
 
-  const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite', true);
-  console.log('downloadAPK', downloadAPK);
+  // const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite', true);
+  // console.log('downloadAPK', downloadAPK);
 
-  const start = Date.now();
+  // // const start = Date.now();
 
   const result = await Bananalyzer.analyzeAPKs(
     [
       {
-        filePath: downloadAPK.filePath,
+        // filePath: downloadAPK.filePath,
+        filePath: './tests/samples/com.twitter.android.lite.apk'
       },
     ],
     true
   );
-  // console.log('result', result);
+  console.log('result', result);
   // fs.writeFileSync('test_dev_analyzer_res.json', JSON.stringify(result), 'utf-8');
   // await saveResult(result, 'com.ubercab.uberlite.xlsx');
   //*****   sdk analyzer  */
@@ -58,10 +83,9 @@ debugModule.enable('*');
   // decompile apk
   // const appDetails = await decompileApk(
   //   {
-  //     packageName: 'com.megaache.trackingsdks',
-  //     filePath: './tests/samples/sample.apk',
-  //   },
-  //   true
+  //     packageName: 'com.twitter.android.lite',
+  //     filePath: './tests/samples/com.twitter.android.lite.apk',
+  //   }
   // );
   // console.log('appDetails', appDetails);
   //**************************

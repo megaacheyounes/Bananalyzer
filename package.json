@@ -65,15 +65,16 @@
     "ncp": "^2.0.0",
     "path": "^0.12.7",
     "puppeteer": "^13.5.2",
+    "puppeteer-chromium-resolver": "^19.3.2",
     "puppeteer-extra": "^3.2.3",
     "puppeteer-extra-plugin-adblocker": "^2.12.0",
     "puppeteer-extra-plugin-stealth": "^2.9.0",
-    "puppeteer-chromium-resolver": "^19.3.2",
     "semver": "^7.3.8",
     "xlsx": "^0.18.5",
     "xml2js": "^0.4.23",
     "yaml": "^2.2.1",
-    "yauzl": "^2.10.0"
+    "yauzl": "^2.10.0",
+    "@esm2cjs/execa": "6.1.1-cjs.1"
   },
   "pkg": {
     "assets": "node_modules/puppeteer-extra-plugin-stealth/**/*.*"

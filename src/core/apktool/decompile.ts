@@ -1,12 +1,14 @@
-import { ANDROID_MANIFEST, APKTOOL_JAR, APK_TOOL_YML, DECOMPILE_FOLDER } from '../../consts';
-import debugModule from 'debug';
-import fs from 'fs';
-import path from 'path';
+import { execa } from '@esm2cjs/execa';
+
+import { existsSync, mkdirSync } from 'fs';
+import { ANDROID_MANIFEST, APKTOOL_JAR, APK_TOOL_YML, DECOMPILE_FOLDER, DECOMPILE_FOLDER_NAME } from '../../consts';
 import { APK } from '../../models/apk';
+import { basename, join } from 'path';
+import debugModule from 'debug';
 
 const debug = debugModule('bananalyzer:apkreader');
 //@ts-ignore
-import JavaCallerModule from 'java-caller';
+// import JavaCallerModule from 'java-caller';
 
 interface DecompileResult {
   isSuccessful: boolean;
@@ -23,40 +25,41 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
 
     let resultPath = getDecompileFolderPath(apk);
 
-    if (!fs.existsSync(DECOMPILE_FOLDER)) fs.mkdirSync(DECOMPILE_FOLDER);
+    // if (!existsSync(DECOMPILE_FOLDER)) mkdirSync(DECOMPILE_FOLDER);
 
     // 3- decompile with apktool
-    const java = new JavaCallerModule.JavaCaller({
-      jar: APKTOOL_JAR,
-    });
+    // const java = new JavaCallerModule.JavaCaller({
+    //   jar: APKTOOL_JAR,
+    // });
 
-    const manifestPath = path.join(resultPath, ANDROID_MANIFEST);
-    const apkYamlPath = path.join(resultPath, APK_TOOL_YML);
+    const manifestPath = join(resultPath, ANDROID_MANIFEST);
+    const apkYamlPath = join(resultPath, APK_TOOL_YML);
 
     //todo: only reuse old decompile result when flag is set, and verify if manifest exists
-    if (!fs.existsSync(resultPath) || !fs.existsSync(manifestPath) || !fs.existsSync(apkYamlPath)) {
+    if (!existsSync(manifestPath) || !existsSync(apkYamlPath)) {
       const startTime = Date.now();
       // eslint-disable-next-line no-unused-vars
-      const { status, stdout, stderr, childJavaProcess } = await java.run([
+      const args = [
+        '-jar',
+        APKTOOL_JAR,
         'd',
-        '-v',
+        //  '-v',
         '--no-assets',
         // '--no-res',
         '--only-main-classes',
         '-f',
-        '-o ' + resultPath,
+        `-o`,
+        resultPath,
         apk.filePath,
-      ], {
-        detached: true
-      });
+      ]
+      // const { status, stdout, stderr, childJavaProcess } = await java.run(, {
+      //   detached: true
+      // });
 
-      // childJavaProcess.kill('SIGINT');
+      const { stdout, stderr } = await execa('java', args)
 
-      debug('--- status ----');
-      debug(status);
       debug('--- stdout ----');
       debug(stdout);
-      //todo: parse and return errors
       debug('--- stderr ----');
       debug(stderr);
       debug(`decompiling elapsed: ${apk.packageName}  ${(Date.now() - startTime) / 1000} sec`);
@@ -72,8 +75,8 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
   });
 
 export const getDecompileFolderPath = (apk: APK) => {
-  const apkName = path.basename(apk.filePath);
+  const apkName = basename(apk.filePath);
 
   debug('apkName', apkName);
-  return path.join(DECOMPILE_FOLDER, apkName);
+  return join(DECOMPILE_FOLDER_NAME, apkName);
 };
