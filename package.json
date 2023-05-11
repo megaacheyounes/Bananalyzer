@@ -59,7 +59,6 @@
     "glob": "^8.1.0",
     "got": "^11.8.6",
     "is-plain-object": "^2.0.4",
-    "java-caller": "^2.7.0",
     "meow": "^9.0.0",
     "micromatch": "^4.0.5",
     "ncp": "^2.0.0",

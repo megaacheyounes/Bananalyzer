@@ -8,7 +8,6 @@ import debugModule from 'debug';
 
 const debug = debugModule('bananalyzer:apkreader');
 //@ts-ignore
-// import JavaCallerModule from 'java-caller';
 
 interface DecompileResult {
   isSuccessful: boolean;
@@ -25,7 +24,7 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
 
     let resultPath = getDecompileFolderPath(apk);
 
-    // if (!existsSync(DECOMPILE_FOLDER)) mkdirSync(DECOMPILE_FOLDER);
+    if (!existsSync(DECOMPILE_FOLDER)) mkdirSync(DECOMPILE_FOLDER);
 
     // 3- decompile with apktool
     // const java = new JavaCallerModule.JavaCaller({
@@ -52,9 +51,6 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
         resultPath,
         apk.filePath,
       ]
-      // const { status, stdout, stderr, childJavaProcess } = await java.run(, {
-      //   detached: true
-      // });
 
       const { stdout, stderr } = await execa('java', args)
 
@@ -76,7 +72,7 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
 
 export const getDecompileFolderPath = (apk: APK) => {
   const apkName = basename(apk.filePath);
-
-  debug('apkName', apkName);
-  return join(DECOMPILE_FOLDER_NAME, apkName);
+  const res = join(DECOMPILE_FOLDER_NAME, apkName);
+  debug('getDecompileFolderPath', res);
+  return res
 };

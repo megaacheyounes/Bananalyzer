@@ -7,9 +7,8 @@ import path from 'path';
 import { APP_CHECK_JAR, APP_DATA_FOLDER, GMS_OUTPUT, HMS_OUTPUT } from '../../consts';
 import { APK } from '../../models/apk';
 
-//@ts-ignore
-import JavaCallerModule from 'java-caller';
 import debugModule from 'debug';
+import { execa } from '@esm2cjs/execa';
 
 const debug = debugModule('bananalyzer:analyzeKits');
 
@@ -28,21 +27,23 @@ export const analyzeGmsHmsSdks = async (apk: APK): Promise<AnalyzedSDKs> => {
     debug(e);
   }
 
-  //   analyze using AppCheck
-  const java = new JavaCallerModule.JavaCaller({
-    jar: APP_CHECK_JAR,
-  });
-
   fs.writeFileSync(HMS_OUTPUT, '');
   fs.writeFileSync(GMS_OUTPUT, '');
 
-  // eslint-disable-next-line no-unused-vars
-  const { status, stdout, stderr } = await java.run(['-Gtrue -Dfalse -Cfalse']);
-  //    debug("--- status ----")
-  //    debug(status)
-  //    debug("--- stdout ----")S
-  //    debug(stdout)
-  //    debug("--- stderr ----")
+  const args = [
+    '-jar',
+    APP_CHECK_JAR,
+    '-Gtrue',
+    '-Dfalse',
+    '-Cfalse'
+  ]
+
+  const { stdout, stderr } = await execa('java', args)
+
+
+  debug("--- stdout ----")
+  debug(stdout)
+  debug("--- stderr ----")
   if (stderr) debug(stderr);
 
   //todo: use csv parsing library
