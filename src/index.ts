@@ -1,3 +1,4 @@
+import { decompileApk } from './core/apktool/decompile';
 import { getSupportedSdks } from './core/analyzer/sdkAnalyzer/baseSdks';
 import { getAppDetails } from './core/appDetailsScrapper';
 /**
@@ -10,10 +11,12 @@ import { analyzeAPKs } from './core/analyzer';
 import { getDownloadLink } from './core/downloader';
 
 import { downloadAPK } from './core/downloader';
+
 export default {
   getDownloadLink: (packageName: string) => getDownloadLink(packageName, true, true),
   downloadAPK: (packageName: string, useExistingApk = true) => downloadAPK(packageName, useExistingApk, true, true),
   analyzeAPKs,
   getAppDetails: (packageName: string) => getAppDetails(packageName, true),
-  getSupportedSdks
+  getSupportedSdks,
+  decompileApk
 };

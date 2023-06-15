@@ -51,18 +51,25 @@ debugModule.enable('*');
   // const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite', true);
   // console.log('downloadAPK', downloadAPK);
 
+
+  const decompileApk = await Bananalyzer.decompileApk({
+    filePath: './tests/samples/com.twitter.android.lite.apk'
+  });
+  console.log('decompileApk', decompileApk);
+
+
   // // const start = Date.now();
 
-  const result = await Bananalyzer.analyzeAPKs(
-    [
-      {
-        // filePath: downloadAPK.filePath,
-        filePath: './tests/samples/com.twitter.android.lite.apk'
-      },
-    ],
-    true
-  );
-  console.log('result', result);
+  // const result = await Bananalyzer.analyzeAPKs(
+  //   [
+  //     {
+  //       // filePath: downloadAPK.filePath,
+  //       filePath: './tests/samples/com.twitter.android.lite.apk'
+  //     },
+  //   ],
+  //   true
+  // );
+  // console.log('result', result);
   // fs.writeFileSync('test_dev_analyzer_res.json', JSON.stringify(result), 'utf-8');
   // await saveResult(result, 'com.ubercab.uberlite.xlsx');
   //*****   sdk analyzer  */

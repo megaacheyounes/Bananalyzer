@@ -9,13 +9,7 @@ import debugModule from 'debug';
 const debug = debugModule('bananalyzer:apkreader');
 //@ts-ignore
 
-interface DecompileResult {
-  isSuccessful: boolean;
-  decompileFolderPath?: string;
-  manifestPath?: string;
-  error?: string;
-  apkToolYmlPath?: string;
-}
+
 // java -jar apktool.jar d -o D:\__tasks__\_analyze\dtse_orion\decompile\sample sample.apk
 export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
   new Promise(async (resolve, reject) => {
@@ -60,6 +54,8 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
       debug(stderr);
       debug(`decompiling elapsed: ${apk.packageName}  ${(Date.now() - startTime) / 1000} sec`);
     }
+
+    isSuccessful = existsSync(manifestPath)
 
     resolve({
       isSuccessful,
