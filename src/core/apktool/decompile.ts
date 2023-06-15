@@ -30,31 +30,36 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
 
     //todo: only reuse old decompile result when flag is set, and verify if manifest exists
     if (!existsSync(manifestPath) || !existsSync(apkYamlPath)) {
-      const startTime = Date.now();
-      // eslint-disable-next-line no-unused-vars
-      const args = [
-        '-jar',
-        APKTOOL_JAR,
-        'd',
-        //  '-v',
-        '--no-assets',
-        // '--no-res',
-        '--only-main-classes',
-        '-f',
-        `-o`,
-        resultPath,
-        apk.filePath,
-      ]
+      try {
 
-      debug("args", args);
+        const startTime = Date.now();
+        // eslint-disable-next-line no-unused-vars
+        const args = [
+          '-jar',
+          APKTOOL_JAR,
+          'd',
+          //  '-v',
+          '--no-assets',
+          // '--no-res',
+          '--only-main-classes',
+          '-f',
+          `-o`,
+          resultPath,
+          apk.filePath,
+        ]
 
-      const { stdout, stderr } = await execa('java', args)
+        debug("args", args);
 
-      debug('--- stdout ----');
-      debug(stdout);
-      debug('--- stderr ----');
-      debug(stderr);
-      debug(`decompiling elapsed: ${apk.packageName}  ${(Date.now() - startTime) / 1000} sec`);
+        const { stdout, stderr } = await execa('java', args)
+
+        debug('--- stdout ----');
+        debug(stdout);
+        debug('--- stderr ----');
+        debug(stderr);
+        debug(`decompiling elapsed: ${apk.packageName}  ${(Date.now() - startTime) / 1000} sec`);
+      } catch (e: any) {
+        error = typeof e == 'object' ? e.message : e
+      }
     }
 
     isSuccessful = existsSync(manifestPath)
