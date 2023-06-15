@@ -6,7 +6,7 @@ import { APK } from '../../models/apk';
 import { basename, join } from 'path';
 import debugModule from 'debug';
 
-const debug = debugModule('bananalyzer:apkreader');
+const debug = debugModule('bananalyzer:decompile');
 //@ts-ignore
 
 
@@ -45,6 +45,8 @@ export const decompileApk = async (apk: APK): Promise<DecompileResult> =>
         resultPath,
         apk.filePath,
       ]
+
+      debug("args", args);
 
       const { stdout, stderr } = await execa('java', args)
 

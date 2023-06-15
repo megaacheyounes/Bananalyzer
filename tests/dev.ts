@@ -1,4 +1,6 @@
-import Bananalyzer from '../src/index';
+// import Bananalyzer from '../src/index';
+import Bananalyzer from '../build';
+
 
 import { execa } from '@esm2cjs/execa';
 import debugModule from 'debug';
