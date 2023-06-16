@@ -1,5 +1,5 @@
-// import Bananalyzer from '../src/index';
-import Bananalyzer from '../build';
+import Bananalyzer from '../src/index';
+// import Bananalyzer from '../build';
 
 
 import { execa } from '@esm2cjs/execa';
@@ -50,14 +50,19 @@ debugModule.enable('*');
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
 
-  // const downloadAPK = await Bananalyzer.downloadAPK('com.facebook.lite', true);
-  // console.log('downloadAPK', downloadAPK);
+  const dl = await Bananalyzer.getDownloadLink('com.Etisalat.ETIDA', false);
 
 
-  const decompileApk = await Bananalyzer.decompileApk({
-    filePath: './tests/samples/com.twitter.android.lite.apk'
-  });
-  console.log('decompileApk', decompileApk);
+  const dl2 = await Bananalyzer.getDownloadLink('com.Etisalat.ETIDA', true);
+
+  console.log('dl split:', dl);
+  console.log('dl merge: ', dl2);
+
+  // const decompileApk = await Bananalyzer.decompileApk({
+  //   // filePath: './tests/samples/com.twitter.android.lite.apk'
+  //   filePath: 'D:/__tasks__/_analyze/_toolss/com-etisalat-etida_9.3.3_arm64-v8a_merge.apk'
+  // });
+  // console.log('decompileApk', decompileApk);
 
 
   // // const start = Date.now();
