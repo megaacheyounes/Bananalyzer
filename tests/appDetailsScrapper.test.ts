@@ -1,4 +1,4 @@
-import { getAppDetails } from '../src/core/appDetailsScrapper';
+import { getAppDetails } from '../src/core/scraper/googlePlayScrapper';
 import { isValidDate } from '../src/utils/dateTimeUtils';
 
 export const testApps = [

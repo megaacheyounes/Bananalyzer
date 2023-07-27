@@ -19,7 +19,7 @@ export const gmsFirebasePropVersion = (
 export const GOOGLE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.android.gms:.*@@(.+)"');
 export const FIREBASE_SMALI_ANNOTATION_VERSION = new RegExp('.source "com.google.firebase:.*@@(.+)"');
 
-export const GOOGLE_SDKS: SdkSearchLocation[] = [
+export const FIREBASE_SDKS: SdkSearchLocation[] = [
 
   {
     name: 'messaging',
@@ -213,7 +213,7 @@ export const GOOGLE_SDKS: SdkSearchLocation[] = [
     ],
   },
 ];
-export const FIREBASE_SDKS: SdkSearchLocation[] = [
+export const GOOGLE_SDKS: SdkSearchLocation[] = [
   {
     name: 'admob',
     versionSearchLocations: [
@@ -318,6 +318,7 @@ export const FIREBASE_SDKS: SdkSearchLocation[] = [
       },
     ],
   },
+  // todo: move to gms services
   {
     name: 'fido',
     versionSearchLocations: [

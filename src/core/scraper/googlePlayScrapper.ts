@@ -4,8 +4,8 @@
 import debugModule from 'debug';
 import { Page } from 'puppeteer';
 
-import BrowserManager from './BrowserManager';
-import { isValidDate } from '../utils/dateTimeUtils';
+import BrowserManager from '../BrowserManager';
+import { isValidDate } from '../../utils/dateTimeUtils';
 
 const debug = debugModule('bananalyzer:appDetailsScrapper');
 
@@ -54,16 +54,16 @@ type AppDetailsSelector = {
 type SelectorsType = {
   screenshots: AppDetailsSelector;
 } & {
-  [key in (typeof APP_DETAILS_KEYS)[number]]: AppDetailsSelector;
-};
+    [key in (typeof APP_DETAILS_KEYS)[number]]: AppDetailsSelector;
+  };
 
 type SelectorResultType = string | undefined;
 
 type AppDetails = {
   screenshots: string[];
 } & {
-  [key in (typeof APP_DETAILS_KEYS)[number]]: SelectorResultType;
-};
+    [key in (typeof APP_DETAILS_KEYS)[number]]: SelectorResultType;
+  };
 
 const SELECTOR_MULTIPLE_INDEX = '__INDEX__';
 
@@ -81,8 +81,7 @@ const APP_DETAILS_SELECTORS: SelectorsType = {
     getFromAppDetailsDialog: true,
   },
   updatedOn: {
-    //*[@id="yDmH0d"]/div[6]/div[2]/div/div/div/div/div[2]/div[3]/div[9]/div[2]
-
+    //*[@id="yDmH0d"]/div[6]/div[2]/div/div/div/div/div[2]/div[3]/div[9]/div[2] 
     selector: 'div.sMUprd:nth-child(2) > div:nth-child(2)',
     // selector: 'div.sMUprd:nth-child(2) > div:nth-child(2)',
     type: DataToScrapeType.TEXT_CONTENT,
@@ -282,7 +281,7 @@ const scrapeMultipleStringValue = async (page: Page, itemSelector: AppDetailsSel
 const transformStringValue = (itemSelector: AppDetailsSelector, value: string) =>
   !!itemSelector.transform ? itemSelector.transform[value] || value : value;
 
-export const getAppDetails = async (packageName: string, closeBrowser = false): Promise<AppDetails | undefined> => {
+export const getGooglePlayDetails = async (packageName: string, closeBrowser = false): Promise<AppDetails | undefined> => {
   const page = await BrowserManager.getChromiumPage();
 
   //fixme

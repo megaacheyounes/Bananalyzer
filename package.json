@@ -1,6 +1,6 @@
 {
   "name": "bananalyzer",
-  "version": "1.2.3",
+  "version": "1.2.5-rc2",
   "description": "A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata",
   "author": "Younes Megaache",
   "homepage": "https://github.com/megaacheyounes/bananalyzer",
@@ -8,7 +8,7 @@
   "types": "build/index.d.ts",
   "displayName": "bananalyzer",
   "scripts": {
-    "dev": "cross-env NODE_ENV=debug ts-node tests/dev.ts",
+    "dev": "cross-env NODE_ENV=debug  ts-node tests/dev.ts",
     "start": "cross-env NODE_ENV=debug ts-node src/cli.ts list -k -r -d",
     "start:package": "cross-env NODE_ENV=debug ts-node src/cli.ts package -r -k -d --name",
     "start:apk": "cross-env NODE_ENV=debug ts-node src/cli.ts apk -k -d --path",
@@ -47,6 +47,7 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "@esm2cjs/execa": "6.1.1-cjs.1",
     "@types/semver": "^7.3.13",
     "@types/xml2js": "^0.4.11",
     "cli-meow-help": "^3.1.0",
@@ -72,8 +73,7 @@
     "xlsx": "^0.18.5",
     "xml2js": "^0.4.23",
     "yaml": "^2.2.1",
-    "yauzl": "^2.10.0",
-    "@esm2cjs/execa": "6.1.1-cjs.1"
+    "yauzl": "^2.10.0"
   },
   "pkg": {
     "assets": "node_modules/puppeteer-extra-plugin-stealth/**/*.*"

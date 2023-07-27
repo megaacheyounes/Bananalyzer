@@ -7,7 +7,7 @@
 ![npm](https://img.shields.io/npm/dm/bananalyzer?label=npm%20downloads)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/megaacheyounes/bananalyzer/issues)
 
-A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata
+A CLI tool for windows 10+, to download, decompile (reverse engineer) and scrape app data from both playstore and AppGallery
 
 ## Contents
 
@@ -390,10 +390,11 @@ result
 - [x] Add unit tests
 - [x] Publish npm module
 - [x] Update npm packages
-- [ ] Detect Ads and Tracking SDKs
-- [ ] Detect Firebase/AppGallery cloud services
-- [x] Get app details from google play
+- [x] Detect Ads and Tracking SDKs
+- [x] Detect Firebase/AppGallery cloud services
 - [ ] Improve and add missing documentation
+- [x] Scrape app details from Google Playstore
+- [ ] Scrape app details from Huawie AppGallery 
 
 ## License
 

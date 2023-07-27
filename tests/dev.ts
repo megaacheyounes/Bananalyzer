@@ -10,7 +10,7 @@ import path from 'path';
 
 const keepApks = true;
 const useExisting = true;
-debugModule.enable('*');
+debugModule.enable('bananalyzer:appGalleryScraper');
 
 (async () => {
 
@@ -44,19 +44,23 @@ debugModule.enable('*');
   // fs.writeFileSync('getSupportedSdks.json', JSON.stringify(supportedSdksRes), 'utf-8');
 
   //***************** get app details  */
-  // const appDetails = await Bananalyzer.getAppDetails('com.facebook.lite');
-  // console.log('appDetails', appDetails);
+  // const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
+  // console.log('playstore details', psDetails);
+
+  const agDetails = await Bananalyzer.getAppGalleryDetails('C100734965');
+  console.log('appgallery details', agDetails);
+
 
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
   // console.log('dl', dl);
 
-  const dl = await Bananalyzer.getDownloadLink('com.Etisalat.ETIDA', false);
+  // const dl = await Bananalyzer.getDownloadLink('com.Etisalat.ETIDA', false);
 
 
-  const dl2 = await Bananalyzer.getDownloadLink('com.Etisalat.ETIDA', true);
+  // const dl2 = await Bananalyzer.getDownloadLink('com.Etisalat.ETIDA', true);
 
-  console.log('dl split:', dl);
-  console.log('dl merge: ', dl2);
+  // console.log('dl split:', dl);
+  // console.log('dl merge: ', dl2);
 
   // const decompileApk = await Bananalyzer.decompileApk({
   //   // filePath: './tests/samples/com.twitter.android.lite.apk'
@@ -71,7 +75,7 @@ debugModule.enable('*');
   //   [
   //     {
   //       // filePath: downloadAPK.filePath,
-  //       filePath: './tests/samples/com.twitter.android.lite.apk'
+  //       filePath: './tests/samples/com.el_grocer.shopper.apk'
   //     },
   //   ],
   //   true

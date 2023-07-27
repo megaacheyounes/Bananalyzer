@@ -54,7 +54,7 @@ const analyzeManifest = async (manifestPath: string): Promise<AnalyzedManifest> 
     googlePermissions = getPermissions(manifestData, 'google');
     huaweiPermissions = getPermissions(manifestData, 'huawei');
     if (!!metadata) {
-      const appIdVal = metadata?.find((v) => v.name.indexOf('appid') != -1)?.value
+      const appIdVal = metadata?.find((v) => v.name.indexOf('com.huawei.hms.client.appid') != -1)?.value
 
       debug("appIdObj", appIdVal)
 
