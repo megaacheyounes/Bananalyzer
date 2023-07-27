@@ -7,7 +7,9 @@
 ![npm](https://img.shields.io/npm/dm/bananalyzer?label=npm%20downloads)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/megaacheyounes/bananalyzer/issues)
 
-<img src="/cover.png" width="640" height="360"/>
+<p align=center>
+    <img src="https://github.com/megaacheyounes/Bananalyzer/raw/dev/cover.png" width="640" height="360"/>
+</p>
 
 A CLI tool for windows 10+, to download, decompile (reverse engineer) and scrape app data from both playstore and AppGallery
  
