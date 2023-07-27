@@ -141,7 +141,10 @@ const getAppDetails = (page: Page, appId: string) =>
       if (firstChar == 'c')
         appId.replace('c', 'C')
 
+      page.on("requestfailed", async event => {
+        debug("requestFailed", event.method(), event.url(), event.failure()?.errorText, event.response())
 
+      });
       const link = `https://appgallery.huawei.com/app/${appId}`;
       debug('using link ' + link);
       await page.goto(link, { waitUntil: 'networkidle0' });
@@ -160,6 +163,8 @@ const getAppDetails = (page: Page, appId: string) =>
       })
       await page.screenshot({ path: './ag2.png' })
 
+
+
       const nameSelector = ".center_info > div:nth-child(1)"
 
       const title = await BrowserManager.getTextContent(page, nameSelector)
@@ -167,7 +172,6 @@ const getAppDetails = (page: Page, appId: string) =>
         debug("not title")
         return reject(new Error("failed to scrape data, appId might be invalid or app does not exist"))
       }
-
 
       const details = await scrapeAppDetailsData(page, false);
 
