@@ -1,4 +1,5 @@
-import { getAppDetails } from '../src/core/scraper/googlePlayScrapper';
+
+import { getGooglePlayDetails } from '../src/core/scraper/googlePlayScrapper';
 import { isValidDate } from '../src/utils/dateTimeUtils';
 
 export const testApps = [
@@ -24,10 +25,11 @@ export const testApps = [
     requiresAndroid: '5.0 and up',
   },
 ];
+//todo: add test for appgallery
 describe('appDetailsScrapper', () => {
   for (const testApp of testApps) {
     it(`should get ${testApp.name} app information`, async () => {
-      const details = await getAppDetails(testApp.packageName);
+      const details = await getGooglePlayDetails(testApp.packageName);
       expect(details?.name).toEqual(testApp.name);
       expect(details?.packageName).toEqual(testApp.packageName);
       expect(details?.developer).toEqual(testApp.developer);
@@ -42,7 +44,7 @@ describe('appDetailsScrapper', () => {
 
   it(`should throw error when packageName is invalid`, async () => {
     try {
-      const details = await getAppDetails('com.invalid.package.name');
+      const details = await getGooglePlayDetails('com.invalid.package.name');
 
       expect(details).toBeUndefined();
     } catch (e) {

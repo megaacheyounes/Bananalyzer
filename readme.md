@@ -7,8 +7,10 @@
 ![npm](https://img.shields.io/npm/dm/bananalyzer?label=npm%20downloads)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/megaacheyounes/bananalyzer/issues)
 
-A CLI tool for windows 10+, to download, decompile (reverse engineer) and scrape app data from both playstore and AppGallery
+<img src="/cover.png" width="640" height="360"/>
 
+A CLI tool for windows 10+, to download, decompile (reverse engineer) and scrape app data from both playstore and AppGallery
+ 
 ## Contents
 
 - [Bananalyzer](#bananalyzer)
@@ -165,20 +167,20 @@ result
 
 ### get app details
 
-get app listing information from google play (scrap)
+scrape app details from Google play using package name(scrap) (example https://play.google.com/store/apps/details?id=com.facebook.lite)
 
 ```typescript
 import Bananalyzer from 'bananalyzer';
 
-const result = await Bananalyzer.getAppDetails('com.facebook.lite');
-console.log(result);
+const details = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
+console.log(details);
 
 /*
-appDetails {
+details {
   packageName: 'com.facebook.lite',
   name: 'Facebook Lite',
   versionName: 'Varies with device',
-  description: "Facebook Lite is fast, works on slow networks, uses less data and comes in a small package.Facebook Lite is recommended if you're on a phone with less than 2GB of RAM, connecting on 2G or 3G networks, or simply want to save mobile data or space on your phone. Enjoy an uncompromising Facebook experience that has reels, dark mode and all the key features, like:• Messages – Messaging is available without needing a separate messenger app - all of the benefits of Facebook Lite and Lite Messenger can be enjoyed in one app. Chat with friends in private or in group chats. Video call or voice call with whoever you choose - you're in control of your privacy.• Reels – Watch, create and share fun reels with your friends on Facebook, WhatsApp, Instagram and more. • Stories – Enjoy and share everyday moments. Add cool effects like stickers to text, music, videos or your own pics and share your story! • Videos – Discover and watch tons of shows and videos, including reels, from creators and pages you care about. Share publicly with your friends in a group message or in a private chat.• Groups – Find communities of people with similar interests and connect with them. • Marketplace – Buy and sell locally and connect with buyers and sellers on Facebook Marketplace.• News – Know what’s happening, locally and globally.Your privacy matters. Learn more about current news reports regarding Facebook data. https://m.facebook.com/help/463983701520800The Facebook Lite app is included in Facebook apps and technologies.Get early versions of the app, try out new features and give us feedback by becoming a beta tester. https://play.google.com/apps/testing/com.facebook.liteProblems downloading or installing the app? https://m.facebook.com/helpFacebook Lite is only available for people ages 13 and over.Terms of Service: http://m.facebook.com/terms.php",
+  description: "Facebook Lite is fast, works on [...]",
   updatedOn: 'Apr 29, 2023',
   releasedOn: 'Jun 24, 2015',
   requiresAndroid: 'VARY',
@@ -190,6 +192,36 @@ appDetails {
   icon: 'https://play-lh.googleusercontent.com/J--_O-bAdNwLKs8XXsm9dTbt4B19wHXq6qGr5eCAJEagPrdC86aB8RieIkRdqKtSbNM=w240-h480-rw'
 }
 
+*/
+```
+
+scrape app details from Huawei AppGallery using app Id (ex: https://appgallery.huawei.com/app/C100734965)
+
+```typescript
+import Bananalyzer from 'bananalyzer';
+
+const details = await Bananalyzer.getAppGalleryDetails('C100734965');
+console.log('details', details);
+/*
+details {
+  packageName: '',
+  name: 'BIGO LIVE-Live Stream, Go Live',
+  versionName: '5.40.6',
+  description: "★★★Over 400 million downloads worldwide[...]',
+  updatedOn: '5/18/2023',
+  releasedOn: '',
+  requiresAndroid: '',
+  rating: '4.5',
+  downloads: '32M installs',
+  downloadsDetails: '',
+  reviewsNumber: '57',
+  icon: 'https://appimg2.dbankcdn.com/application/icon144/65/1dcc87f9e5994fdfba42a91172de93a7.png',
+  screenshots: [
+    'https://appimg2.dbankcdn.com/application/screenshut1/65/1dcc87f9e5994fdfba42a91172de93a7.jpg',
+    'https://appimg2.dbankcdn.com/application/screenshut2/65/1dcc87f9e5994fdfba42a91172de93a7.jpg',
+    [...]
+  ]
+}
 */
 ```
 
@@ -243,10 +275,6 @@ result
         "huaweiMetadata": [
             "com.huawei.hms.client.service.name:location=location:SDK-VERSION",
             "com.huawei.hms.min_api_level:location:location=1",
-            "com.huawei.hms.client.bi.setting=true",
-            "com.huawei.hms.min_api_level:com.huawei.hms:location:location=1",
-            "com.huawei.hms.client.service.name:videokit=videokit:1.0.1.300",
-            "com.huawei.hms.min_api_level:videokit:huawei_module_videoplayer=2",
             "com.huawei.hms.client.service.name:push=push:6.1.0.300",
             "com.huawei.hms.min_api_level:push:push=1",
             "com.huawei.hms.client.service.name:ml-computer-vision=ml-computer-vision:2.0.3.300",
@@ -269,12 +297,7 @@ result
         "huaweiActivities": [
             "com.huawei.hms.videokit.player.UpdateActivity",
             "com.huawei.hms.hmsscankit.ScanKitActivity",
-            "com.huawei.hms.activity.BridgeActivity",
-            "com.huawei.hms.activity.EnableServiceActivity",
-            "com.huawei.openalliance.ad.activity.PPSLauncherActivity",
-            "com.huawei.openalliance.ad.activity.PPSBridgeActivity",
-            "com.huawei.openalliance.ad.activity.PPSNotificationActivity",
-            "com.huawei.openalliance.ad.activity.AgProtocolActivity"
+            //[...]
         ],
         "googleServices": [
             "com.google.android.gms.auth.api.signin.RevocationBoundService",
@@ -394,7 +417,7 @@ result
 - [x] Detect Firebase/AppGallery cloud services
 - [ ] Improve and add missing documentation
 - [x] Scrape app details from Google Playstore
-- [ ] Scrape app details from Huawie AppGallery 
+- [x] Scrape app details from Huawie AppGallery 
 
 ## License
 
