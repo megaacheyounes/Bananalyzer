@@ -130,7 +130,7 @@ const APP_DETAILS_SELECTORS: SelectorsType = {
 // puppeteer.use(stealthPlugin());
 // download from https://apk.support/download-app
 //appId example: C107473795 or 107473795
-const getAppDetailsFromGooglePlay = (page: Page, appId: string) =>
+const getAppDetails = (page: Page, appId: string) =>
   new Promise<AppDetails>(async (resolve, reject) => {
     try {
       const firstChar = appId.charAt(0)
@@ -147,9 +147,13 @@ const getAppDetailsFromGooglePlay = (page: Page, appId: string) =>
       // await page.waitForNetworkIdle();
       debug('page loaded');
 
-      const waitForSelector = ".horizonhomecard"
+      const waitForSelector = ".componentContainer"
 
-      await page.waitForSelector(waitForSelector)
+      await page.screenshot({ path: './ag.png' })
+      await page.waitForSelector(waitForSelector, {
+        timeout: 5_000
+      })
+      await page.screenshot({ path: './ag2.png' })
 
       const nameSelector = ".center_info > div:nth-child(1)"
 
@@ -293,7 +297,7 @@ export const getAppGalleryDetails = async (packageName: string, closeBrowser = f
   let appDetails: AppDetails;
   try {
     // try from source 1 (1 attempt)
-    appDetails = await getAppDetailsFromGooglePlay(page, packageName);
+    appDetails = await getAppDetails(page, packageName);
     if (!!page) await page.close();
     if (closeBrowser) await BrowserManager.closeBrowser;
     return appDetails;

@@ -1,5 +1,5 @@
-// import Bananalyzer from '../src/index';
-import Bananalyzer from '../build';
+import Bananalyzer from '../src/index';
+// import Bananalyzer from '../build';
 
 
 import { execa } from '@esm2cjs/execa';
@@ -44,11 +44,11 @@ debugModule.enable('bananalyzer:appGalleryScraper');
   // fs.writeFileSync('getSupportedSdks.json', JSON.stringify(supportedSdksRes), 'utf-8');
 
   //***************** get app details  */
-  const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
-  console.log('playstore details', psDetails);
+  // const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
+  // console.log('playstore details', psDetails);
 
-  // const details = await Bananalyzer.getAppGalleryDetails('C100734965');
-  // console.log('details', details);
+  const details = await Bananalyzer.getAppGalleryDetails('C100734965');
+  console.log('details', details);
 
 
   // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
