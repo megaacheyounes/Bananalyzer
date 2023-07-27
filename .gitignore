@@ -15,3 +15,12 @@ temp/
 decompile/
 dist/*.zip
 build_cli/
+.yarn/* 
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+.pnp/*
+**/*.apk

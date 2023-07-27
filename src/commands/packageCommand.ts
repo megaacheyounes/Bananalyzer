@@ -1,9 +1,10 @@
-import { Command } from './command';
-import { APK } from '../models/apk';
-import { downloadAPK, downoadChromiumIfMissing, closeBrowser } from '../core/downloader';
 import debugModule from 'debug';
+import { downloadAPK } from '../core/downloader';
+import { APK } from '../models/apk';
+import BrowserManager from '../core/BrowserManager';
+import { Command } from './command';
 
-const debug = debugModule('PackageCommand');
+const debug = debugModule('bananalyzer:PackageCommand');
 
 export default class PackageCommand extends Command {
   async exec(): Promise<boolean> {
@@ -48,7 +49,7 @@ export default class PackageCommand extends Command {
   async downloadOneAPK(packageName: string): Promise<APK | null> {
     return new Promise(async (resolve, reject) => {
       try {
-        resolve(await downloadAPK(packageName, true));
+        resolve(await downloadAPK(packageName, true, true, false));
       } catch (e) {
         debug(e);
         var error = 'The requested app is not found or invalid';
@@ -63,7 +64,7 @@ export default class PackageCommand extends Command {
 
   async clean(): Promise<boolean> {
     super.clean();
-    await closeBrowser();
+    await BrowserManager.closeBrowser();
     return true;
   }
 }

@@ -1,9 +1,8 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 
 import debugModule from 'debug';
-import { parseManifest } from '../src/utils/manifestParser';
-import { getAndroidManifestData, transformToManifest } from '../src/utils/manifestReader';
+import { getAndroidManifestData } from '../src/utils/manifestReader';
 
 debugModule.enable('*');
 const fileName = 'sample_manifest.xml';

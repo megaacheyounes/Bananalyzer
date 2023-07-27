@@ -1,5 +1,3 @@
-'use strict';
-
 import fs, { copyFileSync, existsSync, readFileSync, rmSync } from 'fs';
 import stream from 'stream';
 import { promisify } from 'util';
@@ -13,11 +11,12 @@ import { readManifest } from './apkreader/apkreader';
 import { APP_DATA_FOLDER, ERR_LOG_FILE, LOG_FOLDER, OUT_LOG_FILE, TEMP_FOLDER } from '../consts';
 import { AndroidManifest } from '../models/manifest';
 
-const DecompressZip = require('decompress-zip');
+//@ts-ignore
+import DecompressZip from 'decompress-zip';
 
-const got = require('got');
+import got from 'got';
 
-const debug = debugModule('');
+const debug = debugModule('bananalyzer:utils');
 
 // remove styling
 const cleanLogs = (buffer: Uint8Array | string) => `${buffer}`.replace(/\[(.*?)m/g, '').replace(/\[(.*?)m/g, '');
@@ -76,7 +75,6 @@ export const delay = (millis: number) =>
 export const getApkInfo = (apkPath: string, lookForRootApkIfFailed = true) =>
   new Promise<AndroidManifest>(async (resolve, reject) => {
     // local fork (lol) of adbkit-apkreader with support to read meta data
-    // const ApkReader = require('./adbkit-apkreader');
 
     debug('parsing ' + apkPath + ' look for root apk= ' + lookForRootApkIfFailed);
     if (!fs.existsSync(apkPath)) {

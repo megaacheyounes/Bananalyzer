@@ -1,3 +1,5 @@
+# Bananalyzer
+
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/megaacheyounes/bananalyzer)
 ![GitHub Release Date](https://img.shields.io/github/release-date/megaacheyounes/bananalyzer)
 ![Platform win64](https://img.shields.io/badge/platform-Win64-red)
@@ -5,10 +7,12 @@
 ![npm](https://img.shields.io/npm/dm/bananalyzer?label=npm%20downloads)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/megaacheyounes/bananalyzer/issues)
 
-## Bananalyzer
+<p align=center>
+    <img src="https://github.com/megaacheyounes/Bananalyzer/raw/dev/cover.png" width="640" height="360"/>
+</p>
 
-A simple tool for windows 10, that downloads APKs from Google playstore, analyzes them, and lists all the Google and Huawei SDKs (kits) that are integrated, along with other metadata
-
+A CLI tool for windows 10+, to download, decompile (reverse engineer) and scrape app data from both playstore and AppGallery
+ 
 ## Contents
 
 - [Bananalyzer](#bananalyzer)
@@ -38,7 +42,7 @@ This is a simple nodejs script that has been packaged into an executable (exe) f
 
 ## Usage
 
-```
+```cli
 
    USAGE
 
@@ -117,7 +121,9 @@ latest release (Bananalyzer_v1.1.2_win64.zip):
 
 install
 
-`npm install bananalyzer`
+1. `npm install bananalyzer`
+
+_if you get an error related to missing JARs, then copy the folder `lib` to your projects root folder, in other word, folder `lib/` and your `package.json` should be on the same level_
 
 ### get apk direct download link
 
@@ -161,6 +167,66 @@ result
 */
 ```
 
+### get app details
+
+scrape app details from Google play using package name(scrap) (example https://play.google.com/store/apps/details?id=com.facebook.lite)
+
+```typescript
+import Bananalyzer from 'bananalyzer';
+
+const details = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
+console.log(details);
+
+/*
+details {
+  packageName: 'com.facebook.lite',
+  name: 'Facebook Lite',
+  versionName: 'Varies with device',
+  description: "Facebook Lite is fast, works on [...]",
+  updatedOn: 'Apr 29, 2023',
+  releasedOn: 'Jun 24, 2015',
+  requiresAndroid: 'VARY',
+  rating: '3.9star',
+  downloads: '1B+',
+  downloadsDetails: '1,000,000,000+ downloads',
+  developer: 'Meta Platforms, Inc.',
+  reviewsNumber: '24.3M reviews',
+  icon: 'https://play-lh.googleusercontent.com/J--_O-bAdNwLKs8XXsm9dTbt4B19wHXq6qGr5eCAJEagPrdC86aB8RieIkRdqKtSbNM=w240-h480-rw'
+}
+
+*/
+```
+
+scrape app details from Huawei AppGallery using app Id (ex: https://appgallery.huawei.com/app/C100734965)
+
+```typescript
+import Bananalyzer from 'bananalyzer';
+
+const details = await Bananalyzer.getAppGalleryDetails('C100734965');
+console.log('details', details);
+/*
+details {
+  packageName: '',
+  name: 'BIGO LIVE-Live Stream, Go Live',
+  versionName: '5.40.6',
+  description: "★★★Over 400 million downloads worldwide[...]',
+  updatedOn: '5/18/2023',
+  releasedOn: '',
+  requiresAndroid: '',
+  rating: '4.5',
+  downloads: '32M installs',
+  downloadsDetails: '',
+  reviewsNumber: '57',
+  icon: 'https://appimg2.dbankcdn.com/application/icon144/65/1dcc87f9e5994fdfba42a91172de93a7.png',
+  screenshots: [
+    'https://appimg2.dbankcdn.com/application/screenshut1/65/1dcc87f9e5994fdfba42a91172de93a7.jpg',
+    'https://appimg2.dbankcdn.com/application/screenshut2/65/1dcc87f9e5994fdfba42a91172de93a7.jpg',
+    [...]
+  ]
+}
+*/
+```
+
 ### analyze an APK
 
 Analyze an APK, see CLI description above or result below for more details
@@ -181,84 +247,140 @@ console.log(result);
 /*
 result
 [
-  {
-    HMS: [ 'account', 'location', 'ads' ],
-    GMS: [],
-    packageName: 'com.megaache.trackingsdks',
-    versionName: '0',
-    huaweiAppId: '',
-    googleMetadata: [],
-    huaweiMetadata: [],
-    googlePermissions: [
-      'com.google.android.gms.permission.AD_ID',
-      'com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE'
-    ],
-    huaweiPermissions: [
-      'com.huawei.permission.sec.MDM.v2',
-      'com.huawei.permission.sec.ACCESS_UDID',
-      'com.huawei.permission.app.DOWNLOAD'
-    ],
-    googleActivities: [
-      'com.google.android.gms.common.api.GoogleApiActivity',
-      'com.google.android.gms.ads.AdActivity',
-      'com.google.android.gms.ads.OutOfContextTestingActivity'
-    ],
-    huaweiActivities: [
-      'com.huawei.hms.hwid.internal.ui.activity.HwIdSignInHubActivity',
-      'com.huawei.hms.account.internal.ui.activity.AccountSignInHubActivity',
-      'com.huawei.opendevice.open.OAIDSettingActivity',
-      'com.huawei.opendevice.open.SimplePrivacyActivity',
-      'com.huawei.opendevice.open.PrivacyActivity',
-      'com.huawei.opendevice.open.WhyThisAdStatementActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InstallActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.HMSSDKInstallActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.PPSActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSArActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.PPSRewardActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSRewardActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InnerPPSInterstitialAdActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.InterstitialAdActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.AgProtocolActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.PPSArActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.SplashFeedbackActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.AdComplainActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.PPSFullScreenNotifyActivity',
-      'com.huawei.openalliance.ad.ppskit.activity.ComplianceActivity',
-      'com.huawei.openalliance.ad.activity.FeedbackActivity',
-      'com.huawei.hms.activity.BridgeActivity',
-      'com.huawei.hms.activity.EnableServiceActivity',
-      'com.huawei.openalliance.ad.activity.PPSLauncherActivity',
-      'com.huawei.openalliance.ad.activity.PPSBridgeActivity',
-      'com.huawei.openalliance.ad.activity.PPSNotificationActivity',
-      'com.huawei.openalliance.ad.activity.AgProtocolActivity',
-      'com.huawei.openalliance.ad.activity.TemplateStubActivity',
-      'com.huawei.openalliance.ad.activity.ComplianceActivity'
-    ],
-    googleServices: [ 'com.google.android.gms.ads.AdService' ],
-    huaweiServices: [
-      'com.huawei.android.hms.ppskit.PpsCoreService',
-      'com.huawei.agconnect.core.ServiceDiscovery'
-    ],
-    googleMessagingServices: [
-      'com.google.android.gms.ads.AdService',
-      'androidx.work.impl.background.systemalarm.SystemAlarmService',
-      'androidx.work.impl.background.systemjob.SystemJobService',
-      'androidx.work.impl.foreground.SystemForegroundService',
-      'androidx.room.MultiInstanceInvalidationService',
-      'com.huawei.agconnect.core.ServiceDiscovery'
-    ],
-    huaweiMessagingServices: [
-      'com.google.android.gms.ads.AdService',
-      'androidx.work.impl.background.systemalarm.SystemAlarmService',
-      'androidx.work.impl.background.systemjob.SystemJobService',
-      'androidx.work.impl.foreground.SystemForegroundService',
-      'androidx.room.MultiInstanceInvalidationService',
-      'com.huawei.agconnect.core.ServiceDiscovery'
-    ],
-    uploadDate: '',
-    apkCreationTime: '4/1/2023, 7:49:19 AM'
-  }
+    {
+        "HMS": [
+            "push",
+            "location",
+            "map",
+            "analytics",
+            "ads",
+            "scan",
+            "ml"
+        ],
+        "GMS": [
+            "Account",
+            "Push",
+            "Location",
+            "Map",
+            "Analytics",
+            "Ads",
+            "ML",
+            "SafetyNet",
+            "Fido"
+        ],
+        "packageName": "com.megaache.trackingsdks",
+        "versionName": "2.6.1",
+        "huaweiAppId": "",
+        "googleMetadata": [
+            "com.google.android.gms.version=@integer/google_play_services_version"
+        ],
+        "huaweiMetadata": [
+            "com.huawei.hms.client.service.name:location=location:SDK-VERSION",
+            "com.huawei.hms.min_api_level:location:location=1",
+            "com.huawei.hms.client.service.name:push=push:6.1.0.300",
+            "com.huawei.hms.min_api_level:push:push=1",
+            "com.huawei.hms.client.service.name:ml-computer-vision=ml-computer-vision:2.0.3.300",
+            [...]
+        ],
+        "googlePermissions": [
+            "com.google.android.gms.permission.AD_ID",
+            "com.google.android.c2dm.permission.RECEIVE",
+            "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
+        ],
+        "huaweiPermissions": [
+            "com.huawei.appmarket.service.commondata.permission.GET_COMMON_DATA"
+        ],
+        "googleActivities": [
+            "com.google.android.gms.auth.api.signin.internal.SignInHubActivity",
+            "com.google.android.gms.common.api.GoogleApiActivity",
+            "com.google.android.gms.ads.AdActivity",
+            "com.google.android.gms.ads.OutOfContextTestingActivity"
+        ],
+        "huaweiActivities": [
+            "com.huawei.hms.videokit.player.UpdateActivity",
+            "com.huawei.hms.hmsscankit.ScanKitActivity",
+            //[...]
+        ],
+        "googleServices": [
+            "com.google.android.gms.auth.api.signin.RevocationBoundService",
+            "com.google.firebase.messaging.FirebaseMessagingService",
+            "com.google.firebase.components.ComponentDiscoveryService",
+            "com.google.android.gms.ads.AdService",
+            "com.google.android.datatransport.runtime.backends.TransportBackendDiscovery",
+            "com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+        ],
+        "huaweiServices": [
+            "com.huawei.location.lite.common.http.HttpService",
+            "com.huawei.remoteplayer.RemoteService",
+            "com.huawei.agconnect.core.ServiceDiscovery",
+            "com.huawei.hms.support.api.push.service.HmsMsgService"
+        ],
+        "googleMessagingServices": [
+            "com.google.firebase.messaging.FirebaseMessagingService"
+        ],
+        "huaweiMessagingServices": [],
+        "hmsVersions": [
+            {
+                "name": "videokit",
+                "version": "1.0.1.300",
+                "accuracy": "high"
+            },
+            [...]
+        ],
+        "versionCode": "200600100",
+        "storeUploadDate": "",
+        "apkCreationTime": "27/04/2023, 11:13:20 am",
+        "sdkPerDomain": [
+            {
+                "domain": "HMS",
+                "sdks": [
+                    {
+                        "name": "location",
+                        "version": "SDK-VERSION",
+                        "accuracy": "high"
+                    },
+                    [...]
+                ]
+            },
+            {
+                "domain": "HMS & AG",
+                "sdks": [
+                    {
+                        "name": "auth",
+                        "version": "1.4.2.301",
+                        "accuracy": "high"
+                    },
+                    [...]
+                ]
+            },
+            {
+                "domain": "GMS & FIREBASE",
+                "sdks": [
+                    {
+                        "name": "messaging",
+                        "version": "23.1.2",
+                        "accuracy": "high"
+                    },
+                    [...]
+                ]
+            },
+            {
+                "domain": "ADS & TRACKING",
+                "sdks": [
+                    {
+                        "name": "adjust",
+                        "version": "4.33.3",
+                        "accuracy": "high"
+                    },
+                    [...]
+                ]
+            },
+            {
+                "domain": "OTHER",
+                "sdks": []
+            }
+        ]
+    }
 ]
 
   */
@@ -292,15 +414,16 @@ result
 - [x] Migrate to TypeScript
 - [x] Add unit tests
 - [x] Publish npm module
-- [ ] Update npm packages
-- [ ] Detect Ads and Tracking SDKs
-- [ ] Detect Firebase/AppGallery cloud services
-- [ ] Add download options from apk repos (APKMirror, ApkPure, ApkMonk)
+- [x] Update npm packages
+- [x] Detect Ads and Tracking SDKs
+- [x] Detect Firebase/AppGallery cloud services
 - [ ] Improve and add missing documentation
+- [x] Scrape app details from Google Playstore
+- [x] Scrape app details from Huawie AppGallery 
 
 ## License
 
-```
+```text
 No Copyright (!c) 2022 Younes Megaache
 All rights can be abused (respectfully)
 ```

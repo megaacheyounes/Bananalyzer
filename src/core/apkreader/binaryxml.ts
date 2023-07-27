@@ -1,16 +1,9 @@
-/* eslint-disable no-var */
-/* eslint-disable require-jsdoc */
-'use strict';
-
 // Heavily inspired by https://github.com/xiaxiaocao/apk-parser
 
-/* eslint no-console: "off"*/
-
-// const assert = require('assert');
 import assert from 'assert';
 import debugModule from 'debug';
 
-const debug = debugModule('adb:apkreader:parser:binaryxml');
+const debug = debugModule('bananalyzer:binaryxml');
 
 const NodeType = {
   ELEMENT_NODE: 1,

@@ -1,23 +1,26 @@
 import Bananalyzer from 'bananalyzer';
+// import Bananalyzer from '../build';
 
 (async () => {
-  const getDownloadLinkResult = await Bananalyzer.getDownloadLink('com.aswat.carrefouruae');
+  const pkgName = 'com.ubercab.uberlite';
+  const getAppDetailsResult = await Bananalyzer.getAppDetails(pkgName);
+  console.log('getAppDetailsResult', getAppDetailsResult);
+
+  const getDownloadLinkResult = await Bananalyzer.getDownloadLink(pkgName);
   console.log('getDownloadLinkResult', getDownloadLinkResult);
 
-  const downloadAPKResult = await Bananalyzer.downloadAPK('com.ubercab.uberlite', false);
+  const downloadAPKResult = await Bananalyzer.downloadAPK(pkgName, false);
   console.log('downloadAPKResult', downloadAPKResult);
 
   const analyzeAPKsResult = await Bananalyzer.analyzeAPKs(
     [
       {
-        //todo: set apk path
-        filePath: '../tests/samples/sample.apk',
+        filePath: downloadAPKResult.filePath,
       },
     ],
     true
   );
   console.log('analyzeAPKsResult', analyzeAPKsResult);
-
   console.log('done');
   process.exit(0);
 })();

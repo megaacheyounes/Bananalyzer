@@ -1,6 +1,3 @@
-/* eslint-disable require-jsdoc */
-'use strict';
-
 import debugModule from 'debug';
 
 import BinaryXmlParser from './binaryxml';
@@ -8,7 +5,7 @@ import BinaryXmlParser from './binaryxml';
 // const NS_ANDROID = 'http://schemas.android.com/apk/res/android'
 const INTENT_MAIN = 'android.intent.action.MAIN';
 const CATEGORY_LAUNCHER = 'android.intent.category.LAUNCHER';
-const debug = debugModule('manifestParser');
+const debug = debugModule('bananalyzer:manifestParser');
 
 interface Element {
   nodeName: any;

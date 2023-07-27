@@ -1,12 +1,11 @@
-import { saveResult, getRowFromApp, HEADERS } from '../src/core/ExcelHelper';
+import { getRowFromApp, HEADERS, saveResult } from '../src/core/ExcelHelper';
 
+import { existsSync, mkdirSync, rmSync, statSync } from 'fs';
 import path from 'path';
-import { existsSync, mkdirSync, rmSync, stat, statSync } from 'fs';
 
-import { ExcelRow } from '../src/models/excelRow';
-import { exec } from 'child_process';
 import { delay } from '../src/core/utils';
 import { AnalyzedApp } from '../src/models/analyzedApp';
+import { ExcelRow } from '../src/models/excelRow';
 
 const uploadDate = 'Mar 31, 2022';
 const packageName = 'com.twitter.android.lite';
@@ -28,6 +27,8 @@ const app: AnalyzedApp = {
   huaweiMessagingServices: [],
   huaweiServices: [],
   googleServices: [],
+  hmsVersions: [],
+  sdkPerDomain: [],
   others: [],
 };
 const testTempFolder = path.join(__dirname, 'temp');

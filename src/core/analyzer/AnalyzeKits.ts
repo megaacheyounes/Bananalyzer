@@ -1,30 +1,18 @@
 import { AnalyzedSDKs } from '../../models/analyzedApp';
 ('use strict');
-import debugModule from 'debug';
 
 import fs from 'fs';
 import path from 'path';
 
-import {
-  APP_CHECK_JAR,
-  APP_DATA_FOLDER,
-  GMS_OUTPUT,
-  HMS_OUTPUT,
-  UNKNOWN_INFO,
-  GOOGLE_MESSAGING_EVENT,
-} from '../../consts';
-import { AnalyzedApk } from '../../models/analyzedApp';
+import { APP_CHECK_JAR, APP_DATA_FOLDER, GMS_OUTPUT, HMS_OUTPUT } from '../../consts';
 import { APK } from '../../models/apk';
-import { Action, Activity, AndroidManifest, IntentFilter, Service, UsesPermission } from '../../models/manifest';
-import { moveFile } from '../mv';
-import { getApkInfo } from '../utils';
-import { HUAWEI_MESSAGING_EVENT } from '../../consts';
 
-const JavaCallerModule = require('java-caller');
+import debugModule from 'debug';
+import { execa } from '@esm2cjs/execa';
 
-const debug = debugModule('analyzeKits');
+const debug = debugModule('bananalyzer:analyzeKits');
 
-export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
+export const analyzeGmsHmsSdks = async (apk: APK): Promise<AnalyzedSDKs> => {
   const apkName = path.basename(apk.filePath);
   //   move apks from /downloads to /appdataxsj
 
@@ -39,21 +27,23 @@ export const analyzeKits = async (apk: APK): Promise<AnalyzedSDKs> => {
     debug(e);
   }
 
-  //   analyze using AppCheck
-  const java = new JavaCallerModule.JavaCaller({
-    jar: APP_CHECK_JAR,
-  });
-
   fs.writeFileSync(HMS_OUTPUT, '');
   fs.writeFileSync(GMS_OUTPUT, '');
 
-  // eslint-disable-next-line no-unused-vars
-  const { status, stdout, stderr } = await java.run(['-Gtrue -Dfalse -Cfalse']);
-  //    debug("--- status ----")
-  //    debug(status)
-  //    debug("--- stdout ----")S
-  //    debug(stdout)
-  //    debug("--- stderr ----")
+  const args = [
+    '-jar',
+    APP_CHECK_JAR,
+    '-Gtrue',
+    '-Dfalse',
+    '-Cfalse'
+  ]
+
+  const { stdout, stderr } = await execa('java', args)
+
+
+  debug("--- stdout ----")
+  debug(stdout)
+  debug("--- stderr ----")
   if (stderr) debug(stderr);
 
   //todo: use csv parsing library
@@ -90,8 +80,7 @@ const getServices = (entries: string[][]): string[] => {
     return [];
   }
   const serviceEntries = entries[1]; //.filter((appEntries) => appEntries.length > 0);
-  debug('headers', headers);
-  debug('serviceEntries', serviceEntries);
+
   if (serviceEntries.length == 0) return [];
 
   const kits = serviceEntries

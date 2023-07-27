@@ -3,19 +3,21 @@ import debugModule from 'debug';
 import path from 'path';
 import xlsx from 'xlsx';
 
-import { AnalyzedApk, AnalyzedApp } from '../models/analyzedApp';
-import { ExcelRow } from '../models/excelRow';
 import { IS_PROD } from '../consts';
+import { AnalyzedApp } from '../models/analyzedApp';
+import { ExcelRow } from '../models/excelRow';
 
-const debug = debugModule('excleHelper');
+const debug = debugModule('bananalyzer:excleHelper');
 
 const HEADER_PACKAGE_NAME = 'Package name'; //
 const HEADER_VERSION_NAME = 'Version name';
 const HEADER_APK_CREATION_DATE = 'APK creation date';
 const HEADER_GOOGLE_PLAY_UPDATE_DATE = 'Google Play update date';
+const HEADER_HUAWEI_APP_ID = 'Huawei App Id';
 const HEADER_GMS_KITS = 'GMS kits (low accuracy)';
 const HEADER_HMS_KITS = 'HMS kits (medium accuracy)';
-const HEADER_HUAWEI_APP_ID = 'Huawei App Id';
+
+const HEADER_SDKS = 'SDKs';
 
 const HEADER_HUAWEI_METADATAS = 'Huawei Metadatas';
 const HEADER_GOOGLE_METADATAS = 'Google Metadatas';
@@ -31,6 +33,7 @@ const HEADER_HUAWEI_SERVICES = 'Huawei Services';
 
 const HEADER_GOOGLE_MESSAGING_SERVICES = 'Google Messaging Services';
 const HEADER_HUAWEI_MESSAGING_SERVICES = 'Huawei Messaging Services';
+
 const HEADER_OTHERS = 'Others';
 
 // 3- write to excel file
@@ -43,6 +46,7 @@ export const HEADERS = [
 
   HEADER_GMS_KITS,
   HEADER_HMS_KITS,
+  HEADER_SDKS,
   HEADER_GOOGLE_METADATAS,
   HEADER_HUAWEI_METADATAS,
   HEADER_GOOGLE_PERMISSIONS,
@@ -67,6 +71,15 @@ export const getRowFromApp = (app: AnalyzedApp): ExcelRow => {
 
   appAsRow[HEADER_GMS_KITS] = (app['GMS'] || []).join(' | ');
   appAsRow[HEADER_HMS_KITS] = (app['HMS'] || []).join(' | ');
+
+  const domainSdks = app.sdkPerDomain!.map((d) => {
+    if (d.sdks.length == 0) return ``;
+    const ds = d.sdks.map((sdk) => `${sdk.name} ${sdk.version == '0' ? '' : sdk.version}`);
+    return `
+[${d.domain}] ${ds.join(', ')}`;
+  });
+
+  appAsRow[HEADER_SDKS] = domainSdks.join('');
 
   appAsRow[HEADER_GOOGLE_METADATAS] = asString(app.googleMetadata);
   appAsRow[HEADER_HUAWEI_METADATAS] = asString(app.huaweiMetadata);
@@ -93,7 +106,6 @@ export const saveResult = async (apps: AnalyzedApp[], resultPath: string) =>
     // transform data
     const data: ExcelRow[] = [];
     apps.forEach(async (app) => {
-      debug(app);
       const row = getRowFromApp(app);
 
       data.push(row);
@@ -175,6 +187,8 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
       { wch: 40 }, // gms kits
       { wch: 40 }, // hms kits
 
+      { wch: 60 }, // sdks
+
       { wch: 50 }, // google Metadatas
       { wch: 50 }, // huawei Metadatas
 
@@ -193,7 +207,7 @@ const writeExcel = async (data: ExcelRow[], resultPath: string) =>
     ];
 
     if (!IS_PROD && wscols.length != HEADERS.length) {
-      throw Error(`Missing column width, headers=${HEADERS.length} wscols=${wscols.length}`);
+      console.error(new Error(`Missing column width, headers=${HEADERS.length} wscols=${wscols.length}`));
     }
     worksheet['!cols'] = wscols;
     // worksheet = excel.utils.book(worksheet, data, { headers });

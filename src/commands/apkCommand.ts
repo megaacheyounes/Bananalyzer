@@ -3,7 +3,7 @@ import debugModule from 'debug';
 import path from 'path';
 import { APK } from '../models/apk';
 import existsSync from 'node:fs';
-const debug = debugModule('ApkCommand');
+const debug = debugModule('bananalyzer:ApkCommand');
 
 export default class ApkCommand extends Command {
   async exec(): Promise<boolean> {

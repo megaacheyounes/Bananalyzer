@@ -1,4 +1,4 @@
-'use strict';
+import { Browser } from 'puppeteer';
 /**
  *
  * it download apps from playstore using puppeteer and the website https://apps.evozi.com/apk-downloader
@@ -7,24 +7,18 @@
 import debugModule from 'debug';
 import fs from 'fs';
 import path from 'path';
-import { Browser, Page } from 'puppeteer';
-import puppeteer from 'puppeteer-extra';
+import { Page } from 'puppeteer';
 
-import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION, DOWNLOAD_FOLDER } from '../consts';
+import { DOWNLOAD_FOLDER } from '../consts';
 import { APK } from '../models/apk';
-import { ApkSource, ApkDownloadInfo } from '../models/storeInfo';
-import BrowserUtils from '../utils/browserUtils';
+import { ApkDownloadInfo, ApkSource } from '../models/storeInfo';
+import BrowserManager from './BrowserManager';
 import { delay, downloadFileGot } from './utils';
 
-const debug = debugModule('downloader');
-
-const downloadChromium = require('download-chromium');
+const debug = debugModule('bananalyzer:downloader');
 
 // max number of attempts of downloading an apk from source 2, there is one minute delay between each attempt
 const MAX_ATTEMPTS_COUNT = 2;
-
-// use one browser
-let browser: undefined | Browser;
 
 // block ads and tracker to speed page loading
 // puppeteer.use(adblockerPlugin({ blockTrackers: true }));
@@ -50,15 +44,20 @@ const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolea
       await page.click('#apksubmit');
       debug('clicked submit');
 
-      // wait for download link or error, can take up to 60 seconds
-      await page.waitForSelector('.linkarea_contents', { timeout: 60 * 1000 });
+      try {
+        // wait for download link or error, can take up to 60 seconds
+        await page.waitForSelector('.linkarea_contents', { timeout: 30 * 1000 });
+      } catch (e) {
+        return reject('app not found or invalid');
+      }
 
       // await page.waitForSelector(".dvContents", { timeout: 60 * 1000 })
       debug('page finished fetching apk info');
 
       // first check if thereis an error
-      const maybeError = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
-
+      const maybeError = await BrowserManager.getTextContent(page, '#downloader_area');
+      // const maybeError = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
+      debug('maybe error', maybeError);
       if (maybeError.toLowerCase().indexOf('not found or invalid') != -1) {
         debug('got error: ' + maybeError);
         // we have an error
@@ -79,25 +78,25 @@ const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolea
         const apkLinkSelector = '#zip_area > a';
         await page.waitForSelector(apkLinkSelector, { timeout: 60 * 1000 });
 
-        const apkDownloadLink = await BrowserUtils.getHref(page, apkLinkSelector);
+        const apkDownloadLink = await BrowserManager.getHref(page, apkLinkSelector);
 
         const apkSizeSelector = '#zip_area > a > span:nth-child(3)';
-        const apkDownloadSize = await BrowserUtils.getTextContent(page, apkSizeSelector);
+        const apkDownloadSize = await BrowserManager.getTextContent(page, apkSizeSelector);
 
         storeInfo.downloadLink = apkDownloadLink;
         storeInfo.apkSize = apkDownloadSize;
       } else {
         const firstLinkSelector = '#sse > div:nth-child(1) > a';
-        const firstLinkHref = await BrowserUtils.getHref(page, firstLinkSelector);
+        const firstLinkHref = await BrowserManager.getHref(page, firstLinkSelector);
         storeInfo.downloadLink = firstLinkHref;
 
         // we got apk info and download link
         const firstApkSizeSelector = '#sse > div:nth-child(1) > a > span.der_size';
-        storeInfo.apkSize = await BrowserUtils.getTextContent(page, firstApkSizeSelector);
+        storeInfo.apkSize = await BrowserManager.getTextContent(page, firstApkSizeSelector);
       }
 
       const versionNameSelector = '#downloader_area > div.jinfo > ul > li:nth-child(5)';
-      const versionNameText = await BrowserUtils.getTextContent(page, versionNameSelector);
+      const versionNameText = await BrowserManager.getTextContent(page, versionNameSelector);
       if (!!versionNameText) {
         const versionRegex = /\"(Version Name|VersionName)\": \"(.*)\"/;
         const versionNameMatchRes = versionNameText.match(versionRegex);
@@ -107,7 +106,7 @@ const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolea
       }
 
       const uploadDateSelector = '#downloader_area > div.jinfo > ul > li:nth-child(7)';
-      const uploadDateText = await BrowserUtils.getTextContent(page, uploadDateSelector);
+      const uploadDateText = await BrowserManager.getTextContent(page, uploadDateSelector);
       if (!!uploadDateText) {
         const uploadDateRegex = /(Updated on|UploadDate)\"\: \"(.*)\"/;
 
@@ -152,10 +151,11 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
     debug('apk info loaded');
 
     // check if we got an error
-    const errrorEl = await page.$('#apk_info .text-danger');
-    if (!!errrorEl) {
+    const errorSelector = '#apk_info .text-danger';
+    const errorEl = await page.$(errorSelector);
+    if (!!errorEl) {
       debug('GOT ERROR while waiting for apk info');
-      const errorMessage: string = await (await errrorEl.getProperty('textContent')).jsonValue();
+      const errorMessage = await BrowserManager.getTextContent(page, errorSelector);
 
       console.log('☹  Download Error → ', packageName, ':', errorMessage);
 
@@ -175,6 +175,7 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
         resolve(await getDownloadLink2(page, packageName, attempt));
         return;
       };
+
       // some error message
       if (errorMessage.toLowerCase().indexOf('rate limit') != -1) {
         // you got your ass rate limited!
@@ -241,43 +242,6 @@ const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
   });
 
 /**
- * return chromium tab object (page)
- * @param {boolean} openBrowser if true, it will force create new instance of browser (usefull for tesitng)
- */
-const getChromiumPage = async (openBrowser = false): Promise<Page> => {
-  try {
-    await downoadChromiumIfMissing();
-  } catch (e) {
-    debug(e);
-  }
-  if (!browser || openBrowser) {
-    browser = await puppeteer.launch({
-      executablePath: CHROMIUM_EXEC_PATH, // comment when debugging, to use chromium thats included with pupputeer
-    });
-  }
-  const page = await browser.newPage();
-  // set viewport to a random mobile screen resolution
-  await page.setViewport({
-    width: 390 + Math.floor(Math.random() * 100),
-    height: 844 + Math.floor(Math.random() * 100),
-  });
-
-  // skip loading images and visual resources to reduce loding time
-  await page.setRequestInterception(true);
-  page.on('request', (request: any) => {
-    if (request.isInterceptResolutionHandled()) {
-      return;
-    }
-    const REQUESTS_TO_IGNORE = ['font', 'image', 'stylesheet', 'media', 'imageset'];
-    if (REQUESTS_TO_IGNORE.indexOf(request.resourceType()) !== -1) {
-      return request.abort();
-    }
-    request.continue();
-  });
-  return page;
-};
-
-/**
  * this function will try to download an apk for app represted by @param packageName,
  * sometimes we may get rate limited, therefore this function will call it self (recursive call) again if it detects rate limit, one every minute, 10 times max
  * @param {string} packageName the package name of the app
@@ -285,7 +249,7 @@ const getChromiumPage = async (openBrowser = false): Promise<Page> => {
  *
  * @return {Promise}
  */
-export const downloadAPK = (packageName: string, useExisting: boolean) =>
+export const downloadAPK = (packageName: string, useExisting: boolean, mergeSplitApk = true, closeBrowser = false) =>
   new Promise<APK>(async (resolve, reject) => {
     debug('download APK → ' + packageName);
     // create download folder if missing
@@ -311,10 +275,10 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
         }
       }
 
-      const downloadData = await getDownloadLink(packageName, false);
+      const downloadData = await getDownloadLink(packageName, mergeSplitApk, closeBrowser);
 
       if (!downloadData || !downloadData.downloadLink) {
-        throw Error('failed to get download link');
+        throw Error('failed to get download link (requested app is not found or invalid)');
       }
 
       const { downloadLink, versionName, apkSize, uploadDate, source } = downloadData;
@@ -355,9 +319,10 @@ export const downloadAPK = (packageName: string, useExisting: boolean) =>
 
 export const getDownloadLink = async (
   packageName: string,
-  mergeSplitApk = true
+  mergeSplitApk = true,
+  closeBrowserWhenDone = false
 ): Promise<ApkDownloadInfo | undefined> => {
-  const page = await getChromiumPage();
+  const page = await BrowserManager.getChromiumPage();
   console.log('Searching for APK File → ' + packageName, '(can take up to 3 minutes!)');
 
   let downloadData: ApkDownloadInfo;
@@ -365,6 +330,8 @@ export const getDownloadLink = async (
     // try from source 1 (1 attempt)
     downloadData = await getDownloadLink1(page, packageName, mergeSplitApk);
     if (!!page) await page.close();
+    if (closeBrowserWhenDone) await BrowserManager.closeBrowser();
+
     return downloadData;
   } catch (e1) {
     debug(e1);
@@ -376,70 +343,10 @@ export const getDownloadLink = async (
     // } catch (e2) {
     //   debug(e2);
     if (!!page) await page.close();
-    throw new Error('failed to get download link');
+    if (closeBrowserWhenDone) await BrowserManager.closeBrowser();
+
+    return undefined;
 
     //   }
-  }
-};
-/**
- * as the name suggestes, this function simply try to get a browser instance
- * when chromium is missing, partially downloaded or corrupted, `puppetter.launch` will throw an exception, and that when the function downloads chromium browser
- *
- * @return {Promise} true if chrom is installed and can be launched, false otherwise
- */
-const attemptToOpenOrDownloadChrome = () =>
-  new Promise<boolean>(async (resolve, reject) => {
-    try {
-      const browser = await puppeteer.launch({
-        executablePath: CHROMIUM_EXEC_PATH, // comment when debugging, to use chromium thats included with pupputeer
-      });
-      await browser.close();
-      debug('downoadChromiumIfMissing: browser launched fine ( will not download )');
-      resolve(true);
-    } catch (e) {
-      debug('failed to launch browser, chormium might be missing');
-      // download choromium
-
-      console.log('downloading chromium, please wait...');
-
-      const execPath = await downloadChromium({
-        revision: CHROMIUM_REVISION, // chrom version that works for this pupputeer version, you may change this if you upgrade/downgrade puppetter
-        installPath: CHROMIUM_INSTALL_PATH,
-      }).catch((err: Error) => {
-        debug('download-chromium failed');
-        reject(err);
-      });
-      debug('download-chromium succeed : ' + CHROMIUM_EXEC_PATH);
-      debug('path = ' + execPath);
-      resolve(false);
-    }
-  });
-
-/**
- * this function will try to find and lunch chrome, if that fails it will try to download it and open it again
- * if chrome keeps failing to lunch, this function will give up after 3 attempts, and probably move to another place where it will start a new life as a vegan transgender
- */
-export const downoadChromiumIfMissing = async () => {
-  var chromLaunched = false;
-
-  for (let i = 0; i < 3 && !chromLaunched; i++) {
-    chromLaunched = await attemptToOpenOrDownloadChrome();
-    debug('chrom launched' + chromLaunched);
-    return true;
-  }
-
-  console.log('3 attemps at downloading Chormium have all failed!');
-  throw Error('3 attemps at downloading Chormium have all failed!');
-};
-
-/**
- * we are done downloading, tell puppeteer to close browser and releaase resources blah blah
- */
-export const closeBrowser = async () => {
-  if (!!browser) {
-    await browser.close();
-    browser = undefined;
-  } else {
-    debug('failed to close browser');
   }
 };
