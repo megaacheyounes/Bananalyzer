@@ -8,6 +8,7 @@ import { Page } from 'puppeteer';
 import BrowserManager from '../BrowserManager';
 import { isValidDate } from '../../utils/dateTimeUtils';
 import { match } from 'assert';
+import { delay } from '../utils';
 
 const debug = debugModule('bananalyzer:appGalleryScraper');
 
@@ -143,15 +144,19 @@ const getAppDetails = (page: Page, appId: string) =>
 
       const link = `https://appgallery.huawei.com/app/${appId}`;
       debug('using link ' + link);
-      await page.goto(link, { waitUntil: 'networkidle2' });
+      await page.goto(link, { waitUntil: 'networkidle0' });
       // await page.waitForNetworkIdle();
       debug('page loaded');
 
       const waitForSelector = ".componentContainer"
 
+      await delay(2000)
       await page.screenshot({ path: './ag.png' })
+
       await page.waitForSelector(waitForSelector, {
-        timeout: 5_000
+        timeout: 10_000
+      }).catch(async e => {
+        await page.screenshot({ path: './ag_err.png' })
       })
       await page.screenshot({ path: './ag2.png' })
 
