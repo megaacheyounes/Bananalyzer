@@ -143,8 +143,16 @@ const getAppDetails = (page: Page, appId: string) =>
 
       page.on("requestfailed", async event => {
         debug("requestFailed", event.method(), event.url(), event.failure()?.errorText, event.response())
-
       });
+      page
+        .on('console', message =>
+          console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+        .on('pageerror', ({ message }) => console.log(message))
+        .on('response', response =>
+          console.log(`${response.status()} ${response.url()}`))
+        .on('requestfailed', request =>
+          console.log(`${request.failure().errorText} ${request.url()}`))
+
       const link = `https://appgallery.huawei.com/app/${appId}`;
       debug('using link ' + link);
       await page.goto(link, { waitUntil: 'networkidle0' });
