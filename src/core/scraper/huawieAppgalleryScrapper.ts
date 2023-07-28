@@ -137,17 +137,15 @@ const getAppDetails = (page: Page, appId: string) =>
       if (firstChar == 'c')
         appId.replace('c', 'C')
 
-      page.on("requestfailed", async event => {
-        debug("requestFailed", event.method(), event.url(), event.failure()?.errorText, event.response())
-      });
+       
       page
         .on('console', message =>
-          console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
-        .on('pageerror', ({ message }) => console.log(message))
-        .on('response', response =>
-          console.log(`${response.status()} ${response.url()}`))
+          console.log(`console: ${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+        .on('pageerror', ({ message }) => console.log('pageerror',message))
+        // .on('response', response =>
+        //   console.log(`${response.status()} ${response.url()}`))
         .on('requestfailed', request =>
-          console.log(`${request.failure().errorText} ${request.url()}`))
+          console.log(`requestfailed:${request.failure().errorText} ${request.url()}`))
 
       const link = `https://appgallery.huawei.com/`//app/${appId}`;
       debug('using link ' + link);
@@ -166,8 +164,6 @@ const getAppDetails = (page: Page, appId: string) =>
         await page.screenshot({ path: './ag_err.png' })
       })
       await page.screenshot({ path: './ag2.png' })
-
-
 
       const nameSelector = ".center_info > div:nth-child(1)"
 
