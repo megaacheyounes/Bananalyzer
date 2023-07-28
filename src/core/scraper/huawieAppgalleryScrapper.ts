@@ -10,9 +10,7 @@ import { delay } from '../utils';
 
 const debug = debugModule('bananalyzer:appGalleryScraper');
 
-// block ads and tracker to speed page loading
-// puppeteer.use(adblockerPlugin({ blockTrackers: true }));
-
+ 
 enum DataToScrapeType {
   HREF,
   SRC,

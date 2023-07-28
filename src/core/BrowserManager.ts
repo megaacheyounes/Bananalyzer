@@ -6,11 +6,9 @@ import { Browser, Page } from 'puppeteer';
 import puppeteerExt from 'puppeteer-extra';
 
 // Add stealth plugin and use defaults (all tricks to hide puppeteer usage)
+// puppeteerExt.use(AdblockerPlugin({ blockTrackers: false }));
+// import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 // puppeteerExt.use(StealthPlugin());
-
-// Add adblocker plugin to block all ads and trackers (saves bandwidth)
-import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker';
-puppeteerExt.use(AdblockerPlugin({ blockTrackers: false }));
 
 //@ts-ignore
 import PCR from 'puppeteer-chromium-resolver';
@@ -69,7 +67,8 @@ const getBrowser = async (): Promise<Browser> => {
 
   browser = await puppeteerExt
     .launch({
-      headless: true,
+      product:'firefox',
+      headless: false,
       args: ['--no-sandbox'],
       executablePath: stats.executablePath,
     })
