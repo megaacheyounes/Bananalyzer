@@ -66,8 +66,7 @@ const getBrowser = async (): Promise<Browser> => {
   const stats = await PCR(options);
 
   browser = await puppeteerExt
-    .launch({
-      product:'firefox',
+    .launch({ 
       headless: false,
       args: ['--no-sandbox'],
       executablePath: stats.executablePath,
