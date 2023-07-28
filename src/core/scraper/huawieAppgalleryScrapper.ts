@@ -149,7 +149,7 @@ const getAppDetails = (page: Page, appId: string) =>
         .on('requestfailed', request =>
           console.log(`${request.failure().errorText} ${request.url()}`))
 
-      const link = `https://appgallery.huawei.com`///app/${appId}`;
+      const link = `https://appgallery.huawei.com/`//app/${appId}`;
       debug('using link ' + link);
       await page.goto(link, { waitUntil: 'networkidle0' });
       // await page.waitForNetworkIdle();
