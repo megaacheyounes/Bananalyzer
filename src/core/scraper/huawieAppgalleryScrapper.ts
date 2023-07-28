@@ -1,13 +1,11 @@
-import { Browser } from 'puppeteer';
 /**
  * get app details from google play using puppeteer
  */
 import debugModule from 'debug';
 import { Page } from 'puppeteer';
-
-import BrowserManager from '../BrowserManager';
+ 
 import { isValidDate } from '../../utils/dateTimeUtils';
-import { match } from 'assert';
+import BrowserManager from '../BrowserManager';
 import { delay } from '../utils';
 
 const debug = debugModule('bananalyzer:appGalleryScraper');

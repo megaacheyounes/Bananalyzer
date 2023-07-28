@@ -1,18 +1,16 @@
 import debugModule from 'debug';
 import { Browser, Page } from 'puppeteer';
-import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION } from '../consts';
 // puppeteer-extra is a drop-in replacement for puppeteer,
 // it augments the installed puppeteer with plugin functionality.
 // Any number of plugins can be added through `puppeteer.use()`
 import puppeteerExt from 'puppeteer-extra';
 
 // Add stealth plugin and use defaults (all tricks to hide puppeteer usage)
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-puppeteerExt.use(StealthPlugin());
+// puppeteerExt.use(StealthPlugin());
 
 // Add adblocker plugin to block all ads and trackers (saves bandwidth)
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker';
-puppeteerExt.use(AdblockerPlugin({ blockTrackers: true }));
+puppeteerExt.use(AdblockerPlugin({ blockTrackers: false }));
 
 //@ts-ignore
 import PCR from 'puppeteer-chromium-resolver';
