@@ -2,6 +2,7 @@
 
 
 import debugModule from 'debug';
+import Bananalyzer from '../build';
 import { getGooglePlayDetails } from '../src/core/scraper/googlePlayScrapper';
 
 const keepApks = true;
@@ -42,19 +43,19 @@ debugModule.enable('bananalyzer:*');
 
 
   //***************** get app details  */
-  const psDetails = await getGooglePlayDetails("com.king.candycrushsaga")
-  console.log("psDetails", psDetails)
+  // const psDetails = await getGooglePlayDetails("com.king.candycrushsaga")
+  // console.log("psDetails", psDetails)
 
   //build
-  // const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
-  // console.log('playstore details', psDetails);
+  const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
+  console.log('playstore details', psDetails);
 
   // const details = await Bananalyzer.getAppGalleryDetails('C100734965');
   // console.log('details', details);
 
 
-  // const dl = await Bananalyzer.getDownloadLink('com.asdfasdf.pricena');
-  // console.log('dl', dl);
+  const dl = await Bananalyzer.getDownloadLink('com.facebook.lite');
+  console.log('dl', dl);
 
   // const dl = await Bananalyzer.getDownloadLink('com.Etisalat.ETIDA', false);
 
@@ -64,11 +65,10 @@ debugModule.enable('bananalyzer:*');
   // console.log('dl split:', dl);
   // console.log('dl merge: ', dl2);
 
-  // const decompileApk = await Bananalyzer.decompileApk({
-  //   // filePath: './tests/samples/com.twitter.android.lite.apk'
-  //   filePath: 'D:/__tasks__/_analyze/_toolss/com-etisalat-etida_9.3.3_arm64-v8a_merge.apk'
-  // });
-  // console.log('decompileApk', decompileApk);
+  const decompileApk = await Bananalyzer.decompileApk({
+    filePath: './tests/samples/com.twitter.android.lite.apk'
+  });
+  console.log('decompileApk', decompileApk);
 
 
   // // const start = Date.now();

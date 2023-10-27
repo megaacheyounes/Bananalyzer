@@ -79,7 +79,7 @@ const getBrowser = async (): Promise<Browser> => {
 
   browser = await puppeteerExt
     .launch({
-      headless: false,
+      headless: true,
       args: ['--no-sandbox'],
       executablePath: stats.executablePath,
       defaultViewport: {
