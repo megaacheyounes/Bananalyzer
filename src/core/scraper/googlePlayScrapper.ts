@@ -4,8 +4,8 @@
 import debugModule from 'debug';
 import { Page } from 'puppeteer';
 
-import BrowserManager from '../BrowserManager';
 import { isValidDate } from '../../utils/dateTimeUtils';
+import BrowserManager from '../BrowserManager';
 
 const debug = debugModule('bananalyzer:appDetailsScrapper');
 
@@ -69,7 +69,7 @@ const SELECTOR_MULTIPLE_INDEX = '__INDEX__';
 
 const APP_DETAILS_SELECTORS: SelectorsType = {
   packageName: { selector: '.ignore' + new Date().getTime(), type: DataToScrapeType.TEXT_CONTENT },
-  name: { selector: '.Fd93Bb > span:nth-child(1)', type: DataToScrapeType.TEXT_CONTENT },
+  name: { selector: '.Fd93Bb', type: DataToScrapeType.TEXT_CONTENT },
   versionName: {
     selector: 'div.sMUprd:nth-child(1) > div:nth-child(2)',
     type: DataToScrapeType.TEXT_CONTENT,

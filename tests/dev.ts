@@ -2,7 +2,7 @@
 
 
 import debugModule from 'debug';
-import { downloadAPK, getDownloadLink } from '../src/core/downloader';
+import { getGooglePlayDetails } from '../src/core/scraper/googlePlayScrapper';
 
 const keepApks = true;
 const useExisting = true;
@@ -39,7 +39,13 @@ debugModule.enable('bananalyzer:*');
   // console.log('getSupportedSdks', supportedSdksRes);
   // fs.writeFileSync('getSupportedSdks.json', JSON.stringify(supportedSdksRes), 'utf-8');
 
+
+
   //***************** get app details  */
+  const psDetails = await getGooglePlayDetails("com.king.candycrushsaga")
+  console.log("psDetails", psDetails)
+
+  //build
   // const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
   // console.log('playstore details', psDetails);
 
@@ -105,8 +111,8 @@ debugModule.enable('bananalyzer:*');
   //**************************
   // todo: test download
   // const res = await downloadAPK('com.almowafir.app', false);
-  const res = await getDownloadLink("com.facebook.lite")
-  console.log("res", res)
+  // const res = await getDownloadLink("com.facebook.lite")
+  // console.log("res", res)
 
   // ******************************
   // todo: test analyze apks
