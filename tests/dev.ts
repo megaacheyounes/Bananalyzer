@@ -1,16 +1,12 @@
 // import Bananalyzer from '../src/index';
-import Bananalyzer from '../build';
 
 
-import { execa } from '@esm2cjs/execa';
 import debugModule from 'debug';
-import { APKTOOL_JAR } from '../src/consts';
-import { decompileApk } from '../src/core/apktool/decompile';
-import path from 'path';
+import { downloadAPK, getDownloadLink } from '../src/core/downloader';
 
 const keepApks = true;
 const useExisting = true;
-debugModule.enable('bananalyzer:appGalleryScraper');
+debugModule.enable('bananalyzer:*');
 
 (async () => {
 
@@ -44,8 +40,8 @@ debugModule.enable('bananalyzer:appGalleryScraper');
   // fs.writeFileSync('getSupportedSdks.json', JSON.stringify(supportedSdksRes), 'utf-8');
 
   //***************** get app details  */
-  const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
-  console.log('playstore details', psDetails);
+  // const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
+  // console.log('playstore details', psDetails);
 
   // const details = await Bananalyzer.getAppGalleryDetails('C100734965');
   // console.log('details', details);
@@ -108,7 +104,10 @@ debugModule.enable('bananalyzer:appGalleryScraper');
   // console.log('appDetails', appDetails);
   //**************************
   // todo: test download
-  // await downloadAPK('com.twitter.android.lite');
+  // const res = await downloadAPK('com.almowafir.app', false);
+  const res = await getDownloadLink("com.facebook.lite")
+  console.log("res", res)
+
   // ******************************
   // todo: test analyze apks
   // const d = await analyzeAPKs([testApks[0]], true);

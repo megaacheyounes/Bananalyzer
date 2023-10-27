@@ -1,4 +1,3 @@
-import { Browser } from 'puppeteer';
 /**
  *
  * it download apps from playstore using puppeteer and the website https://apps.evozi.com/apk-downloader
@@ -33,33 +32,35 @@ const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolea
       debug('getDownloadLink1 => ' + packageName);
       const link = 'https://apk.support/apk-downloader';
       debug('using link ' + link);
-      await page.goto(link, { waitUntil: 'domcontentloaded' });
+      await page.goto(link, { waitUntil: 'networkidle0' });
       await page.waitForSelector('input[name=package]');
       debug('page loaded');
 
-      await page.$eval('input[name=package]', (el: any, packageName) => (el.value = packageName), packageName);
+      await page.type('input[name=package]', packageName, { delay: 30 });
 
       debug('set package name');
 
       await page.click('#apksubmit');
-      debug('clicked submit');
 
       try {
-        // wait for download link or error, can take up to 60 seconds
-        await page.waitForSelector('.linkarea_contents', { timeout: 30 * 1000 });
+        // wait for download link or error, can take up to 30 seconds
+        await page.waitForSelector('#downloader_area > .appinfo,#downloader_area > br', { timeout: 30 * 1000 });
       } catch (e) {
-        return reject('app not found or invalid');
+        return reject('Timeout error while looking for the app');
       }
 
-      // await page.waitForSelector(".dvContents", { timeout: 60 * 1000 })
       debug('page finished fetching apk info');
 
       // first check if thereis an error
       const maybeError = await BrowserManager.getTextContent(page, '#downloader_area');
       // const maybeError = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
-      debug('maybe error', maybeError);
-      if (maybeError.toLowerCase().indexOf('not found or invalid') != -1) {
-        debug('got error: ' + maybeError);
+
+      const maybeErrorLowerCase = maybeError.toLowerCase()
+
+      if (maybeErrorLowerCase.indexOf('not found or invalid') != -1 ||
+        maybeErrorLowerCase.indexOf("removed from the play store") != -1) {
+        debug('got error: ', maybeErrorLowerCase);
+        await delay(2000)
         // we have an error
         return reject(new Error('the requested app is not found or invalid'));
       }
@@ -124,121 +125,6 @@ const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolea
       debug(e);
       reject(new Error('failed to get download link'));
     }
-  });
-
-// download from https://apps.evozi.com/apk-downloader/
-const getDownloadLink2 = (page: Page, packageName: string, attempt = 0) =>
-  new Promise<ApkDownloadInfo>(async (resolve, reject) => {
-    attempt++;
-    debug('getDownloadLink2 attempt#' + attempt);
-    const link = `https://apps.evozi.com/apk-downloader/?id=${packageName}`;
-    debug('page link ' + link);
-
-    try {
-      await page.goto(link, { waitUntil: 'domcontentloaded' });
-    } catch (e) {
-      debug(e);
-      return reject(new Error('no Internet'));
-    }
-    await page.waitForSelector('.card-body .btn');
-    debug('page loaded');
-
-    await page.click('.card-body .btn');
-    debug('generate download link btn clicked');
-
-    // we have to wait up to 3 min, we either get the downlaod url or an error
-    await page.waitForSelector('#apk_info .text-success,.text-danger', { timeout: 60_000 * 3 });
-    debug('apk info loaded');
-
-    // check if we got an error
-    const errorSelector = '#apk_info .text-danger';
-    const errorEl = await page.$(errorSelector);
-    if (!!errorEl) {
-      debug('GOT ERROR while waiting for apk info');
-      const errorMessage = await BrowserManager.getTextContent(page, errorSelector);
-
-      console.log('☹  Download Error → ', packageName, ':', errorMessage);
-
-      if (errorMessage.indexOf('we are not able to download') != -1) {
-        // can't download apk, move on
-        return reject(new Error(errorMessage));
-      }
-
-      const retryAfter = async (delayInMillis: number) => {
-        if (attempt >= MAX_ATTEMPTS_COUNT) {
-          reject(new Error('failed to download apk ' + attempt + ' times!'));
-        }
-        console.log("I'm taking a nap (◡‿◡) zzZZZ");
-        debug('delay ==>> ' + delayInMillis + ' millis...');
-
-        await delay(delayInMillis);
-        resolve(await getDownloadLink2(page, packageName, attempt));
-        return;
-      };
-
-      // some error message
-      if (errorMessage.toLowerCase().indexOf('rate limit') != -1) {
-        // you got your ass rate limited!
-
-        // example message 1 = "Rate limit exceeded, please try again in 1 minute."
-        // example message 1 = "Rate limit exceeded, please try again in 3.7 minutes. (Take a short rest and come back later)"
-        // try to get timeout from error message
-        const timeout = +errorMessage.replace(/[^\d\.]*/g, '').replace(/\.$/, ''); // in minutes
-        debug('timeout = ' + timeout);
-        if (isNaN(timeout)) {
-          // failed to parse number of minute from message
-          // let just wait a minute
-          await retryAfter(60 * 1_000);
-        } else {
-          await retryAfter(timeout * 60 * 1_000);
-        }
-      } else if (errorMessage.toLowerCase().indexOf('invalid token') != -1) {
-        // ugghh we have to refresh to page
-        // error message example = "Expired or Invalid Token, Please refresh the page and try again"
-        return retryAfter(1000);
-      }
-
-      // package name is probabely wrong or invalid
-      reject(new Error(errorMessage));
-
-      return; // do not invoke the rest of the code
-    }
-    // no errors, we are good
-
-    const storeInfo: ApkDownloadInfo = {
-      packageName,
-      source: ApkSource.APPS_EVOZI,
-    };
-
-    const apkInfoEl = await page.$('.card-body .text-success');
-    if (apkInfoEl != null) {
-      const apkInfoTextContent = (await apkInfoEl.getProperty('textContent')).jsonValue();
-      const apkInfo: string = apkInfoTextContent.toString();
-      debug('apkInfo', apkInfo);
-
-      const sizeMatch = apkInfo.match(/File Size:(.*)QR/);
-      // ugly parsing of html text
-      if (sizeMatch != null) storeInfo.apkSize = sizeMatch[1].trim();
-
-      // sometimes apk info does not include version!, but we will still get it from the APK later in analyzer.ts
-      if (apkInfo.toLowerCase().indexOf('version:') == -1) {
-        storeInfo.versionName = '';
-      } else {
-        const versionMatch = apkInfo.match(/Version: (.*)/);
-        if (versionMatch != null) storeInfo.versionName = versionMatch[1].trim();
-      }
-    }
-
-    debug(' parsed apk info ' + storeInfo.versionName + ' ,' + storeInfo.apkSize);
-
-    const downloadLink = await page.$eval('a.btn.btn-success', (el: any) => el.href);
-
-    if (!downloadLink || downloadLink.length < 0) {
-      reject(new Error('failed to get download url'));
-      return;
-    }
-    storeInfo.downloadLink = downloadLink;
-    resolve(storeInfo);
   });
 
 /**
@@ -336,17 +222,10 @@ export const getDownloadLink = async (
   } catch (e1) {
     debug(e1);
     debug('failed to get download link from source1');
-    // try again from source 2 (3 attempts)
-    // try {
-    //   downloadData = await getDownloadLink2(page, packageName);
-    //   debug('got download link from source 2');
-    // } catch (e2) {
-    //   debug(e2);
     if (!!page) await page.close();
     if (closeBrowserWhenDone) await BrowserManager.closeBrowser();
 
     return undefined;
 
-    //   }
   }
 };

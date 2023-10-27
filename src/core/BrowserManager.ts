@@ -1,6 +1,5 @@
 import debugModule from 'debug';
 import { Browser, Page } from 'puppeteer';
-import { CHROMIUM_EXEC_PATH, CHROMIUM_INSTALL_PATH, CHROMIUM_REVISION } from '../consts';
 // puppeteer-extra is a drop-in replacement for puppeteer,
 // it augments the installed puppeteer with plugin functionality.
 // Any number of plugins can be added through `puppeteer.use()`
@@ -51,6 +50,7 @@ const getTextContent = async (page: Page, selector: string): Promise<string> => 
   await element.dispose();
   return textContent || '';
 };
+
 const getHref = async (page: Page, selector: string): Promise<string> => {
   const element = await page.$(selector);
   if (!element) return '';
@@ -65,15 +65,27 @@ const getSrc = async (page: Page, selector: string): Promise<string> => {
   await element.dispose();
   return src || '';
 };
-
+const getAttribute = async (page: Page, selector: string, attribute: string): Promise<string> => {
+  const element = await page.$(selector);
+  if (!element) return '';
+  debug("attr", attribute)
+  const value = await page.evaluate((el, attribute) => el.value, element);
+  debug("value=", value)
+  await element.dispose();
+  return value || '';
+};
 const getBrowser = async (): Promise<Browser> => {
   const stats = await PCR(options);
 
   browser = await puppeteerExt
     .launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox'],
       executablePath: stats.executablePath,
+      defaultViewport: {
+        width: 1280,
+        height: 720
+      }
     })
     .catch((err: any) => debug('initBrowser failed', err));
 
@@ -97,11 +109,7 @@ const getChromiumPage = async (openBrowser: boolean = false): Promise<Page> => {
     browser = await getBrowser();
   }
   const page = await browser.newPage();
-  // set viewport to a random mobile screen resolution
-  await page.setViewport({
-    width: 1280 + Math.floor(Math.random() * 100),
-    height: 720 + Math.floor(Math.random() * 100),
-  });
+
 
   // skip loading images and visual resources to reduce loding time
   // await page.setRequestInterception(true);
@@ -133,6 +141,7 @@ const BrowserManager = {
   elementExist,
   getHref,
   getTextContent,
+  getAttribute,
   getSrc,
   getChromiumPage,
   closeBrowser,
