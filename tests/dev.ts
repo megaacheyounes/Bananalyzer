@@ -1,9 +1,9 @@
 // import Bananalyzer from '../src/index';
 
-
 import debugModule from 'debug';
-import Bananalyzer from '../build';
-import { getGooglePlayDetails } from '../src/core/scraper/googlePlayScrapper';
+
+import { getDownloadLink2 } from '../src/core/downloader2';
+
 
 const keepApks = true;
 const useExisting = true;
@@ -40,6 +40,9 @@ debugModule.enable('bananalyzer:*');
   // console.log('getSupportedSdks', supportedSdksRes);
   // fs.writeFileSync('getSupportedSdks.json', JSON.stringify(supportedSdksRes), 'utf-8');
 
+  // const bb = await Bananalyzer.getDownloadLink("com.facebook.lite")
+  // console.log("bbb", bb)
+
 
 
   //***************** get app details  */
@@ -47,15 +50,15 @@ debugModule.enable('bananalyzer:*');
   // console.log("psDetails", psDetails)
 
   //build
-  const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
-  console.log('playstore details', psDetails);
+  // const psDetails = await Bananalyzer.getPlayStoreDetails('com.facebook.lite');
+  // console.log('playstore details', psDetails);
 
   // const details = await Bananalyzer.getAppGalleryDetails('C100734965');
   // console.log('details', details);
 
 
-  const dl = await Bananalyzer.getDownloadLink('com.facebook.lite');
-  console.log('dl', dl);
+  // const dl = await Bananalyzer.getDownloadLink('com.facebook.lite');
+  // console.log('dl', dl);
 
   // const dl = await Bananalyzer.getDownloadLink('com.Etisalat.ETIDA', false);
 
@@ -65,10 +68,10 @@ debugModule.enable('bananalyzer:*');
   // console.log('dl split:', dl);
   // console.log('dl merge: ', dl2);
 
-  const decompileApk = await Bananalyzer.decompileApk({
-    filePath: './tests/samples/com.twitter.android.lite.apk'
-  });
-  console.log('decompileApk', decompileApk);
+  // const decompileApk = await Bananalyzer.decompileApk({
+  //   filePath: './tests/samples/com.twitter.android.lite.apk'
+  // });
+  // console.log('decompileApk', decompileApk);
 
 
   // // const start = Date.now();
@@ -111,8 +114,12 @@ debugModule.enable('bananalyzer:*');
   //**************************
   // todo: test download
   // const res = await downloadAPK('com.almowafir.app', false);
-  // const res = await getDownloadLink("com.facebook.lite")
-  // console.log("res", res)
+  console.log("first")
+  const res = await getDownloadLink2("com.facebook.lite")
+  const res2 = await getDownloadLink2("com.leandiv.flyakeed")
+  const res3 = await getDownloadLink2("im.thebot.messenger")
+
+  console.log("res", res, res2, res3)
 
   // ******************************
   // todo: test analyze apks

@@ -15,7 +15,8 @@ puppeteerExt.use(AdblockerPlugin({ blockTrackers: true }));
 
 //@ts-ignore
 import PCR from 'puppeteer-chromium-resolver';
-const options = {};
+const options = {
+};
 
 const debug = debugModule('bananalyzer:browserManager');
 
@@ -34,7 +35,7 @@ let browser: Browser | void;
 //     debug('chrom launched' + chromLaunched);
 //     return true;
 //   }
-
+//
 //   console.log('3 attemps at downloading Chormium have all failed!');
 //   throw Error('3 attemps at downloading Chormium have all failed!');
 // };
@@ -43,6 +44,7 @@ const elementExist = async (page: Page, selector: string): Promise<boolean> => {
   const element = await page.$(selector);
   return !!element;
 };
+
 const getTextContent = async (page: Page, selector: string): Promise<string> => {
   const element = await page.$(selector);
   if (!element) return '';
@@ -65,30 +67,31 @@ const getSrc = async (page: Page, selector: string): Promise<string> => {
   await element.dispose();
   return src || '';
 };
-const getAttribute = async (page: Page, selector: string, attribute: string): Promise<string> => {
-  const element = await page.$(selector);
-  if (!element) return '';
-  debug("attr", attribute)
-  const value = await page.evaluate((el, attribute) => el.value, element);
-  debug("value=", value)
-  await element.dispose();
-  return value || '';
-};
+
+const DEBUG = true
 const getBrowser = async (): Promise<Browser> => {
   const stats = await PCR(options);
 
+  debug("launching browser...")
   browser = await puppeteerExt
     .launch({
-      headless: true,
-      args: ['--no-sandbox'],
+      //TODO set to true
+      headless: false,
+      args: ['--no-sandbox',
+        ...[
+          DEBUG ? "--remote-debugging-port=9222" : '',
+          DEBUG ? "--remote-debugging-address=0.0.0.0" : '',
+        ],
+
+      ],
       executablePath: stats.executablePath,
       defaultViewport: {
         width: 1280,
         height: 720
       }
     })
-    .catch((err: any) => debug('initBrowser failed', err));
-
+    .catch((err: any) => debug('getBrowser: failed to launch browser', err));
+  debug("browser launched")
   return browser!;
   // return await puppeteer.launch({
   //   executablePath: CHROMIUM_EXEC_PATH,
@@ -100,17 +103,12 @@ const getBrowser = async (): Promise<Browser> => {
  * @param {boolean} openBrowser if true, it will force create new instance of browser
  */
 const getChromiumPage = async (openBrowser: boolean = false): Promise<Page> => {
-  // try {
-  //   await downoadChromiumIfMissing();
-  // } catch (e) {
-  //   debug(e);
-  // }
+
   if (!browser || openBrowser) {
     browser = await getBrowser();
   }
   const page = await browser.newPage();
-
-
+  debug("page created")
   // skip loading images and visual resources to reduce loding time
   // await page.setRequestInterception(true);
   // page.on('request', (request: any) => {
@@ -141,7 +139,6 @@ const BrowserManager = {
   elementExist,
   getHref,
   getTextContent,
-  getAttribute,
   getSrc,
   getChromiumPage,
   closeBrowser,

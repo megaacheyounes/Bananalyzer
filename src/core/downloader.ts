@@ -16,117 +16,6 @@ import { delay, downloadFileGot } from './utils';
 
 const debug = debugModule('bananalyzer:downloader');
 
-// max number of attempts of downloading an apk from source 2, there is one minute delay between each attempt
-const MAX_ATTEMPTS_COUNT = 2;
-
-// block ads and tracker to speed page loading
-// puppeteer.use(adblockerPlugin({ blockTrackers: true }));
-
-// trying to hide that we are using a headless browser
-//fixme: causes errors when building .exe
-// puppeteer.use(stealthPlugin());
-// download from https://apk.support/download-app
-const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolean) =>
-  new Promise<ApkDownloadInfo>(async (resolve, reject) => {
-    try {
-      debug('getDownloadLink1 => ' + packageName);
-      const link = 'https://apk.support/apk-downloader';
-      debug('using link ' + link);
-      await page.goto(link, { waitUntil: 'networkidle0' });
-      await page.waitForSelector('input[name=package]');
-      debug('page loaded');
-
-      await page.type('input[name=package]', packageName, { delay: 30 });
-
-      debug('set package name');
-
-      await page.click('#apksubmit');
-
-      try {
-        // wait for download link or error, can take up to 30 seconds
-        await page.waitForSelector('#downloader_area > .appinfo,#downloader_area > br', { timeout: 30 * 1000 });
-      } catch (e) {
-        return reject('Timeout error while looking for the app');
-      }
-
-      debug('page finished fetching apk info');
-
-      // first check if thereis an error
-      const maybeError = await BrowserManager.getTextContent(page, '#downloader_area');
-      // const maybeError = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
-
-      const maybeErrorLowerCase = maybeError.toLowerCase()
-
-      if (maybeErrorLowerCase.indexOf('not found or invalid') != -1 ||
-        maybeErrorLowerCase.indexOf("removed from the play store") != -1) {
-        debug('got error: ', maybeErrorLowerCase);
-        await delay(2000)
-        // we have an error
-        return reject(new Error('the requested app is not found or invalid'));
-      }
-
-      const storeInfo: ApkDownloadInfo = {
-        packageName,
-        source: ApkSource.APK_SUPPORT,
-      };
-
-      const mergeApkButtonSelector = '#zipapk';
-      const splitApkEl = await page.$(mergeApkButtonSelector);
-
-      if (!!splitApkEl && mergeSplitApk) {
-        await page.click(mergeApkButtonSelector);
-        // wait for merged apk download link
-        const apkLinkSelector = '#zip_area > a';
-        await page.waitForSelector(apkLinkSelector, { timeout: 60 * 1000 });
-
-        const apkDownloadLink = await BrowserManager.getHref(page, apkLinkSelector);
-
-        const apkSizeSelector = '#zip_area > a > span:nth-child(3)';
-        const apkDownloadSize = await BrowserManager.getTextContent(page, apkSizeSelector);
-
-        storeInfo.downloadLink = apkDownloadLink;
-        storeInfo.apkSize = apkDownloadSize;
-      } else {
-        const firstLinkSelector = '#sse > div:nth-child(1) > a';
-        const firstLinkHref = await BrowserManager.getHref(page, firstLinkSelector);
-        storeInfo.downloadLink = firstLinkHref;
-
-        // we got apk info and download link
-        const firstApkSizeSelector = '#sse > div:nth-child(1) > a > span.der_size';
-        storeInfo.apkSize = await BrowserManager.getTextContent(page, firstApkSizeSelector);
-      }
-
-      const versionNameSelector = '#downloader_area > div.jinfo > ul > li:nth-child(5)';
-      const versionNameText = await BrowserManager.getTextContent(page, versionNameSelector);
-      if (!!versionNameText) {
-        const versionRegex = /\"(Version Name|VersionName)\": \"(.*)\"/;
-        const versionNameMatchRes = versionNameText.match(versionRegex);
-
-        if (!!versionNameMatchRes && versionNameMatchRes.length > 1) storeInfo.versionName = versionNameMatchRes[2];
-        debug('version from website is ', storeInfo.versionName);
-      }
-
-      const uploadDateSelector = '#downloader_area > div.jinfo > ul > li:nth-child(7)';
-      const uploadDateText = await BrowserManager.getTextContent(page, uploadDateSelector);
-      if (!!uploadDateText) {
-        const uploadDateRegex = /(Updated on|UploadDate)\"\: \"(.*)\"/;
-
-        const uploadDateMatchRes = uploadDateText.match(uploadDateRegex);
-        if (!!uploadDateMatchRes && uploadDateMatchRes.length > 1) storeInfo.uploadDate = uploadDateMatchRes[2];
-      }
-
-      // let hrefs = await page.$('.down_b_area .browser a')
-      // storeInfo.downloadLink = await page.$eval('.dvContents a', (el: any) => {
-      //   return el.href;
-      // });
-
-      resolve(storeInfo);
-    } catch (e) {
-      debug(e);
-      reject(new Error('failed to get download link'));
-    }
-  });
-
 /**
  * this function will try to download an apk for app represted by @param packageName,
  * sometimes we may get rate limited, therefore this function will call it self (recursive call) again if it detects rate limit, one every minute, 10 times max
@@ -229,3 +118,122 @@ export const getDownloadLink = async (
 
   }
 };
+
+
+// max number of attempts of downloading an apk from source 2, there is one minute delay between each attempt
+const MAX_ATTEMPTS_COUNT = 2;
+
+// block ads and tracker to speed page loading
+// puppeteer.use(adblockerPlugin({ blockTrackers: true }));
+
+// trying to hide that we are using a headless browser
+//fixme: causes errors when building .exe
+// puppeteer.use(stealthPlugin());
+// download from https://apk.support/download-app
+const getDownloadLink1 = (page: Page, packageName: string, mergeSplitApk: boolean) =>
+  new Promise<ApkDownloadInfo>(async (resolve, reject) => {
+    try {
+      debug('getDownloadLink1 => ' + packageName);
+      const link = 'https://apk.support/apk-downloader';
+      debug('using link ' + link);
+      await page.goto(link, { waitUntil: 'networkidle0' });
+      await page.waitForSelector('input[name=package]');
+      debug('page loaded');
+
+      await page.type('input[name=package]', packageName, { delay: 30 });
+
+      debug('set package name');
+
+      await page.click('#apksubmit');
+
+      try {
+        // wait for download link or error, can take up to 30 seconds
+        await page.screenshot({
+          path: "image_1.png"
+        })
+        await page.waitForSelector('#downloader_area > .appinfo,#downloader_area > br', { timeout: 30 * 1000 });
+      } catch (e) {
+        await page.screenshot({
+          path: "image_2.png"
+
+        })
+        return reject('Timeout error while looking for the app');
+      }
+
+      debug('page finished fetching apk info');
+
+      // first check if thereis an error
+      const maybeError = await BrowserManager.getTextContent(page, '#downloader_area');
+      // const maybeError = await page.$eval('#downloader_area', (el: any) => (el ? el.innerText : 'el is null'));
+
+      const maybeErrorLowerCase = maybeError.toLowerCase()
+
+      if (maybeErrorLowerCase.indexOf('not found or invalid') != -1 ||
+        maybeErrorLowerCase.indexOf("removed from the play store") != -1) {
+        debug('got error: ', maybeErrorLowerCase);
+        await delay(2000)
+        // we have an error
+        return reject(new Error('the requested app is not found or invalid'));
+      }
+
+      const storeInfo: ApkDownloadInfo = {
+        packageName,
+        source: ApkSource.APK_SUPPORT,
+      };
+
+      const mergeApkButtonSelector = '#zipapk';
+      const splitApkEl = await page.$(mergeApkButtonSelector);
+
+      if (!!splitApkEl && mergeSplitApk) {
+        await page.click(mergeApkButtonSelector);
+        // wait for merged apk download link
+        const apkLinkSelector = '#zip_area > a';
+        await page.waitForSelector(apkLinkSelector, { timeout: 60 * 1000 });
+
+        const apkDownloadLink = await BrowserManager.getHref(page, apkLinkSelector);
+
+        const apkSizeSelector = '#zip_area > a > span:nth-child(3)';
+        const apkDownloadSize = await BrowserManager.getTextContent(page, apkSizeSelector);
+
+        storeInfo.downloadLink = apkDownloadLink;
+        storeInfo.apkSize = apkDownloadSize;
+      } else {
+        const firstLinkSelector = '#sse > div:nth-child(1) > a';
+        const firstLinkHref = await BrowserManager.getHref(page, firstLinkSelector);
+        storeInfo.downloadLink = firstLinkHref;
+
+        // we got apk info and download link
+        const firstApkSizeSelector = '#sse > div:nth-child(1) > a > span.der_size';
+        storeInfo.apkSize = await BrowserManager.getTextContent(page, firstApkSizeSelector);
+      }
+
+      const versionNameSelector = '#downloader_area > div.jinfo > ul > li:nth-child(5)';
+      const versionNameText = await BrowserManager.getTextContent(page, versionNameSelector);
+      if (!!versionNameText) {
+        const versionRegex = /\"(Version Name|VersionName)\": \"(.*)\"/;
+        const versionNameMatchRes = versionNameText.match(versionRegex);
+
+        if (!!versionNameMatchRes && versionNameMatchRes.length > 1) storeInfo.versionName = versionNameMatchRes[2];
+        debug('version from website is ', storeInfo.versionName);
+      }
+
+      const uploadDateSelector = '#downloader_area > div.jinfo > ul > li:nth-child(7)';
+      const uploadDateText = await BrowserManager.getTextContent(page, uploadDateSelector);
+      if (!!uploadDateText) {
+        const uploadDateRegex = /(Updated on|UploadDate)\"\: \"(.*)\"/;
+
+        const uploadDateMatchRes = uploadDateText.match(uploadDateRegex);
+        if (!!uploadDateMatchRes && uploadDateMatchRes.length > 1) storeInfo.uploadDate = uploadDateMatchRes[2];
+      }
+
+      // let hrefs = await page.$('.down_b_area .browser a')
+      // storeInfo.downloadLink = await page.$eval('.dvContents a', (el: any) => {
+      //   return el.href;
+      // });
+
+      resolve(storeInfo);
+    } catch (e) {
+      debug(e);
+      reject(new Error('failed to get download link'));
+    }
+  });
